@@ -1,1060 +1,1029 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rooming Tools Hub</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gruppenbericht – kompakt & klar</title>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
 <style>
-:root{
-  --bg:#f6f8fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#dbe2ea;
-  --nav:#0f172a;--nav2:#111827;--ok:#065f46;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
-.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
-.sidebar{background:linear-gradient(180deg,var(--nav),var(--nav2));color:#fff;padding:22px}
-.brand{font-size:22px;font-weight:700;margin-bottom:8px}
-.sub{font-size:13px;color:#cbd5e1;line-height:1.4;margin-bottom:22px}
-.navbtn{
-  width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
-  color:#fff;padding:12px 14px;border-radius:14px;margin-bottom:10px;cursor:pointer;font-size:14px
-}
-.navbtn.active{background:#fff;color:#111827;font-weight:700}
-.main{padding:22px}
-.page{display:none}
-.page.active{display:block}
-h1{margin:0 0 8px;font-size:28px}
-.desc{margin:0 0 18px;color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(15,23,42,.06);margin-bottom:16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-input,select,button,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px;box-sizing:border-box;background:#fff}
-textarea{min-height:280px;resize:vertical}
-button{cursor:pointer;font-weight:700;background:#111827;color:#fff}
-button.secondary{background:#fff;color:#111827}
-button.green{background:var(--ok)}
-button.danger{background:#b91c1c}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.row button{width:auto}
-.table-wrap{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:14px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:8px 10px;border-bottom:1px solid #eef2f7;text-align:left;font-size:14px}
-th{background:#f8fafc;position:sticky;top:0}
-th:nth-child(1), td:nth-child(1){width:60px}
-th:nth-child(6), td:nth-child(6){width:160px}
-.note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:10px 12px;border-radius:12px;font-size:13px}
-.ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;padding:10px 12px;border-radius:12px;font-size:13px}
-.log{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;padding:12px;border-radius:12px;font-family:ui-monospace,monospace;font-size:12px;min-height:90px}
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-.stat{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px}
-.stat b{display:block;font-size:22px}
-.small{font-size:12px;color:var(--muted)}
-.pill{display:inline-block;padding:4px 9px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;margin-right:6px;margin-bottom:6px}
-td input, td select{padding:7px 8px;font-size:13px}
-.coming{font-size:15px;line-height:1.6;color:#334155}
-.action-cell button{padding:7px 10px;font-size:12px;border-radius:10px;width:auto}
-@media (max-width:980px){.app{grid-template-columns:1fr}.sidebar{padding-bottom:10px}.grid,.stats{grid-template-columns:1fr}}
+  :root{
+    --cream:#fffaf2;
+    --cream-2:#fff5e8;
+    --cream-3:#fff0dc;
+    --rose:#fff4f7;
+    --sand:#f7ead8;
+    --gold:#c9a24d;
+    --navy:#29415c;
+    --navy-2:#3c5a79;
+    --ink:#2f2c28;
+    --muted:#756d64;
+    --line:#e8dccd;
+    --bad:#b42318;
+    --card:#ffffffd9;
+    --shadow:0 14px 34px rgba(80,63,39,.10);
+    --radius:18px;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    padding:18px;
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 500px at 10% 0%, #fff0f6, transparent 55%),
+      radial-gradient(900px 500px at 100% 0%, #fff2df, transparent 60%),
+      linear-gradient(145deg, var(--cream) 0%, #fffdf9 45%, var(--cream-2) 100%);
+    min-height:100vh;
+  }
+
+  .shell{ max-width:1700px; margin:0 auto; }
+
+  .hero,
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    backdrop-filter: blur(8px);
+  }
+
+  .hero{
+    padding:18px 20px;
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .hero-left{ display:flex; gap:14px; align-items:center; }
+  .hero img{ height:52px; }
+  .hero h1{
+    margin:0;
+    font-size:24px;
+    color:var(--navy);
+    letter-spacing:.2px;
+  }
+  .hero p{
+    margin:4px 0 0;
+    font-size:13px;
+    color:var(--muted);
+    max-width:980px;
+    line-height:1.45;
+  }
+
+  .top-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  .btn{
+    appearance:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    border-radius:14px;
+    padding:10px 14px;
+    font-weight:800;
+    font-size:13px;
+    transition:.18s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn.primary{
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));
+    color:#fff;
+    box-shadow:0 10px 20px rgba(41,65,92,.18);
+  }
+  .btn.soft{
+    background:linear-gradient(180deg,#fff,#fff8ee);
+    color:var(--navy);
+    border-color:var(--line);
+  }
+  .btn.toggle.active{
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));
+    color:#fff;
+    border-color:rgba(201,162,77,.55);
+  }
+
+  .toolbar{
+    padding:14px;
+    margin-bottom:14px;
+    display:grid;
+    grid-template-columns: 1.2fr 1.5fr 1fr;
+    gap:12px;
+  }
+  .panel{
+    background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,249,240,.92));
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px;
+  }
+  .panel-title{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    color:var(--navy);
+    text-transform:uppercase;
+    margin:0 0 10px;
+  }
+  .stack, .row-wrap{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .field{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    padding:10px 12px;
+    border-radius:14px;
+    background:#fffdf9;
+    border:1px solid var(--line);
+  }
+  .field label{
+    font-size:12px;
+    color:var(--navy);
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .field input,
+  .field select{
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid #e2d5c3;
+    background:#fff;
+    color:var(--ink);
+    font-size:12px;
+    outline:none;
+  }
+  .field .tiny{ width:138px; }
+  .status-multi{ min-width:145px; min-height:96px; }
+  .status-hint{ font-size:11px; color:var(--muted); }
+
+  .summary{
+    display:grid;
+    grid-template-columns: repeat(6, minmax(140px, 1fr));
+    gap:10px;
+    padding:14px;
+    margin-bottom:14px;
+  }
+  .metric{
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px 14px;
+    background:linear-gradient(180deg,#fff,#fff8ef);
+  }
+  .metric b{
+    display:block;
+    font-size:12px;
+    color:var(--navy);
+    margin-bottom:6px;
+  }
+  .metric span{
+    font-size:22px;
+    font-weight:900;
+    letter-spacing:.01em;
+  }
+  .metric small{ color:var(--muted); font-weight:700; font-size:11px; }
+
+  .table-card{ padding:0; overflow:hidden; }
+  .section-head{
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg, rgba(255,245,232,.95), rgba(255,250,244,.95));
+  }
+  .section-head h2{
+    margin:0;
+    font-size:16px;
+    color:var(--navy);
+  }
+  .section-head p{
+    margin:3px 0 0;
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  .table-wrap{ padding:10px 12px 16px; }
+
+  table.dataTable{ width:100% !important; border-collapse:separate !important; border-spacing:0; }
+  table.dataTable thead th{
+    background:#f8efe2;
+    border-bottom:2px solid #ddc9a8 !important;
+    color:var(--navy);
+    text-align:center !important;
+    font-weight:900;
+    padding:6px 6px !important;
+    font-size:11px;
+    line-height:1.2;
+  }
+  thead .filter-row th{
+    background:#fffdf9;
+    border-bottom:1px solid var(--line) !important;
+    padding:8px 10px;
+  }
+  .col-filter{
+    width:100%;
+    padding:5px 6px;
+    border-radius:8px;
+    border:1px solid #e3d7c8;
+    background:#fff;
+    font-size:11px;
+    text-align:center;
+    color:var(--ink);
+    font-weight:600;
+  }
+  table.dataTable tbody td{
+    border-bottom:1px solid #f0e7dc !important;
+    text-align:center !important;
+    vertical-align:middle;
+    white-space:nowrap;
+    padding:6px 6px !important;
+    font-size:11px;
+    line-height:1.2;
+  }
+  table.dataTable tbody tr:hover{ background:#fff7ec; }
+
+  th.bbcol, td.bbcol{ max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  th.accol, td.accol{ max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  th.mktcol, td.mktcol{ min-width:90px; width:90px; }
+  th.rmcol, td.rmcol{ min-width:65px; width:65px; }
+  th.chgcol, td.chgcol{ min-width:95px; width:95px; }
+
+  td.neg{ color:var(--bad) !important; font-weight:800; }
+  tr.ten-row{ background:#fff6db !important; }
+  tr.ten-row:hover{ background:#fff1c5 !important; }
+
+  .dt-buttons .dt-button{
+    background:linear-gradient(180deg,#fff,#fff7ed) !important;
+    color:var(--navy) !important;
+    border:1px solid var(--line) !important;
+    border-radius:12px !important;
+    font-weight:900 !important;
+  }
+  div.dt-button-collection{
+    background:#e1c39a !important;
+    border:2px solid #6f4e28 !important;
+    box-shadow:0 18px 34px rgba(58,44,30,.32) !important;
+    border-radius:14px !important;
+    padding:10px !important;
+    z-index:999999 !important;
+  }
+  div.dt-button-collection .dt-button,
+  div.dt-button-collection a.dt-button,
+  div.dt-button-collection button.dt-button{
+    display:block !important;
+    width:260px !important;
+    text-align:left !important;
+    padding:10px 12px !important;
+    border-radius:10px !important;
+    background:#fffaf4 !important;
+    color:#1a1a1a !important;
+    border:2px solid #8b642f !important;
+    margin:4px 0 !important;
+    font-weight:900 !important;
+    text-shadow:none !important;
+    box-shadow:none !important;
+    opacity:1 !important;
+  }
+  div.dt-button-collection .dt-button span,
+  div.dt-button-collection a.dt-button span,
+  div.dt-button-collection button.dt-button span{
+    color:#1a1a1a !important;
+  }
+  div.dt-button-collection .dt-button:hover,
+  div.dt-button-collection a.dt-button:hover,
+  div.dt-button-collection button.dt-button:hover{
+    background:#f3e0bf !important;
+    color:#111 !important;
+    border-color:#6f4e28 !important;
+  }
+  div.dt-button-collection .dt-button.active,
+  div.dt-button-collection a.dt-button.active,
+  div.dt-button-collection button.dt-button.active{
+    background:#cfab75 !important;
+    color:#111 !important;
+    border-color:#5a3f20 !important;
+  }
+  div.dt-button-collection .dt-button.active::before,
+  div.dt-button-collection a.dt-button.active::before,
+  div.dt-button-collection button.dt-button.active::before{ content:"✓ "; color:#4c3519; font-weight:900; }
+  div.dt-button-collection .dt-button:not(.active)::before,
+  div.dt-button-collection a.dt-button:not(.active)::before,
+  div.dt-button-collection button.dt-button:not(.active)::before{ content:"◻ "; color:#6f4e28; }
+  div.dt-button-background{ background:rgba(40,28,16,.35) !important; }
+  .dt-button-collection .buttons-columnVisibility,
+  .dt-button-collection a.buttons-columnVisibility,
+  .dt-button-collection button.buttons-columnVisibility{
+    background:#ffffff !important;
+    color:#111111 !important;
+    border:2px solid #5b3d1c !important;
+  }
+  .dt-button-collection .buttons-columnVisibility span,
+  .dt-button-collection a.buttons-columnVisibility span,
+  .dt-button-collection button.buttons-columnVisibility span,
+  .dt-button-collection .dt-button-text{
+    color:#111111 !important;
+    opacity:1 !important;
+    visibility:visible !important;
+  }
+
+  td.mktcol{ position:relative; overflow:visible !important; }
+  .cell-select{
+    width:100%;
+    min-width:108px;
+    padding:7px 10px;
+    border-radius:10px;
+    border:2px solid #8b642f;
+    background:#fffaf4;
+    font-weight:800;
+    color:#1a1a1a;
+    appearance:auto;
+    -webkit-appearance:menulist;
+    pointer-events:auto;
+    cursor:pointer;
+    appearance:auto;
+    -webkit-appearance:menulist;
+    position:relative;
+    z-index:2;
+  }
+  .cell-select:hover{ border-color:#7a5629; background:#fff7ee; }
+  .cell-select:focus{
+    outline:none;
+    border-color:#6d4c24;
+    box-shadow:0 0 0 3px rgba(201,162,77,.18);
+  }
+  .cell-select option{
+    background:#fffaf4;
+    color:#2f2c28;
+  }
+  .cell-check{ transform:scale(1.15); accent-color:var(--navy); cursor:pointer; }
+
+  .column-popover{
+    position:fixed;
+    top:88px;
+    right:24px;
+    width:260px;
+    max-width:calc(100vw - 32px);
+    max-height:70vh;
+    overflow:auto;
+    background:#ffffff;
+    border:2px solid #7a5730;
+    border-radius:16px;
+    box-shadow:0 22px 46px rgba(58,44,30,.28);
+    padding:14px;
+    z-index:1000000;
+    display:none;
+  }
+  .column-popover.open{ display:block; }
+  .column-popover h3{
+    margin:0 0 10px 0;
+    color:#2c2117;
+    font-size:16px;
+  }
+  .column-grid{ display:grid; gap:8px; }
+  .col-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 10px;
+    border:1px solid #d8c3a9;
+    border-radius:10px;
+    background:#fffaf4;
+    color:#1c1c1c;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .col-item input{ transform:scale(1.15); accent-color:#5b3d1c; }
+  .col-item:hover{ background:#f5e6d3; border-color:#9d7140; }
+  .column-actions{ display:flex; gap:8px; margin-top:12px; }
+  .column-actions .mini{
+    flex:1;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid #8f6b42;
+    background:#fff;
+    color:#2b2119;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+
+  @media (max-width: 1280px){
+    .toolbar{ grid-template-columns:1fr; }
+    .summary{ grid-template-columns: repeat(3, minmax(140px, 1fr)); }
+  }
+  @media (max-width: 720px){
+    .summary{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    .hero-left{ align-items:flex-start; }
+  }
+
+  @media print{
+    .hero, .toolbar, .dt-buttons, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { display:none !important; }
+    .card{ box-shadow:none; border:0; }
+    table{ font-size:10px !important; }
+    @page { size:A4 landscape; margin:10mm; }
+  }
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">Rooming Tools Hub</div>
-    <div class="sub">Getrennte Module pro Kunde. Das PMS-Standard-Template ist fest eingebunden und wird für alle Module automatisch geladen.</div>
-    <button class="navbtn active" data-page="page-viya">Viya Travel</button>
-    <button class="navbtn" data-page="page-eme">Emetravel</button>
-    <button class="navbtn" data-page="page-exa">Exa Travel</button>
-    <button class="navbtn" data-page="page-bey">Bey Tours</button>
-    <button class="navbtn" data-page="page-future">Weitere Kunden</button>
-  </aside>
+<div class="shell">
 
-  <main class="main">
+  <section class="hero">
+    <div class="hero-left">
+      <img src="Logo_ibis_RGB.png" alt="Logo_ibis_RGB" onerror="this.style.display='none'">
+      <div>
+        <h1>Gruppenbericht</h1>
+        <p>Reduziert, heller und klarer aufgebaut. CLX wird automatisch als CXL behandelt, Chg Date bleibt erhalten, Mehrfach-Statusfilter ist aktiv und die Excel-Variante enthält nur noch die Daten ohne Charts. Auch der Chart-Bereich in der HTML-Version wurde entfernt. Die Tabelle ist zusätzlich kompakter für mehr Platz pro Bericht.</p>
+      </div>
+    </div>
 
-    <section id="page-viya" class="page active">
-      <h1>Viya Travel</h1>
-      <p class="desc">Eigene Logik für das Viya-Format. Getrennt von Emetravel und Exa Travel.</p>
+    <div class="top-actions">
+      <button class="btn primary" id="pdfBtn" type="button">PDF herunterladen</button>
+      <button class="btn secondary" id="importJsonBtn" type="button">JSON import</button>
+      <button class="btn primary" id="exportJsonBtn" type="button">JSON export</button>
+      <input id="importJsonFile" type="file" accept=".json" style="display:none">
+      <button class="btn soft" id="resetBtn" type="button">Filter zurücksetzen</button>
+      <button class="btn soft" id="clearBtn" type="button">Tabelle leeren</button>
+      <button class="btn soft" id="colToggleBtn" type="button">Spalten auswählen</button>
+      <button class="btn soft" id="compactToggleBtn" type="button">Ansicht: Kompakt</button>
+    </div>
+  </section>
 
-      <div class="card">
-        <div class="note">
-          <b>Fixe PMS-Codes:</b> Double = <b>DBL</b>, Twin = <b>TWI</b>, Triple = <b>TRI</b>.<br>
-          Pro Zimmer wird die Zeile <b>1.Room / 2.Room / 3.Room ...</b> als Hauptzeile gelesen.
-          Der Room Type wird aus der nächsten passenden Zeile mit <b>Double / Twin / Triple / Single</b> gelesen.
+  <section class="card toolbar">
+    <div class="panel">
+      <div class="panel-title">Import & Schnellfilter</div>
+      <div class="stack">
+        <div class="field">
+          <label for="importFiles">Dateien importieren</label>
+          <input id="importFiles" type="file" accept=".txt,.csv" multiple>
+        </div>
+        <button class="btn soft toggle" id="washQuickBtn" type="button">Nur Wash = true</button>
+      </div>
+      <div class="row-wrap" style="margin-top:10px;">
+        <button class="btn soft toggle" id="mktAllBtn" type="button">Alle Märkte</button>
+        <button class="btn soft toggle" id="mktCorpBtn" type="button">Corporate</button>
+        <button class="btn soft toggle" id="mktLeisBtn" type="button">Leisure</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Filter</div>
+      <div class="row-wrap">
+        <div class="field">
+          <label for="statusSelect">Status</label>
+          <select id="statusSelect" title="Status auswählen">
+            <option value="">Alle</option>
+            <option value="ACT">ACT</option>
+            <option value="DEF">DEF</option>
+            <option value="TEN">TEN</option>
+            <option value="CXL">CXL</option>
+          </select>
+          <span class="status-hint">Dropdown-Auswahl</span>
+        </div>
+
+        <div class="field">
+          <label>Anreise</label>
+          <input class="tiny" id="arrFrom" type="date">
+          <input class="tiny" id="arrTo" type="date">
+        </div>
+
+        <div class="field">
+          <label>Abreise</label>
+          <input class="tiny" id="depFrom" type="date">
+          <input class="tiny" id="depTo" type="date">
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <div class="grid">
-          <div><label>Viya Rooming List</label><input id="viyaFile" type="file" accept=".xlsx,.xls"></div>
-          <div><label>PMS Template</label><input value="Standard Template aktiv" disabled></div>
-          <div><label>Anreise</label><input id="viyaArrival" type="date"></div>
-          <div><label>Abreise</label><input id="viyaDeparture" type="date"></div>
-          <div>
-            <label>Single exportieren als</label>
-            <select id="viyaSingleMode"><option value="DBL">DBL</option><option value="TWI">TWI</option></select>
-          </div>
-          <div>
-            <label>Payment</label>
-            <select id="viyaPayment"><option value="CA">CA</option><option value="CC">CC</option><option value="BT">BT</option></select>
-          </div>
+    <div class="panel">
+      <div class="panel-title">Monat & Ansicht</div>
+      <div class="stack">
+        <div class="field">
+          <label for="monthSelect">Monat Anreise</label>
+          <select id="monthSelect">
+            <option value="">Alle</option>
+            <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mär</option>
+            <option value="4">Apr</option><option value="5">Mai</option><option value="6">Jun</option>
+            <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+            <option value="10">Okt</option><option value="11">Nov</option><option value="12">Dez</option>
+          </select>
         </div>
-        <div style="height:12px"></div>
-        <div class="row">
-          <button id="viyaAnalyzeBtn">Viya analysieren</button>
-          <button id="viyaExportBtn" class="green">Mit Standard-Template exportieren</button>
-          <button id="viyaPickTemplateBtn" class="secondary">Template-Datei wählen</button>
-          <button id="viyaExportBlankBtn" class="secondary">Ohne Template exportieren</button>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="stats">
-          <div class="stat"><b id="viyaStatRooms">0</b><span class="small">erkannte Zimmer</span></div>
-          <div class="stat"><b id="viyaStatDBL">0</b><span class="small">DBL</span></div>
-          <div class="stat"><b id="viyaStatTWI">0</b><span class="small">TWI</span></div>
-          <div class="stat"><b id="viyaStatTRI">0</b><span class="small">TRI</span></div>
-          <div class="stat"><b id="viyaStatAdults">0</b><span class="small">Adults gesamt</span></div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="ok" id="viyaSummary">Noch keine Datei analysiert.</div>
-      </div>
-
-      <div class="card">
-        <div class="row" style="margin-bottom:12px">
-          <button id="viyaAddRowBtn" class="secondary">Zeile hinzufügen</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Line</th><th>Name</th><th>First Name</th><th>Arrival</th><th>Departure</th><th>Room Type</th><th>Adults</th><th>Payment</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="viyaTbody"></tbody>
-          </table>
+        <div class="field">
+          <label for="chgMonthSelect">Monat Chg Date</label>
+          <select id="chgMonthSelect">
+            <option value="">Alle</option>
+            <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mär</option>
+            <option value="4">Apr</option><option value="5">Mai</option><option value="6">Jun</option>
+            <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+            <option value="10">Okt</option><option value="11">Nov</option><option value="12">Dez</option>
+          </select>
         </div>
       </div>
-
-      <div class="card"><div id="viyaLog" class="log"></div></div>
-    </section>
-
-    <section id="page-eme" class="page">
-      <h1>Emetravel</h1>
-      <p class="desc">Eigene Logik für das Emetravel-Format. Getrennt von Viya und Exa Travel.</p>
-
-      <div class="card">
-        <div class="note">
-          Die Spalte <b>ROOMING</b> enthält nur in der ersten Zeile eines Zimmers einen Wert
-          (z. B. <b>TPL</b>, <b>TWIN</b>, <b>DBL + IFN</b>, <b>SGL</b>). Genau diese Zeile wird als Zimmer-Zeile genommen.
-        </div>
+      <div class="row-wrap" style="margin-top:10px;">
+        <button class="btn soft" id="sortRevCurBtn" type="button">Revenue Cur</button>
+        <button class="btn soft" id="sortRevPickBtn" type="button">Revenue Pick</button>
+        <button class="btn soft" id="sortMonthBtn" type="button">Monat Anreise ↑</button>
+        <button class="btn soft" id="sortResetBtn" type="button">Sort Reset</button>
       </div>
-
-      <div class="card">
-        <div class="grid">
-          <div><label>Emetravel Rooming List</label><input id="emeFile" type="file" accept=".xlsx,.xls"></div>
-          <div><label>PMS Template</label><input value="Standard Template aktiv" disabled></div>
-          <div><label>Anreise</label><input id="emeArrival" type="date"></div>
-          <div><label>Abreise</label><input id="emeDeparture" type="date"></div>
-          <div>
-            <label>Single exportieren als</label>
-            <select id="emeSingleMode"><option value="DBL">DBL</option><option value="TWI">TWI</option></select>
-          </div>
-          <div>
-            <label>Payment</label>
-            <select id="emePayment"><option value="CA">CA</option><option value="CC">CC</option><option value="BT">BT</option></select>
-          </div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="row">
-          <button id="emeAnalyzeBtn">Emetravel analysieren</button>
-          <button id="emeExportBtn" class="green">Mit Standard-Template exportieren</button>
-          <button id="emePickTemplateBtn" class="secondary">Template-Datei wählen</button>
-          <button id="emeExportBlankBtn" class="secondary">Ohne Template exportieren</button>
-        </div>
+      <div class="field" style="margin-top:10px;">
+        <input id="negOnly" type="checkbox">
+        <label for="negOnly">Nur negative Zeilen</label>
       </div>
+    </div>
+  </section>
 
-      <div class="card">
-        <div class="stats">
-          <div class="stat"><b id="emeStatRooms">0</b><span class="small">erkannte Zimmer</span></div>
-          <div class="stat"><b id="emeStatDBL">0</b><span class="small">DBL</span></div>
-          <div class="stat"><b id="emeStatTWI">0</b><span class="small">TWI</span></div>
-          <div class="stat"><b id="emeStatTRI">0</b><span class="small">TRI</span></div>
-          <div class="stat"><b id="emeStatAdults">0</b><span class="small">Adults gesamt</span></div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="ok" id="emeSummary">Noch keine Datei analysiert.</div>
+  <section class="card summary">
+    <div class="metric"><b>Zeilen</b><span id="f_rows">0</span></div>
+    <div class="metric"><b>Rm Cur</b><span id="f_rmcur">0</span></div>
+    <div class="metric"><b>Rm Pick</b><span id="f_rmpick">0</span></div>
+    <div class="metric"><b>Revenue Cur</b><span id="f_rev">0.00 CHF</span></div>
+    <div class="metric"><b>Revenue Pick</b><span id="f_prev">0.00 CHF</span></div>
+    <div class="metric"><b>CXL</b><span id="dbg_cxl_filtered">0</span><small id="dbg_cxl_total_wrap">von 0 gesamt</small></div>
+  </section>
+
+  <section class="card table-card">
+    <div class="section-head">
+      <div>
+        <h2>Tabelle</h2>
+        <p>Helleres Layout, weniger verstreute Aktionen und klarere Gruppierung.</p>
       </div>
+    </div>
 
-      <div class="card">
-        <div class="row" style="margin-bottom:12px">
-          <button id="emeAddRowBtn" class="secondary">Zeile hinzufügen</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Line</th><th>Name</th><th>First Name</th><th>Arrival</th><th>Departure</th><th>Room Type</th><th>Adults</th><th>Payment</th><th>Quelle</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="emeTbody"></tbody>
-          </table>
-        </div>
-      </div>
+    <div class="table-wrap">
+      <table id="reportTable" class="display" style="width:100%">
+        <thead>
+          <tr class="filter-row">
+            <th class="bbcol"><input class="col-filter" placeholder="Business Block"></th>
+            <th class="accol"><input class="col-filter" placeholder="Account Name"></th>
+            <th><input class="col-filter" placeholder="Selection"></th>
+            <th class="mktcol"><input class="col-filter" placeholder="Market"></th>
+            <th><input class="col-filter" placeholder="Anreise"></th>
+            <th><input class="col-filter" placeholder="Abreise"></th>
+            <th class="rmcol"><input class="col-filter" placeholder="Rm Cur"></th>
+            <th><input class="col-filter" placeholder="Revenue Cur"></th>
+            <th><input class="col-filter" placeholder="Avg Rate Cur"></th>
+            <th class="rmcol"><input class="col-filter" placeholder="Rm Pick"></th>
+            <th><input class="col-filter" placeholder="Revenue Pick"></th>
+            <th><input class="col-filter" placeholder="Avg Rate Pick"></th>
+            <th><input class="col-filter" placeholder="BB Id"></th>
+            <th><input class="col-filter" placeholder="Status"></th>
+            <th class="chgcol"><input class="col-filter" placeholder="Chg Date"></th>
+            <th><input class="col-filter" placeholder="Quelle"></th>
+            <th><input class="col-filter" placeholder="StatusCode (hidden)"></th>
+          </tr>
+          <tr>
+            <th class="bbcol">Business Block Name</th>
+            <th class="accol">Account Name</th>
+            <th>Selection</th>
+            <th class="mktcol">Market</th>
+            <th>Anreise</th>
+            <th>Abreise</th>
+            <th class="rmcol">Rm Cur</th>
+            <th>Revenue Cur</th>
+            <th>Avg Rate Cur</th>
+            <th class="rmcol">Rm Pick</th>
+            <th>Revenue Pick</th>
+            <th>Avg Rate Pick</th>
+            <th>BB Id</th>
+            <th>Status</th>
+            <th class="chgcol">Chg Date</th>
+            <th>Quelle</th>
+            <th>StatusCode</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 
-      <div class="card"><div id="emeLog" class="log"></div></div>
-    </section>
+  <div id="columnPopover" class="column-popover" aria-hidden="true">
+    <h3>Spalten auswählen</h3>
+    <div id="columnChooser" class="column-grid"></div>
+    <div class="column-actions">
+      <button class="mini" id="showAllColsBtn" type="button">Alle anzeigen</button>
+      <button class="mini" id="hideOptionalColsBtn" type="button">Kompakt</button>
+    </div>
+  </div>
 
-    <section id="page-exa" class="page">
-      <h1>Exa Travel</h1>
-      <p class="desc">Eigene Logik für Exa Travel E-Mails. Nicht mit Viya oder Emetravel kombiniert.</p>
-
-      <div class="card">
-        <div class="note">
-          <b>Exa Travel arbeitet per E-Mail-Text.</b><br>
-          Bitte den Mailinhalt hier einfügen. Das Tool erkennt:
-          <b>PAX / LAST NAME / NAME / ROOM</b> und erstellt daraus <b>1 Zeile pro Zimmer</b> für den PMS-Import.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="grid">
-          <div style="grid-column:1 / -1">
-            <label>Email-Inhalt / Roomingliste einfügen</label>
-            <textarea id="exaText" placeholder="Hier den Exa Travel E-Mail-Text einfügen..."></textarea>
-          </div>
-          <div><label>PMS Template</label><input value="Standard Template aktiv" disabled></div>
-          <div></div>
-          <div><label>Anreise</label><input id="exaArrival" type="date"></div>
-          <div><label>Abreise</label><input id="exaDeparture" type="date"></div>
-          <div>
-            <label>Single exportieren als</label>
-            <select id="exaSingleMode"><option value="DBL">DBL</option><option value="TWI">TWI</option></select>
-          </div>
-          <div>
-            <label>Payment</label>
-            <select id="exaPayment"><option value="CA">CA</option><option value="CC">CC</option><option value="BT">BT</option></select>
-          </div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="row">
-          <button id="exaAnalyzeBtn">Exa Travel analysieren</button>
-          <button id="exaExportBtn" class="green">Mit Standard-Template exportieren</button>
-          <button id="exaPickTemplateBtn" class="secondary">Template-Datei wählen</button>
-          <button id="exaExportBlankBtn" class="secondary">Ohne Template exportieren</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <span class="pill">DBL → DBL</span>
-        <span class="pill">TWIN → TWI</span>
-        <span class="pill">TPL / TPL C/MNR1 → TRI</span>
-        <span class="pill">SGL → frei wählbar</span>
-        <span class="pill">1 Zeile pro Zimmer</span>
-        <span class="pill">echtes Excel-Datum</span>
-      </div>
-
-      <div class="card">
-        <div class="stats">
-          <div class="stat"><b id="exaStatRooms">0</b><span class="small">erkannte Zimmer</span></div>
-          <div class="stat"><b id="exaStatDBL">0</b><span class="small">DBL</span></div>
-          <div class="stat"><b id="exaStatTWI">0</b><span class="small">TWI</span></div>
-          <div class="stat"><b id="exaStatTRI">0</b><span class="small">TRI</span></div>
-          <div class="stat"><b id="exaStatAdults">0</b><span class="small">Adults gesamt</span></div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="ok" id="exaSummary">Noch kein Email-Text analysiert.</div>
-      </div>
-
-      <div class="card">
-        <div class="row" style="margin-bottom:12px">
-          <button id="exaAddRowBtn" class="secondary">Zeile hinzufügen</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Line</th><th>Name</th><th>First Name</th><th>Arrival</th><th>Departure</th><th>Room Type</th><th>Adults</th><th>Payment</th><th>Quelle</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="exaTbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="card"><div id="exaLog" class="log"></div></div>
-    </section>
-
-    <section id="page-bey" class="page">
-      <h1>Bey Tours</h1>
-      <p class="desc">Eigene Logik für das Bey-Tours-Format. Getrennt von Viya, Emetravel und Exa Travel.</p>
-
-      <div class="card">
-        <div class="note">
-          Die Datei wird über die Spalten <b>PAX / APELLIDO PATERNO / APELLIDO MATERNO / PRIMER NOMBRE / SEGUNDO NOMBRE / TIPO DE HABITACIÓN</b> gelesen.<br>
-          In <b>TIPO DE HABITACIÓN</b> steht nur in der ersten Zeile eines Zimmers ein Wert (<b>TPL</b>, <b>TWIN</b>, <b>DBL</b>, <b>SGL</b>). Genau diese Zeile wird als Zimmer-Zeile verwendet.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="grid">
-          <div><label>Bey Tours Rooming List</label><input id="beyFile" type="file" accept=".xlsx,.xls"></div>
-          <div><label>PMS Template</label><input value="Standard Template aktiv" disabled></div>
-          <div><label>Anreise</label><input id="beyArrival" type="date"></div>
-          <div><label>Abreise</label><input id="beyDeparture" type="date"></div>
-          <div>
-            <label>Single exportieren als</label>
-            <select id="beySingleMode"><option value="DBL">DBL</option><option value="TWI">TWI</option></select>
-          </div>
-          <div>
-            <label>Payment</label>
-            <select id="beyPayment"><option value="CA">CA</option><option value="CC">CC</option><option value="BT">BT</option></select>
-          </div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="row">
-          <button id="beyAnalyzeBtn">Bey Tours analysieren</button>
-          <button id="beyExportBtn" class="green">Mit Standard-Template exportieren</button>
-          <button id="beyPickTemplateBtn" class="secondary">Template-Datei wählen</button>
-          <button id="beyExportBlankBtn" class="secondary">Ohne Template exportieren</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="stats">
-          <div class="stat"><b id="beyStatRooms">0</b><span class="small">erkannte Zimmer</span></div>
-          <div class="stat"><b id="beyStatDBL">0</b><span class="small">DBL</span></div>
-          <div class="stat"><b id="beyStatTWI">0</b><span class="small">TWI</span></div>
-          <div class="stat"><b id="beyStatTRI">0</b><span class="small">TRI</span></div>
-          <div class="stat"><b id="beyStatAdults">0</b><span class="small">Adults gesamt</span></div>
-        </div>
-        <div style="height:12px"></div>
-        <div class="ok" id="beySummary">Noch keine Datei analysiert.</div>
-      </div>
-
-      <div class="card">
-        <div class="row" style="margin-bottom:12px">
-          <button id="beyAddRowBtn" class="secondary">Zeile hinzufügen</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Line</th><th>Name</th><th>First Name</th><th>Arrival</th><th>Departure</th><th>Room Type</th><th>Adults</th><th>Payment</th><th>Quelle</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="beyTbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="card"><div id="beyLog" class="log"></div></div>
-    </section>
-
-    <section id="page-future" class="page">
-      <h1>Weitere Kunden</h1>
-      <p class="desc">Neue Formate können als eigene Seite ergänzt werden, ohne bestehende Module zu verändern.</p>
-      <div class="card">
-        <div class="coming">
-          Vorgesehen für weitere Formate wie:
-          <div style="height:10px"></div>
-          <span class="pill">Bey Tours</span>
-          <span class="pill">Europamundo</span>
-          <span class="pill">Europe Incoming</span>
-          <span class="pill">Eurorutas</span>
-          <span class="pill">Panavision</span>
-          <div style="height:16px"></div>
-          Jedes neue Format bekommt seine eigene Seite, eigene Erkennung und eigenen Export.
-        </div>
-      </div>
-    </section>
-
-  </main>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
 <script>
-const DEFAULT_TEMPLATE_URL = "./Rooming_List_Final.xls";
-let templateArrayBuffer = null;
-let templateSourceName = "";
+function toNumber(x){
+  if (x === null || x === undefined) return 0;
+  const s = String(x).trim().replace(/\s/g,'').replace(/CHF/gi,'').replace(/,/g,'');
+  const n = Number(s);
+  return Number.isFinite(n) ? n : 0;
+}
+function fmt2(n){ return Number(n).toLocaleString("de-CH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtMoney(n){ const val = Number(n); return val < 0 ? "(" + fmt2(Math.abs(val)) + ")" : fmt2(val); }
+function renderInt(data, type){ const n = Math.round(toNumber(data)); return type === 'display' ? String(n) : n; }
+function renderCHF(data, type){ const n = toNumber(data); return type === 'display' ? fmtMoney(n) + " CHF" : n; }
+function renderRate(data, type){ const n = toNumber(data); return type === 'display' ? fmtMoney(n) : n; }
 
-function q(id){ return document.getElementById(id); }
-function clean(v){ return String(v ?? "").replace(/\s+/g," ").trim(); }
-function formatDateISO(y,m,d){ return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-function formatDateEU(iso){
-  const s = clean(iso);
-  if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-  const [y,m,d] = s.split("-");
-  return `${d}.${m}.${y.slice(2)}`;
-}
-function parseDateFromAny(text){
-  const s = clean(text);
-  if(!s) return "";
-  let m = s.match(/(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})/);
-  if(m){
-    let day=+m[1], month=+m[2], year=+m[3];
-    if(year<100) year += 2000;
-    return formatDateISO(year,month,day);
-  }
-  m = s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if(m) return formatDateISO(+m[1],+m[2],+m[3]);
-  return "";
-}
-function isoToExcelSerial(iso){
-  const s = clean(iso);
-  if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
-  const [y,m,d] = s.split("-").map(Number);
-  const utc = Date.UTC(y, m - 1, d);
-  return utc / 86400000 + 25569;
-}
-function setDateCell(ws, addr, iso){
-  const serial = isoToExcelSerial(iso);
-  if(serial === null){
-    ws[addr] = { t:"s", v: formatDateEU(iso) };
-  } else {
-    ws[addr] = { t:"n", v: serial, z:"dd.mm.yy" };
-  }
-}
-function setCell(ws, addr, value, type){ ws[addr] = { t:type, v:value }; }
-async function loadWorkbook(file){
-  const data = await file.arrayBuffer();
-  return XLSX.read(data,{type:"array", cellDates:true});
-}
-function escapeHtml(v){
-  return String(v ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;");
-}
-function clearColumn(ws, col, rowStart, rowEnd){
-  for(let r=rowStart;r<=rowEnd;r++) delete ws[col + r];
-}
-function writePmsSheet(ws, rows){
-  setCell(ws,"A1","Line","s");
-  setCell(ws,"B1","Name","s");
-  setCell(ws,"C1","First Name","s");
-  setCell(ws,"D1","Title","s");
-  setCell(ws,"E1","Shares","s");
-  setCell(ws,"F1","Arrival","s");
-  setCell(ws,"G1","Departure","s");
-  setCell(ws,"H1","Room Type","s");
-  setCell(ws,"I1","Room","s");
-  setCell(ws,"J1","Payment Method","s");
-  setCell(ws,"K1","Adults","s");
-  setCell(ws,"L1","Children","s");
 
-  clearColumn(ws, "D", 2, rows.length + 200);
-  clearColumn(ws, "E", 2, rows.length + 200);
-  clearColumn(ws, "F", 2, rows.length + 200);
-  clearColumn(ws, "G", 2, rows.length + 200);
-  clearColumn(ws, "H", 2, rows.length + 200);
-  clearColumn(ws, "I", 2, rows.length + 200);
-  clearColumn(ws, "J", 2, rows.length + 200);
-  clearColumn(ws, "K", 2, rows.length + 200);
-  clearColumn(ws, "L", 2, rows.length + 200);
-
-  delete ws["M1"];
-  delete ws["N1"];
-  delete ws["O1"];
-
-  rows.forEach((row, idx)=>{
-    const r = idx + 2;
-    setCell(ws,"A"+r,row.line,"n");
-    setCell(ws,"B"+r,row.name,"s");
-    setCell(ws,"C"+r,row.firstName,"s");
-
-    delete ws["D"+r];
-    delete ws["E"+r];
-
-    setDateCell(ws,"F"+r,row.arrival);
-    setDateCell(ws,"G"+r,row.departure);
-    setCell(ws,"H"+r,row.roomType,"s");
-    delete ws["I"+r];
-    setCell(ws,"J"+r,row.payment,"s");
-    setCell(ws,"K"+r,Number(row.adult || 0),"n");
-    setCell(ws,"L"+r,0,"n");
-  });
-
-  ws["!ref"] = "A1:L" + (rows.length + 2);
+const VIEW_KEY='gruppenbericht_view_compact_v1';
+function setCompactMode(on){
+  document.body.classList.toggle('compact-mode', !!on);
+  const btn = document.getElementById('compactToggleBtn');
+  if(btn){ btn.textContent = 'Ansicht: ' + (on ? 'Normal' : 'Kompakt'); }
+  try{ localStorage.setItem(VIEW_KEY, on ? '1' : '0'); }catch(e){}
+  if(window.dt){ dt.columns.adjust().draw(false); }
 }
-async function fetchTemplateBuffer(){
-  const res = await fetch(DEFAULT_TEMPLATE_URL);
-  if(!res.ok) throw new Error("Template konnte nicht geladen werden: " + DEFAULT_TEMPLATE_URL);
-  return await res.arrayBuffer();
-}
-function askTemplateFile(){
-  return new Promise((resolve, reject)=>{
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.xls,.xlsx';
-    input.style.display = 'none';
-    document.body.appendChild(input);
-    input.addEventListener('change', async ()=>{
-      try{
-        const file = input.files && input.files[0];
-        if(!file){ reject(new Error('Template-Auswahl abgebrochen')); return; }
-        templateSourceName = file.name;
-        resolve(await file.arrayBuffer());
-      }catch(err){ reject(err); }
-      finally{ input.remove(); }
-    }, { once:true });
-    input.click();
-  });
-}
-
-async function pickTemplateManually(logFn){
-  templateArrayBuffer = await askTemplateFile();
-  if(logFn) logFn("Lokales Template geladen: " + templateSourceName);
-  return templateArrayBuffer;
-}
-async function ensureTemplateBuffer(logFn){
-  if(templateArrayBuffer) return templateArrayBuffer;
+function initCompactMode(){
+  let on = false;
   try{
-    templateArrayBuffer = await fetchTemplateBuffer();
-    templateSourceName = DEFAULT_TEMPLATE_URL;
-    if(logFn) logFn("Standard Template geladen: " + DEFAULT_TEMPLATE_URL);
-    return templateArrayBuffer;
-  }catch(err){
-    if(location.protocol === 'file:'){
-      if(logFn) logFn("Fetch des Templates lokal blockiert. Bitte zuerst 'Template-Datei wählen' klicken.");
-      throw new Error("Bitte zuerst 'Template-Datei wählen' klicken und Rooming_List_Final.xls oder .xlsx auswählen.");
-    }
-    throw err;
-  }
+    const saved = localStorage.getItem(VIEW_KEY);
+    if(saved !== null) on = saved === '1';
+    else on = window.innerWidth < 1650;
+  }catch(e){ on = window.innerWidth < 1650; }
+  setCompactMode(on);
 }
-function getFreshTemplateWorkbook(){
-  if(!templateArrayBuffer) throw new Error('Template ist nicht geladen');
-  return XLSX.read(templateArrayBuffer.slice(0), {type:'array', cellDates:true});
-}
-function downloadWithTemplate(rows, filename){
-  const wb = getFreshTemplateWorkbook();
-  const ws = wb.Sheets[wb.SheetNames[0]];
-  writePmsSheet(ws, rows);
-  XLSX.writeFile(wb, filename);
-}
-function buildBlankWorkbook(rows, sheetName, filename){
-  const wb=XLSX.utils.book_new(), ws={};
-  writePmsSheet(ws, rows);
-  XLSX.utils.book_append_sheet(wb, ws, sheetName);
-  XLSX.writeFile(wb, filename);
-}
-function bindTableInputs(tbodyId, list, updateFn){
-  q(tbodyId).querySelectorAll('input[data-i], select[data-i]').forEach(el=>{
-    el.addEventListener('input', e=>{
-      const i=Number(e.target.dataset.i), k=e.target.dataset.k;
-      list[i][k]=e.target.value;
-      updateFn();
-    });
-  });
-}
-document.querySelectorAll('.navbtn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    btn.classList.add('active');
-    q(btn.dataset.page).classList.add('active');
-  });
-});
 
-/* -------- VIYA -------- */
-let viyaParsedRooms = [];
-function viyaLog(m){ q("viyaLog").textContent = new Date().toLocaleTimeString()+" "+m+"\n"+q("viyaLog").textContent; }
-function viyaIsRoomStart(v){ return /^\d+\.Room$/i.test(clean(v)); }
-function viyaIsRoomType(v){ return /^(Double|Twin|Triple|Single)$/i.test(clean(v)); }
-function viyaMapRoomType(v){
-  const s=clean(v).toLowerCase();
-  if(s==="double") return "DBL";
-  if(s==="twin") return "TWI";
-  if(s==="triple") return "TRI";
-  if(s==="single") return q("viyaSingleMode").value;
-  return "";
+const MARKET_OPTIONS = ["", "Corporate", "Leisure"];
+const AUTO_LEISURE_ACCOUNTS = [
+  "BEY TOURS","EMETRAVEL","EUROPE INCOMING HOLDINGS LTD.","EURORUTAS TUOR OPERATOR S.L.",
+  "MEGA TRAVEL OPERADORA S.A DE C.V","MASEUROPA","GLOBETROTTERS TRAVEL AND TOURS",
+  "GOEUGO INTERNATIONAL LTD.","VIYA TRAVEL LTD","PANAVISION TOURS  (CIRCUITOS A FONDO S",
+  "EUROPA MUNDO VACACIONES, S.L.U.","G2 TRAVEL LTD.","KUONI GLOBAL TRAVEL SERVICES (SCHWEIZ)",
+  "EUROPE INCOMING LONDON","VOSAIO TRAVEL LIMITED","MAPA TOURS"
+];
+function normAccount(s){ return String(s ?? "").toUpperCase().replace(/[’']/g, "'").replace(/[“”"]/g, '"').replace(/\u00A0/g, ' ').replace(/\s+/g, " ").trim(); }
+function shouldAutoLeisure(accountName){ const n = normAccount(accountName); return n && AUTO_LEISURE_ACCOUNTS.some(a => n.includes(normAccount(a)) || n.startsWith(normAccount(a))); }
+function applyAutoLeisureAllRows(){ if (!dt) return; dt.rows().every(function(){ const r=this.data(); if(r && shouldAutoLeisure(r[1])){ r[3]="Leisure"; this.data(r);} }); }
+function washToBool(val){ if (val === true) return true; const s = String(val ?? "").trim().toLowerCase(); return ["true","1","yes","ja","y","✓"].includes(s); }
+function washDisplay(val){ return washToBool(val) ? "true" : "false"; }
+function marketNormalize(val){ const s = String(val ?? "").trim(); if(!s) return ""; const found = MARKET_OPTIONS.find(o => o.toLowerCase() === s.toLowerCase()); return found ?? s; }
+function renderWash(val, type){ const b = washToBool(val); return type === 'display' ? `<input class="cell-check wash-check" type="checkbox" ${b ? "checked" : ""}>` : (b ? "true" : "false"); }
+function renderMarket(val, type){
+  const v = marketNormalize(val);
+  if (type !== 'display') return v || "";
+  const opts = MARKET_OPTIONS.map(o => `<option value="${o}" ${(o && o.toLowerCase()===v.toLowerCase()) || (!o && !v) ? 'selected' : ''}>${o || '—'}</option>`).join('');
+  return `<select class="cell-select market-select" title="Market wählen">${opts}</select>`;
 }
-function viyaAdult(v){
-  const s=clean(v).toLowerCase();
-  if(s==="double") return 2;
-  if(s==="twin") return 2;
-  if(s==="triple") return 3;
-  if(s==="single") return 1;
-  return "";
-}
-function viyaDetectSpecials(n,f){
-  const t=(n+" "+f).toLowerCase();
-  if(t.includes("guide")) return "Guide";
-  if(t.includes("driver")) return "Driver";
-  if(t.includes("leader")) return "Leader";
-  return "";
-}
-function viyaRowHasGuest(row){ return clean(row[3]) || clean(row[4]) || clean(row[5]) || clean(row[6]); }
-function viyaGuestFromRow(row){
-  const fullSurname=[clean(row[3]),clean(row[4])].filter(Boolean).join(" ");
-  const fullFirst=[clean(row[5]),clean(row[6])].filter(Boolean).join(" ");
-  return { name: fullSurname, firstName: fullFirst, specials: viyaDetectSpecials(fullSurname,fullFirst) };
-}
-function viyaAutoDates(rows){
-  let found=[];
-  for(let r=0;r<Math.min(rows.length,20);r++){
-    const row=rows[r]||[];
-    for(let c=0;c<row.length;c++){
-      const dt=parseDateFromAny(row[c]);
-      if(dt) found.push(dt);
-    }
-  }
-  found=[...new Set(found)].sort();
-  if(found[0] && !q("viyaArrival").value) q("viyaArrival").value=found[0];
-  if(found[1] && !q("viyaDeparture").value) q("viyaDeparture").value=found[1];
-}
-function viyaUpdateStats(){
-  q("viyaStatRooms").textContent=viyaParsedRooms.length;
-  q("viyaStatDBL").textContent=viyaParsedRooms.filter(x=>x.roomType==="DBL").length;
-  q("viyaStatTWI").textContent=viyaParsedRooms.filter(x=>x.roomType==="TWI").length;
-  q("viyaStatTRI").textContent=viyaParsedRooms.filter(x=>x.roomType==="TRI").length;
-  q("viyaStatAdults").textContent=viyaParsedRooms.reduce((a,b)=>a+Number(b.adult||0),0);
-}
-function viyaRender(){
-  const tb=q("viyaTbody"); tb.innerHTML="";
-  const arrivalDisplay=formatDateEU(q("viyaArrival").value);
-  const departureDisplay=formatDateEU(q("viyaDeparture").value);
-  const payment=q("viyaPayment").value;
-  viyaParsedRooms.forEach((g,i)=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${i+1}</td><td><input value="${escapeHtml(g.name)}" data-i="${i}" data-k="name"></td><td><input value="${escapeHtml(g.firstName)}" data-i="${i}" data-k="firstName"></td><td>${escapeHtml(arrivalDisplay)}</td><td>${escapeHtml(departureDisplay)}</td><td><select data-i="${i}" data-k="roomType"><option value="DBL" ${g.roomType==="DBL"?"selected":""}>DBL</option><option value="TWI" ${g.roomType==="TWI"?"selected":""}>TWI</option><option value="TRI" ${g.roomType==="TRI"?"selected":""}>TRI</option></select></td><td><input value="${escapeHtml(g.adult)}" data-i="${i}" data-k="adult"></td><td>${escapeHtml(payment)}</td><td class="action-cell"><button class="danger" onclick="viyaDeleteRow(${i})">Löschen</button></td>`;
-    tb.appendChild(tr);
-  });
-  bindTableInputs("viyaTbody", viyaParsedRooms, viyaUpdateStats);
-  viyaUpdateStats();
-  q("viyaSummary").innerHTML=`<b>${viyaParsedRooms.length}</b> Zimmer erkannt | Arrival: ${clean(arrivalDisplay)} | Departure: ${clean(departureDisplay)}`;
-}
-async function viyaAnalyze(){
-  const file=q("viyaFile").files[0];
-  if(!file){ alert("Bitte Viya-Datei wählen"); return; }
-  const wb=await loadWorkbook(file);
-  const ws=wb.Sheets[wb.SheetNames[0]];
-  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
-  viyaAutoDates(rows);
-  viyaParsedRooms=[];
-  let startRow = rows.findIndex(r => clean((r||[])[0]) === "No");
-  if(startRow < 0){ viyaLog("Header 'No' nicht gefunden."); viyaRender(); return; }
-  for(let i=startRow+1; i<rows.length; i++){
-    const row = rows[i] || [];
-    const colA = clean(row[0]);
-    if(!viyaIsRoomStart(colA)) continue;
-    if(!viyaRowHasGuest(row)) continue;
-    const guest = viyaGuestFromRow(row);
-    let sourceRoomType = "";
-    for(let j=i+1; j<rows.length; j++){
-      const a = clean((rows[j]||[])[0]);
-      if(viyaIsRoomStart(a)) break;
-      if(viyaIsRoomType(a)){ sourceRoomType = a; break; }
-    }
-    if(!sourceRoomType && viyaIsRoomType((row||[])[9])) sourceRoomType = clean(row[9]);
-    if(!sourceRoomType){ viyaLog("Room Type nicht gefunden für "+colA); continue; }
-    viyaParsedRooms.push({name: guest.name, firstName: guest.firstName, roomType: viyaMapRoomType(sourceRoomType), adult: viyaAdult(sourceRoomType), specials: guest.specials});
-  }
-  viyaRender();
-  viyaLog("Analyse fertig: "+viyaParsedRooms.length+" Zimmer");
-}
-async function viyaMaybeLoadTemplate(){ await ensureTemplateBuffer(viyaLog); }
-function viyaExportRows(){
-  return viyaParsedRooms.map((g,i)=>({line:i+1,name:g.name,firstName:g.firstName,arrival:q("viyaArrival").value,departure:q("viyaDeparture").value,roomType:g.roomType,payment:q("viyaPayment").value,adult:g.adult,specials:g.specials}));
-}
-function viyaExport(useTemplate){
-  if(!viyaParsedRooms.length){ alert("Bitte zuerst Viya analysieren"); return; }
-  const rows=viyaExportRows();
-  if(useTemplate){
-    downloadWithTemplate(rows, "Viya_PMS_Hub_Template.xlsx");
-  } else {
-    buildBlankWorkbook(rows, "Rooming List", "Viya_PMS_Hub.xlsx");
-  }
-  viyaLog("Export erstellt: "+rows.length+" Zeilen");
-}
-function viyaDeleteRow(i){ viyaParsedRooms.splice(i,1); viyaRender(); }
-function viyaAddRow(){ viyaParsedRooms.push({name:"", firstName:"", roomType:"DBL", adult:2, specials:""}); viyaRender(); }
 
-/* -------- EMETRAVEL -------- */
-let emeParsedRooms = [];
-function emeLog(m){ q("emeLog").textContent = new Date().toLocaleTimeString()+" "+m+"\n"+q("emeLog").textContent; }
-function emeMapRoomType(rooming){
-  const s = clean(rooming).toUpperCase();
-  if(s.includes("TPL")) return "TRI";
-  if(s.includes("TWIN")) return "TWI";
-  if(s.includes("DBL")) return "DBL";
-  if(s === "SGL") return q("emeSingleMode").value;
-  return "";
-}
-function emeAdult(rooming){
-  const s = clean(rooming).toUpperCase();
-  if(s.includes("TPL")) return 3;
-  if(s.includes("TWIN")) return 2;
-  if(s.includes("DBL")) return 2;
-  if(s === "SGL") return 1;
-  return "";
-}
-function emeSplitName(fullName){
-  const name = clean(fullName).replace(/\s*\(MENOR\)\s*/gi, "").trim();
-  if(!name) return { lastName:"", firstName:"", specials:"" };
-  const upper = name.toUpperCase();
-  if(upper === "DRIVER") return { lastName:"Driver", firstName:"", specials:"Driver" };
-  if(upper.includes("TOUR LIDER")) return { lastName:"Guide", firstName:"", specials:"Guide" };
-  const parts = name.split(/\s+/).filter(Boolean);
-  if(parts.length === 1) return { lastName:parts[0], firstName:"", specials:"" };
-  if(parts.length === 2) return { lastName:parts[0], firstName:parts[1], specials:"" };
-  if(parts.length === 3) return { lastName:parts[0]+" "+parts[1], firstName:parts[2], specials:"" };
-  return { lastName:parts.slice(0,2).join(" "), firstName:parts.slice(2).join(" "), specials:"" };
-}
-function emeFindHeaderRow(rows){
-  for(let i=0;i<Math.min(rows.length,15);i++){
-    const a = clean((rows[i]||[])[0]).toUpperCase();
-    const b = clean((rows[i]||[])[1]).toUpperCase();
-    const c = clean((rows[i]||[])[2]).toUpperCase();
-    if(a==="NO" && b==="NOMBRE" && c==="ROOMING") return i;
+function parseDelimited(text, delimiter){
+  const rows=[]; let row=[]; let cur=''; let inQuotes=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i], next=text[i+1];
+    if(ch === '"'){ if(inQuotes && next === '"'){ cur+='"'; i++; } else inQuotes=!inQuotes; continue; }
+    if(!inQuotes && (ch === '\n' || ch === '\r')){ if(ch === '\r' && next === '\n') i++; row.push(cur); rows.push(row); row=[]; cur=''; continue; }
+    if(!inQuotes && ch === delimiter){ row.push(cur); cur=''; continue; }
+    cur += ch;
   }
-  return -1;
+  row.push(cur); rows.push(row);
+  return rows.map(r=>r.map(c=>(c??'').trim())).filter(r=>r.some(c=>c!==''));
 }
-function emeUpdateStats(){
-  q("emeStatRooms").textContent=emeParsedRooms.length;
-  q("emeStatDBL").textContent=emeParsedRooms.filter(x=>x.roomType==="DBL").length;
-  q("emeStatTWI").textContent=emeParsedRooms.filter(x=>x.roomType==="TWI").length;
-  q("emeStatTRI").textContent=emeParsedRooms.filter(x=>x.roomType==="TRI").length;
-  q("emeStatAdults").textContent=emeParsedRooms.reduce((a,b)=>a+Number(b.adult||0),0);
-}
-function emeRender(){
-  const tb=q("emeTbody"); tb.innerHTML="";
-  const arrivalDisplay=formatDateEU(q("emeArrival").value);
-  const departureDisplay=formatDateEU(q("emeDeparture").value);
-  const payment=q("emePayment").value;
-  emeParsedRooms.forEach((g,i)=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${i+1}</td><td><input value="${escapeHtml(g.name)}" data-i="${i}" data-k="name"></td><td><input value="${escapeHtml(g.firstName)}" data-i="${i}" data-k="firstName"></td><td>${escapeHtml(arrivalDisplay)}</td><td>${escapeHtml(departureDisplay)}</td><td><select data-i="${i}" data-k="roomType"><option value="DBL" ${g.roomType==="DBL"?"selected":""}>DBL</option><option value="TWI" ${g.roomType==="TWI"?"selected":""}>TWI</option><option value="TRI" ${g.roomType==="TRI"?"selected":""}>TRI</option></select></td><td><input value="${escapeHtml(g.adult)}" data-i="${i}" data-k="adult"></td><td>${escapeHtml(payment)}</td><td>${escapeHtml(g.source)}</td><td class="action-cell"><button class="danger" onclick="emeDeleteRow(${i})">Löschen</button></td>`;
-    tb.appendChild(tr);
-  });
-  bindTableInputs("emeTbody", emeParsedRooms, emeUpdateStats);
-  emeUpdateStats();
-  q("emeSummary").innerHTML=`<b>${emeParsedRooms.length}</b> Zimmer erkannt | Arrival: ${clean(arrivalDisplay)} | Departure: ${clean(departureDisplay)}`;
-}
-async function emeAnalyze(){
-  const file=q("emeFile").files[0];
-  if(!file){ alert("Bitte Emetravel-Datei wählen"); return; }
-  const wb=await loadWorkbook(file);
-  const ws=wb.Sheets[wb.SheetNames[0]];
-  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
-  emeParsedRooms=[];
-  const headerRow=emeFindHeaderRow(rows);
-  if(headerRow<0){ emeLog("Header NO / NOMBRE / ROOMING nicht gefunden."); emeRender(); return; }
-  for(let i=headerRow+1;i<rows.length;i++){
-    const row=rows[i]||[];
-    const no=clean(row[0]), nombre=row[1], rooming=clean(row[2]);
-    if(!no && !clean(nombre) && !rooming) continue;
-    if(!rooming) continue;
-    const split=emeSplitName(nombre);
-    emeParsedRooms.push({name:split.lastName, firstName:split.firstName, roomType:emeMapRoomType(rooming), adult:emeAdult(rooming), specials:split.specials || "", source:rooming});
-  }
-  emeRender();
-  emeLog("Analyse fertig: "+emeParsedRooms.length+" Zimmer");
-}
-async function emeMaybeLoadTemplate(){ await ensureTemplateBuffer(emeLog); }
-function emeExportRows(){
-  return emeParsedRooms.map((g,i)=>({line:i+1,name:g.name,firstName:g.firstName,arrival:q("emeArrival").value,departure:q("emeDeparture").value,roomType:g.roomType,payment:q("emePayment").value,adult:g.adult,specials:g.specials}));
-}
-function emeExport(useTemplate){
-  if(!emeParsedRooms.length){ alert("Bitte zuerst Emetravel analysieren"); return; }
-  const rows=emeExportRows();
-  if(useTemplate){
-    downloadWithTemplate(rows, "Emetravel_PMS_Hub_Template.xlsx");
-  } else {
-    buildBlankWorkbook(rows, "Rooming List", "Emetravel_PMS_Hub.xlsx");
-  }
-  emeLog("Export erstellt: "+rows.length+" Zeilen");
-}
-function emeDeleteRow(i){ emeParsedRooms.splice(i,1); emeRender(); }
-function emeAddRow(){ emeParsedRooms.push({name:"", firstName:"", roomType:"DBL", adult:2, specials:"", source:""}); emeRender(); }
+function detectDelimiter(line){ if(line.includes('\t')) return '\t'; return ((line.match(/;/g)||[]).length > (line.match(/,/g)||[]).length) ? ';' : ','; }
+function normHeaderKey(name){ return String(name ?? '').replace(/^\uFEFF/, '').replace(/["']/g,'').trim().toUpperCase().replace(/[^A-Z0-9]/g,''); }
+function buildHeaderMap(headerRow){ const map={}; headerRow.forEach((name,idx)=>{ const k=normHeaderKey(name); if(k) map[k]=idx; }); return map; }
+function getCell(cols,map,name){ const idx = map[normHeaderKey(name)]; return idx===undefined ? '' : (cols[idx] ?? ''); }
+function findHeaderRowIndex(rows){ const a=normHeaderKey('ARRIVALDATE'), d=normHeaderKey('DEPARTUREDATE'); for(let i=0;i<Math.min(rows.length,40);i++){ const keys=(rows[i]||[]).map(normHeaderKey); if(keys.includes(a) && keys.includes(d)) return i; } return -1; }
+function isFooterOrLabel(firstCell){ const v=(firstCell||'').trim(); return v.startsWith('CF_NAME_FILTER') || v==='Filter' || v.startsWith('CF_'); }
+function isGrandTotal(cols,map){ return getCell(cols,map,'GROUP_BY')==='ALL' && getCell(cols,map,'COL1')==='ALL' && (getCell(cols,map,'BOOK_ID')||'').trim()===''; }
+function isCurrencyOrVariance(cols,map){ const hay=`${getCell(cols,map,'COL1')} ${getCell(cols,map,'COL2')} ${getCell(cols,map,'COL3')}`.toLowerCase(); return hay.includes('currency') || hay.includes('variance') || hay==='chf' || hay.includes(' chf'); }
 
-/* -------- EXA TRAVEL -------- */
-let exaParsedRooms = [];
-function exaLog(m){ q("exaLog").textContent = new Date().toLocaleTimeString()+" "+m+"\n"+q("exaLog").textContent; }
-function exaMapRoomType(room){
-  const s = clean(room).toUpperCase();
-  if(s.includes("TWIN")) return "TWI";
-  if(s.includes("TPL")) return "TRI";
-  if(s.includes("DBL")) return "DBL";
-  if(s.includes("SGL")) return q("exaSingleMode").value;
-  return "";
-}
-function exaAdult(room){
-  const s = clean(room).toUpperCase();
-  if(s.includes("TWIN")) return 2;
-  if(s.includes("TPL")) return 3;
-  if(s.includes("DBL")) return 2;
-  if(s.includes("SGL")) return 1;
-  return "";
-}
-function exaSpecials(lastName, firstName){
-  const t = (clean(lastName)+" "+clean(firstName)).toUpperCase();
-  if(t.includes("GUIDE")) return "Guide";
-  if(t.includes("DRIVER")) return "Driver";
-  return "";
-}
-function exaUpdateStats(){
-  q("exaStatRooms").textContent=exaParsedRooms.length;
-  q("exaStatDBL").textContent=exaParsedRooms.filter(x=>x.roomType==="DBL").length;
-  q("exaStatTWI").textContent=exaParsedRooms.filter(x=>x.roomType==="TWI").length;
-  q("exaStatTRI").textContent=exaParsedRooms.filter(x=>x.roomType==="TRI").length;
-  q("exaStatAdults").textContent=exaParsedRooms.reduce((a,b)=>a+Number(b.adult||0),0);
-}
-function exaRender(){
-  const tb=q("exaTbody"); tb.innerHTML="";
-  const arrivalDisplay=formatDateEU(q("exaArrival").value);
-  const departureDisplay=formatDateEU(q("exaDeparture").value);
-  const payment=q("exaPayment").value;
-  exaParsedRooms.forEach((g,i)=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${i+1}</td><td><input value="${escapeHtml(g.name)}" data-i="${i}" data-k="name"></td><td><input value="${escapeHtml(g.firstName)}" data-i="${i}" data-k="firstName"></td><td>${escapeHtml(arrivalDisplay)}</td><td>${escapeHtml(departureDisplay)}</td><td><select data-i="${i}" data-k="roomType"><option value="DBL" ${g.roomType==="DBL"?"selected":""}>DBL</option><option value="TWI" ${g.roomType==="TWI"?"selected":""}>TWI</option><option value="TRI" ${g.roomType==="TRI"?"selected":""}>TRI</option></select></td><td><input value="${escapeHtml(g.adult)}" data-i="${i}" data-k="adult"></td><td>${escapeHtml(payment)}</td><td>${escapeHtml(g.source)}</td><td class="action-cell"><button class="danger" onclick="exaDeleteRow(${i})">Löschen</button></td>`;
-    tb.appendChild(tr);
-  });
-  bindTableInputs("exaTbody", exaParsedRooms, exaUpdateStats);
-  exaUpdateStats();
-  q("exaSummary").innerHTML=`<b>${exaParsedRooms.length}</b> Zimmer erkannt | Arrival: ${clean(arrivalDisplay)} | Departure: ${clean(departureDisplay)}`;
-}
-function exaAutoDates(lines){
-  let found=[];
-  lines.forEach(line=>{
-    const m = clean(line).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/g);
-    if(m){
-      m.forEach(x=>{
-        const dt=parseDateFromAny(x);
-        if(dt) found.push(dt);
-      });
-    }
-  });
-  found=[...new Set(found)].sort();
-  if(found[0] && !q("exaArrival").value) q("exaArrival").value=found[0];
-  if(found[1] && !q("exaDeparture").value) q("exaDeparture").value=found[1];
-}
-function exaParseFlexibleLine(line){
-  if(line.includes('\t')) return line.split('\t').map(x=>clean(x));
-  return line.split(/\s{2,}/).map(x=>clean(x));
-}
-function exaFindPaxHeader(lines){
-  return lines.findIndex(l => {
-    const s = clean(l).toUpperCase().replace(/\s+/g,' ');
-    return s.includes('PAX') && s.includes('LAST NAME') && s.includes('ADT/CHD') && s.includes('ROOM');
-  });
-}
-function exaNormalizeHeader(line){ return clean(line).toUpperCase().replace(/\s+/g,' '); }
-function exaLooksLikePassengerLine(line){ return /^\s*\d+\s+/.test(line) || /^\d+\t/.test(line); }
-function exaExtractRoomToken(line){
-  const u = clean(line).toUpperCase();
-  const patterns = [/TPL\s*C\/MNR\d+/, /\bTPL\b/, /\bTWIN\b/, /\bDBL(?:\s*\+\s*IFN)?\b/, /\bSGL\b/];
-  for(const p of patterns){
-    const m = u.match(p);
-    if(m) return m[0];
-  }
-  return "";
-}
-async function exaAnalyze(){
-  const text = q("exaText").value;
-  if(!clean(text)){ alert("Bitte den Exa Travel E-Mail-Text einfügen"); return; }
-  const lines = text.split(/\r?\n/).map(x=>x.replace(/\r/g,'')).filter(x=>clean(x));
-  exaAutoDates(lines);
-  exaParsedRooms = [];
-  const headerIdx = exaFindPaxHeader(lines);
-  if(headerIdx < 0){ exaLog("PAX Header nicht gefunden."); exaRender(); return; }
-  for(let i=headerIdx+1;i<lines.length;i++){
-    const line = lines[i];
-    const norm = exaNormalizeHeader(line);
-    if(norm.startsWith('NIGHTS DATE CITY')) continue;
-    if(norm.startsWith('PAX LAST NAME NAME')) continue;
-    if(!exaLooksLikePassengerLine(line)) continue;
-    const cols = exaParseFlexibleLine(line);
-    const paxNo = clean(cols[0] || "");
-    if(!/^\d+$/.test(paxNo)) continue;
-    let lastName = clean(cols[1] || "");
-    let firstName = clean(cols[2] || "");
-    const room = exaExtractRoomToken(line);
-    if(!room) continue;
-    const roomType = exaMapRoomType(room);
-    if(!roomType) continue;
-    const lineUpper = clean(line).toUpperCase();
-    let outLast = lastName;
-    let outFirst = firstName;
-    let outSpecials = "";
-    if(/\bGUIDE\b/.test(lineUpper)){
-      outLast = 'Guide';
-      outFirst = '';
-      outSpecials = 'Guide';
-    } else if(/\bDRIVER\b/.test(lineUpper)){
-      outLast = 'Driver';
-      outFirst = '';
-      outSpecials = 'Driver';
-    } else {
-      outSpecials = exaSpecials(outLast, outFirst);
-    }
-    exaParsedRooms.push({ name: outLast, firstName: outFirst, roomType: roomType, adult: exaAdult(room), specials: outSpecials, source: room });
-  }
-  exaRender();
-  exaLog("Analyse fertig: "+exaParsedRooms.length+" Zimmer");
-}
-async function exaMaybeLoadTemplate(){ await ensureTemplateBuffer(exaLog); }
-function exaExportRows(){
-  return exaParsedRooms.map((g,i)=>({line:i+1,name:g.name,firstName:g.firstName,arrival:q("exaArrival").value,departure:q("exaDeparture").value,roomType:g.roomType,payment:q("exaPayment").value,adult:g.adult,specials:g.specials}));
-}
-function exaExport(useTemplate){
-  if(!exaParsedRooms.length){ alert("Bitte zuerst Exa Travel analysieren"); return; }
-  const rows=exaExportRows();
-  if(useTemplate){
-    downloadWithTemplate(rows, "ExaTravel_PMS_Hub_Template.xlsx");
-  } else {
-    buildBlankWorkbook(rows, "Rooming List", "ExaTravel_PMS_Hub.xlsx");
-  }
-  exaLog("Export erstellt: "+rows.length+" Zeilen");
-}
-function exaDeleteRow(i){ exaParsedRooms.splice(i,1); exaRender(); }
-function exaAddRow(){ exaParsedRooms.push({name:"", firstName:"", roomType:"DBL", adult:2, specials:"", source:""}); exaRender(); }
-
-/* -------- BEY TOURS -------- */
-let beyParsedRooms = [];
-function beyLog(m){ q("beyLog").textContent = new Date().toLocaleTimeString()+" "+m+"\n"+q("beyLog").textContent; }
-function beyMapRoomType(rooming){
-  const s = clean(rooming).toUpperCase();
-  if(s.includes("TPL")) return "TRI";
-  if(s.includes("TWIN")) return "TWI";
-  if(s.includes("DBL")) return "DBL";
-  if(s === "SGL") return q("beySingleMode").value;
-  return "";
-}
-function beyAdult(rooming){
-  const s = clean(rooming).toUpperCase();
-  if(s.includes("TPL")) return 3;
-  if(s.includes("TWIN")) return 2;
-  if(s.includes("DBL")) return 2;
-  if(s === "SGL") return 1;
-  return "";
-}
-function beyFindHeaderInfo(rows){
-  for(let i=0;i<Math.min(rows.length,30);i++){
-    const row = (rows[i] || []).map(v=>clean(v).toUpperCase());
-    const paxIdx = row.indexOf("PAX");
-    const apPatIdx = row.indexOf("APELLIDO PATERNO");
-    const apMatIdx = row.indexOf("APELLIDO MATERNO");
-    const primerNombreIdx = row.indexOf("PRIMER NOMBRE");
-    const segundoNombreIdx = row.indexOf("SEGUNDO NOMBRE");
-    const roomIdx = row.indexOf("TIPO DE HABITACIÓN");
-    if(paxIdx >= 0 && apPatIdx >= 0 && apMatIdx >= 0 && primerNombreIdx >= 0 && roomIdx >= 0){
-      return {
-        rowIndex: i,
-        paxIdx,
-        apPatIdx,
-        apMatIdx,
-        primerNombreIdx,
-        segundoNombreIdx,
-        roomIdx
-      };
-    }
-  }
+function parseOperaDate(d){
+  if(d === null || d === undefined) return null;
+  let s = String(d).replace(/\u00A0/g,' ').trim();
+  if(!s) return null;
+  let m = s.match(/(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{2}|\d{4})/);
+  if(m){ let y=Number(m[3]); if(y<100) y=2000+y; return new Date(Date.UTC(y, Number(m[2])-1, Number(m[1]))); }
+  m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if(m){ return new Date(Date.UTC(Number(m[1]), Number(m[2])-1, Number(m[3]))); }
   return null;
 }
-function beySplitGuest(row, headerInfo){
-  const lastName = [clean(row[headerInfo.apPatIdx]), clean(row[headerInfo.apMatIdx])].filter(Boolean).join(" ");
-  const firstName = [clean(row[headerInfo.primerNombreIdx]), clean(row[headerInfo.segundoNombreIdx])].filter(Boolean).join(" ");
-  const joined = (lastName + " " + firstName).toUpperCase();
-  let specials = "";
-  if(joined.includes("GUIDE")) specials = "Guide";
-  if(joined.includes("DRIVER")) specials = "Driver";
-  return { lastName, firstName, specials };
+function parseISODate(s){ const m=String(s||'').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? new Date(Date.UTC(+m[1], +m[2]-1, +m[3])) : null; }
+function operaDateKey(d){ const dt=parseOperaDate(d); return dt ? (dt.getUTCFullYear()*10000)+(dt.getUTCMonth()+1)*100+dt.getUTCDate() : 0; }
+function renderOperaDateSort(data, type){ return (type === 'sort' || type === 'type') ? operaDateKey(data) : data; }
+
+function normStatusRaw(s){ return String(s ?? "").toUpperCase().replace(/\u00A0/g,' ').trim(); }
+function statusCodeFromAnyText(s){
+  const raw = normStatusRaw(s), letters = raw.replace(/[^A-Z]/g,'');
+  if(!letters) return 'OTHER';
+  if (letters === 'CLX' || letters.includes('CANCEL') || letters.includes('CANCELL') || letters.includes('CXL')) return 'CXL';
+  if (letters.includes('ACT')) return 'ACT';
+  if (letters.includes('TEN')) return 'TEN';
+  if (letters.includes('DEF')) return 'DEF';
+  return letters;
 }
-function beyUpdateStats(){
-  q("beyStatRooms").textContent=beyParsedRooms.length;
-  q("beyStatDBL").textContent=beyParsedRooms.filter(x=>x.roomType==="DBL").length;
-  q("beyStatTWI").textContent=beyParsedRooms.filter(x=>x.roomType==="TWI").length;
-  q("beyStatTRI").textContent=beyParsedRooms.filter(x=>x.roomType==="TRI").length;
-  q("beyStatAdults").textContent=beyParsedRooms.reduce((a,b)=>a+Number(b.adult||0),0);
+function statusBucketFromCode(code){ const c=String(code||'').trim().toUpperCase(); if(c==='ACT') return 'ACT'; if(c==='TEN' || c==='DEF') return 'OTB'; if(c==='CXL') return 'CXL'; return 'OTHER'; }
+
+let washQuickOn = false, marketQuick = '', monthQuick = '', chgMonthQuick = '';
+$.fn.dataTable.ext.search.push(function(settings, data){
+  if(settings.nTable.id !== 'reportTable') return true;
+  if (washQuickOn && String(data[2]).toLowerCase() !== 'true') return false;
+  if (marketQuick && String(data[3]).toLowerCase() !== marketQuick.toLowerCase()) return false;
+
+  if (monthQuick){
+    const arrM = parseOperaDate(data[4]); const depM = parseOperaDate(data[5]) || arrM; if(!arrM) return false;
+    const monthIdx = Number(monthQuick), a = arrM.getTime(), d = depM.getTime(); let ok=false;
+    for(let y=arrM.getUTCFullYear(); y<=depM.getUTCFullYear(); y++){
+      const ms = Date.UTC(y, monthIdx-1, 1), me = Date.UTC(y, monthIdx, 1);
+      if(a < me && d >= ms){ ok=true; break; }
+    }
+    if(!ok) return false;
+  }
+  if (chgMonthQuick){ const chg=parseOperaDate(data[14]); if(!chg || (chg.getUTCMonth()+1)!==Number(chgMonthQuick)) return false; }
+
+  const arr = parseOperaDate(data[4]), dep = parseOperaDate(data[5]);
+  const arrFrom = parseISODate(document.getElementById('arrFrom').value), arrTo = parseISODate(document.getElementById('arrTo').value);
+  const depFrom = parseISODate(document.getElementById('depFrom').value), depTo = parseISODate(document.getElementById('depTo').value);
+  const inRange = (d, from, to) => !d || ((!from || d >= from) && (!to || d <= new Date(to.getTime()+86400000-1)));
+  if(!inRange(arr, arrFrom, arrTo) || !inRange(dep, depFrom, depTo)) return false;
+  if(document.getElementById('negOnly').checked && !(toNumber(data[7])<0 || toNumber(data[10])<0)) return false;
+  return true;
+});
+
+let dt;
+const STORAGE_KEY="gruppenbericht_refined_light_v1";
+const COL_STATUS = 13, COL_CHGDATE = 14, COL_SOURCE = 15, COL_STATUSCODE = 16;
+function ensureStatusCode(row){ row[COL_STATUSCODE] = statusCodeFromAnyText(row[COL_STATUS]); return row; }
+function saveTableToLocal(){ try{ const rows=dt.rows().data().toArray().map(r=>[...r]); rows.forEach(r=>{ r[2]=washToBool(r[2]); r[3]=shouldAutoLeisure(r[1]) ? 'Leisure' : marketNormalize(r[3]); ensureStatusCode(r);}); localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); }catch(e){ console.warn(e);} }
+function loadTableFromLocal(){ try{ const saved=localStorage.getItem(STORAGE_KEY); if(!saved || dt.rows().count()>0) return; JSON.parse(saved).forEach(r=>{ const rr=[...r]; rr[2]=washToBool(rr[2]); rr[3]=shouldAutoLeisure(rr[1]) ? 'Leisure' : marketNormalize(rr[3]); rr[COL_STATUSCODE]=statusCodeFromAnyText(rr[COL_STATUS]); dt.row.add(rr); }); dt.draw(); }catch(e){ console.warn(e);} }
+function computeTotals(rows){ let curRev=0,pickRev=0,curRm=0,pickRm=0; rows.forEach(r=>{ curRm+=toNumber(r[6]); pickRm+=toNumber(r[9]); curRev+=toNumber(r[7]); pickRev+=toNumber(r[10]); }); return {rows:rows.length, curRm, pickRm, curRev, pickRev}; }
+function countCxl(rows){ return rows.filter(r => String(r[COL_STATUSCODE]||'').toUpperCase()==='CXL').length; }
+function updateTotals(){
+  const allRows = dt.rows().data().toArray(), rows = dt.rows({search:'applied'}).data().toArray(), t=computeTotals(rows);
+  document.getElementById('f_rows').textContent=t.rows;
+  document.getElementById('f_rmcur').textContent=Math.round(t.curRm);
+  document.getElementById('f_rmpick').textContent=Math.round(t.pickRm);
+  document.getElementById('f_rev').textContent=fmtMoney(t.curRev)+" CHF";
+  document.getElementById('f_prev').textContent=fmtMoney(t.pickRev)+" CHF";
+  document.getElementById('dbg_cxl_filtered').textContent=countCxl(rows);
+  document.getElementById('dbg_cxl_total_wrap').textContent='von ' + countCxl(allRows) + ' gesamt';
 }
-function beyRender(){
-  const tb=q("beyTbody"); tb.innerHTML="";
-  const arrivalDisplay=formatDateEU(q("beyArrival").value);
-  const departureDisplay=formatDateEU(q("beyDeparture").value);
-  const payment=q("beyPayment").value;
-  beyParsedRooms.forEach((g,i)=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${i+1}</td><td><input value="${escapeHtml(g.name)}" data-i="${i}" data-k="name"></td><td><input value="${escapeHtml(g.firstName)}" data-i="${i}" data-k="firstName"></td><td>${escapeHtml(arrivalDisplay)}</td><td>${escapeHtml(departureDisplay)}</td><td><select data-i="${i}" data-k="roomType"><option value="DBL" ${g.roomType==="DBL"?"selected":""}>DBL</option><option value="TWI" ${g.roomType==="TWI"?"selected":""}>TWI</option><option value="TRI" ${g.roomType==="TRI"?"selected":""}>TRI</option></select></td><td><input value="${escapeHtml(g.adult)}" data-i="${i}" data-k="adult"></td><td>${escapeHtml(payment)}</td><td>${escapeHtml(g.source)}</td><td class="action-cell"><button class="danger" onclick="beyDeleteRow(${i})">Löschen</button></td>`;
-    tb.appendChild(tr);
+
+function upsertCharts(){}
+function getSelectedStatuses(){
+  const val = String(document.getElementById('statusSelect')?.value || '').trim().toUpperCase();
+  return val ? [val] : [];
+}
+function applyStatusFilter(){
+  const selected = getSelectedStatuses();
+  if(!selected.length){
+    dt.column(COL_STATUSCODE).search('', true, false).draw();
+    return;
+  }
+  const regex = '^(' + selected.join('|') + ')$';
+  dt.column(COL_STATUSCODE).search(regex, true, false).draw();
+}
+function clearStatusSelection(){
+  const sel = document.getElementById('statusSelect');
+  if(sel) sel.value = '';
+}
+function stripHtml(s){ return String(s ?? '').replace(/<[^>]*>/g,'').trim(); }
+
+$(function(){
+  initCompactMode();
+  dt = $('#reportTable').DataTable({
+    orderCellsTop:true, ordering:true, order:[], pageLength:25, lengthMenu:[10,25,50,100], dom:'Bfrtip',
+    buttons:[
+      { extend:'excelHtml5', title:'Gruppenbericht', text:'Excel (Daten)', exportOptions:{ columns:(idx)=> idx !== COL_STATUSCODE && dt.column(idx).visible(), format:{ body:function(data,row,col,node){ if(col===2) return washToBool($(node).find('input.wash-check').prop('checked')) ? true : false; if(col===3) return marketNormalize($(node).find('select.market-select').val()||''); if([7,8,10,11].includes(col)) return toNumber(data); if([6,9].includes(col)) return Math.round(toNumber(data)); return String(data).replace(/<[^>]*>/g,'').trim(); } } } },
+    ],
+    columnDefs:[
+      { targets:0, className:'bbcol', width:'220px' }, { targets:1, className:'accol', width:'260px' }, { targets:3, className:'mktcol', width:'90px' }, { targets:[6,9], className:'rmcol', width:'65px' }, { targets:14, className:'chgcol', width:'95px' },
+      { targets:[4,5,14], render:renderOperaDateSort }, { targets:2, render:renderWash }, { targets:3, render:renderMarket }, { targets:[6,9], render:renderInt }, { targets:[7,10], render:renderCHF }, { targets:[8,11], render:renderRate },
+      { targets:COL_STATUSCODE, visible:false, searchable:true }, { targets:COL_STATUS, orderData:[COL_STATUSCODE] }
+    ],
+    rowCallback:function(row,data){
+      const code=String(data[COL_STATUSCODE]||'').toUpperCase().trim(); row.classList.toggle('ten-row', code==='TEN'); $('td', row).removeClass('neg'); if(toNumber(data[7])<0) $('td', row).eq(7).addClass('neg'); if(toNumber(data[10])<0) $('td', row).eq(10).addClass('neg');
+    }
   });
-  bindTableInputs("beyTbody", beyParsedRooms, beyUpdateStats);
-  beyUpdateStats();
-  q("beySummary").innerHTML=`<b>${beyParsedRooms.length}</b> Zimmer erkannt | Arrival: ${clean(arrivalDisplay)} | Departure: ${clean(departureDisplay)}`;
+  window.dt = dt;
+  buildColumnChooser();
+
+  $('#reportTable thead tr.filter-row th').each(function(i){ $('input', this).on('keyup change clear', function(){ const val=this.value || ''; if(i===COL_STATUS){ dt.column(COL_STATUSCODE).search(val, false, true).draw(); return; } if(i!==COL_STATUSCODE) dt.column(i).search(val).draw(); }); });
+  $('#statusSelect').on('change', applyStatusFilter);
+  $('#monthSelect').on('change', function(){ monthQuick=(this.value||'').trim(); dt.draw(); });
+  $('#chgMonthSelect').on('change', function(){ chgMonthQuick=(this.value||'').trim(); dt.draw(); });
+  ['arrFrom','arrTo','depFrom','depTo','negOnly'].forEach(id=> document.getElementById(id).addEventListener('change', ()=>dt.draw()));
+  dt.on('draw', function(){ updateTotals(); upsertCharts(); });
+
+  try{ if(Array.isArray(window.__GB_PRELOADED_ROWS__) && window.__GB_PRELOADED_ROWS__.length){ dt.clear(); window.__GB_PRELOADED_ROWS__.forEach(r=>dt.row.add(r)); dt.draw(); } else loadTableFromLocal(); }catch(e){ console.warn(e); loadTableFromLocal(); }
+  applyAutoLeisureAllRows(); saveTableToLocal(); updateTotals(); upsertCharts();
+
+  $('#reportTable tbody').on('change','input.wash-check',function(){ const row=dt.row($(this).closest('tr')); const data=row.data(); data[2]=$(this).prop('checked'); row.data(data).invalidate(); saveTableToLocal(); dt.draw(false); });
+  $('#reportTable tbody').on('mousedown click focus','select.market-select',function(e){ e.stopPropagation(); });
+  $('#reportTable tbody').on('change input','select.market-select',function(e){
+    e.stopPropagation();
+    const row=dt.row($(this).closest('tr'));
+    const data=row.data();
+    if(!data) return;
+    data[3]=marketNormalize($(this).val());
+    row.data(data).invalidate();
+    saveTableToLocal();
+    updateTotals();
+  });
+  setMarketQuick('');
+});
+
+function setWashQuick(on){ washQuickOn=!!on; document.getElementById('washQuickBtn').classList.toggle('active', washQuickOn); dt.draw(); }
+function setMarketQuick(val){ marketQuick=val||''; ['All','Corp','Leis'].forEach(()=>{}); document.getElementById('mktAllBtn').classList.toggle('active', marketQuick===''); document.getElementById('mktCorpBtn').classList.toggle('active', marketQuick==='Corporate'); document.getElementById('mktLeisBtn').classList.toggle('active', marketQuick==='Leisure'); dt.draw(); }
+document.getElementById('washQuickBtn').addEventListener('click', ()=>setWashQuick(!washQuickOn));
+document.getElementById('mktAllBtn').addEventListener('click', ()=>setMarketQuick(''));
+document.getElementById('mktCorpBtn').addEventListener('click', ()=>setMarketQuick('Corporate'));
+document.getElementById('mktLeisBtn').addEventListener('click', ()=>setMarketQuick('Leisure'));
+
+let sortRevCurDesc=true, sortRevPickDesc=true, sortMonthAsc=true;
+document.getElementById('sortRevCurBtn').addEventListener('click', function(){ dt.order([7, sortRevCurDesc ? 'desc':'asc']).draw(); sortRevCurDesc=!sortRevCurDesc; });
+document.getElementById('sortRevPickBtn').addEventListener('click', function(){ dt.order([10, sortRevPickDesc ? 'desc':'asc']).draw(); sortRevPickDesc=!sortRevPickDesc; });
+document.getElementById('sortResetBtn').addEventListener('click', function(){ dt.column(COL_STATUSCODE).search('', true, false); dt.order([]).draw(); });
+document.getElementById('sortMonthBtn').addEventListener('click', function(){ dt.order([[4, sortMonthAsc ? 'asc':'desc']]).draw(); this.textContent='Monat Anreise ' + (sortMonthAsc ? '↑':'↓'); sortMonthAsc=!sortMonthAsc; });
+document.getElementById('clearBtn').addEventListener('click', function(){ dt.clear().draw(); updateTotals(); try{ localStorage.removeItem(STORAGE_KEY);}catch(e){} });
+document.getElementById('resetBtn').addEventListener('click', function(){ dt.columns().search(''); dt.search(''); document.querySelectorAll('.col-filter').forEach(i=>i.value=''); clearStatusSelection(); ['monthSelect','chgMonthSelect','arrFrom','arrTo','depFrom','depTo'].forEach(id=>document.getElementById(id).value=''); document.getElementById('negOnly').checked=false; monthQuick=''; chgMonthQuick=''; setWashQuick(false); setMarketQuick(''); dt.column(COL_STATUSCODE).search('', true, false); dt.order([]).draw(); });
+
+function addRowsFromOpera(text, sourceName){
+  const rows=parseDelimited(text, detectDelimiter((text.split(/\r?\n/).find(l=>l.trim().length)||'')));
+  if(!rows.length) return;
+  const hIdx=findHeaderRowIndex(rows);
+  if(hIdx<0){ alert('Import-Fehler: Header nicht gefunden. Bitte als Delimited Data inkl. Spaltennamen exportieren.'); return; }
+  const header=rows[hIdx], map=buildHeaderMap(header);
+  if(map[normHeaderKey('ARRIVALDATE')]===undefined || map[normHeaderKey('DEPARTUREDATE')]===undefined){ alert('Import-Fehler: ARRIVALDATE/DEPARTUREDATE fehlen.'); return; }
+  for(let i=hIdx+1;i<rows.length;i++){
+    const cols=rows[i]; if(!cols || !cols.length) continue; if(isFooterOrLabel(cols[0])) break; if(isGrandTotal(cols,map) || isCurrencyOrVariance(cols,map)) continue;
+    const pickRm=getCell(cols,map,'CP_PICKUPROOMNIGHTS'), pickRev=getCell(cols,map,'CP_PICKUPREVENUE'), prm=toNumber(pickRm), pr=toNumber(pickRev);
+    const statusRaw = normStatusRaw(getCell(cols,map,'BOOKING_STATUS') || getCell(cols,map,'BOOKINGSTATUS') || '');
+    const accName = getCell(cols,map,'NVL_ACCOUNT_NAME_AGENT_NAME'), changeDate = getCell(cols,map,'CF_CHANGE_DATE') || getCell(cols,map,'CHG_DATE') || '';
+    dt.row.add([ getCell(cols,map,'DESCRIPTION'), accName, false, shouldAutoLeisure(accName) ? 'Leisure' : '', getCell(cols,map,'ARRIVALDATE'), getCell(cols,map,'DEPARTUREDATE'), getCell(cols,map,'CP_CURRENTROOMNIGHTS'), getCell(cols,map,'CP_CURRENTREVENUE'), getCell(cols,map,'CP_CURRENTAVGRATE'), pickRm, pickRev, prm>0 ? (pr/prm) : 0, getCell(cols,map,'BOOK_ID'), statusRaw, changeDate, sourceName || '', statusCodeFromAnyText(statusRaw) ]);
+  }
 }
-async function beyAnalyze(){
-  const file=q("beyFile").files[0];
-  if(!file){ alert("Bitte Bey-Tours-Datei wählen"); return; }
-  const wb=await loadWorkbook(file);
-  const ws=wb.Sheets[wb.SheetNames[0]];
-  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
-  beyParsedRooms=[];
-  const headerInfo=beyFindHeaderInfo(rows);
-  if(!headerInfo){ beyLog("Header PAX / APELLIDO PATERNO / TIPO DE HABITACIÓN nicht gefunden."); beyRender(); return; }
-  for(let i=headerInfo.rowIndex+1;i<rows.length;i++){
-    const row=rows[i]||[];
-    const pax=clean(row[headerInfo.paxIdx]);
-    const rooming=clean(row[headerInfo.roomIdx]);
-    const hasGuestData = clean(row[headerInfo.apPatIdx]) || clean(row[headerInfo.apMatIdx]) || clean(row[headerInfo.primerNombreIdx]) || clean(row[headerInfo.segundoNombreIdx]);
-    if(!pax && !hasGuestData && !rooming) continue;
-    if(!rooming) continue;
-    const guest=beySplitGuest(row, headerInfo);
-    beyParsedRooms.push({
-      name: guest.lastName,
-      firstName: guest.firstName,
-      roomType: beyMapRoomType(rooming),
-      adult: beyAdult(rooming),
-      specials: guest.specials,
-      source: rooming
+
+document.getElementById('importFiles').addEventListener('change', async function(e){ for(const file of Array.from(e.target.files||[])){ addRowsFromOpera(await file.text(), file.name); } dt.draw(); applyAutoLeisureAllRows(); updateTotals(); saveTableToLocal(); e.target.value=''; });
+
+document.getElementById('pdfBtn').addEventListener('click', function(){
+  const { jsPDF } = window.jspdf, doc = new jsPDF({orientation:'landscape', unit:'mm', format:'a4'}), stamp=new Date().toISOString().slice(0,10);
+  const rows=dt.rows({search:'applied'}).data().toArray(), totals=computeTotals(rows);
+  const summaryY = 22;
+
+  doc.setFillColor(41,65,92); doc.rect(0,0,297,20,'F'); doc.setFillColor(201,162,77); doc.rect(0,20,297,2,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(17); doc.text('Gruppenbericht', 14, 13);
+  doc.setTextColor(47,44,40); doc.setFontSize(10); doc.text('Stand: ' + stamp, 240, 13);
+
+  const boxes = [
+    ['Zeilen', String(totals.rows)],
+    ['Rm Cur', String(Math.round(totals.curRm))],
+    ['Rm Pick', String(Math.round(totals.pickRm))],
+    ['Revenue Cur', fmtMoney(totals.curRev) + ' CHF'],
+    ['Revenue Pick', fmtMoney(totals.pickRev) + ' CHF'],
+    ['CXL gefiltert', String(countCxl(rows))]
+  ];
+
+  boxes.forEach((b, i) => {
+    const x = 14 + (i % 3) * 90, y = summaryY + Math.floor(i / 3) * 20;
+    doc.setFillColor(255,248,239); doc.roundedRect(x, y, 82, 15, 3, 3, 'F');
+    doc.setDrawColor(232,220,205); doc.roundedRect(x, y, 82, 15, 3, 3, 'S');
+    doc.setTextColor(41,65,92); doc.setFontSize(8); doc.text(b[0], x+4, y+5.2);
+    doc.setTextColor(47,44,40); doc.setFontSize(11); doc.text(b[1], x+4, y+11);
+  });
+
+  const visibleCols=[]; dt.columns().every(function(i){ if(this.visible() && i !== COL_STATUSCODE) visibleCols.push(i); });
+  const colNames={0:'Business Block',1:'Account',2:'Selection',3:'Market',4:'Anreise',5:'Abreise',6:'Rm Cur',7:'Revenue Cur',8:'Avg Cur',9:'Rm Pick',10:'Revenue Pick',11:'Avg Pick',12:'BB Id',13:'Status',14:'Chg Date',15:'Quelle'};
+  const head=[visibleCols.map(i=>colNames[i]||`Col ${i}`)];
+  const body=rows.map(r=>visibleCols.map(i => i===2 ? washDisplay(r[2]) : i===3 ? marketNormalize(r[3]) : [7,10].includes(i) ? fmtMoney(toNumber(r[i])) + ' CHF' : [8,11].includes(i) ? fmtMoney(toNumber(r[i])) : [6,9].includes(i) ? String(Math.round(toNumber(r[i]))) : stripHtml(r[i])));
+  doc.autoTable({
+    head, body, startY:72,
+    styles:{fontSize:8, cellPadding:2, textColor:[47,44,40]},
+    headStyles:{fillColor:[248,239,226], textColor:[41,65,92]},
+    alternateRowStyles:{fillColor:[255,251,246]},
+    margin:{left:14,right:14,bottom:12},
+    didDrawPage:function(data){
+      if(data.pageNumber === 1) return;
+      doc.setFillColor(41,65,92); doc.rect(0,0,297,20,'F'); doc.setFillColor(201,162,77); doc.rect(0,20,297,2,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(17); doc.text('Gruppenbericht – Tabelle', 14, 13);
+      doc.setTextColor(47,44,40); doc.setFontSize(10); doc.text('Stand: ' + stamp, 240, 13);
+    }
+  });
+  doc.save('Gruppenbericht_' + stamp + '.pdf');
+});
+
+function __gb_snapshotRows(){
+  if(typeof dt==='undefined' || !dt) return [];
+  var rows = dt.rows().data().toArray().map(function(r){ return Array.prototype.slice.call(r); });
+  rows.forEach(function(r){
+    r[2] = washToBool(r[2]);
+    r[3] = shouldAutoLeisure(r[1]) ? "Leisure" : marketNormalize(r[3]);
+    ensureStatusCode(r);
+  });
+  return rows;
+}
+function downloadJsonSnapshot(){
+  var rows = __gb_snapshotRows();
+  var stamp = new Date().toISOString().slice(0,10);
+  var blob = new Blob([JSON.stringify(rows, null, 2)], {type:'application/json;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Gruppenbericht_' + stamp + '.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+}
+async function importJsonSnapshot(file){
+  if(!file) return;
+  try{
+    var text = await file.text();
+    var rows = JSON.parse(text);
+    if(!Array.isArray(rows)){
+      alert('Ungültige JSON-Datei. Erwartet wird ein Array mit Zeilen.');
+      return;
+    }
+    dt.clear();
+    rows.forEach(function(r){
+      var rr = Array.isArray(r) ? Array.prototype.slice.call(r) : [];
+      while(rr.length <= COL_STATUSCODE) rr.push('');
+      rr[2] = washToBool(rr[2]);
+      rr[3] = shouldAutoLeisure(rr[1]) ? 'Leisure' : marketNormalize(rr[3]);
+      rr[COL_STATUSCODE] = statusCodeFromAnyText(rr[COL_STATUS]);
+      dt.row.add(rr);
     });
+    dt.draw();
+    applyAutoLeisureAllRows();
+    updateTotals();
+    saveTableToLocal();
+    syncColumnChooser();
+  }catch(err){
+    console.error(err);
+    alert('Fehler beim JSON-Import. Bitte eine gültige Export-Datei verwenden.');
   }
-  beyRender();
-  beyLog("Analyse fertig: "+beyParsedRooms.length+" Zimmer");
 }
-async function beyMaybeLoadTemplate(){ await ensureTemplateBuffer(beyLog); }
-function beyExportRows(){
-  return beyParsedRooms.map((g,i)=>({line:i+1,name:g.name,firstName:g.firstName,arrival:q("beyArrival").value,departure:q("beyDeparture").value,roomType:g.roomType,payment:q("beyPayment").value,adult:g.adult,specials:g.specials}));
+function buildColumnChooser(){
+  const chooser = document.getElementById('columnChooser');
+  if(!chooser || !dt) return;
+  chooser.innerHTML = '';
+  const labels = {0:'Business Block Name',1:'Account Name',2:'Selection',3:'Market',4:'Anreise',5:'Abreise',6:'Rm Cur',7:'Revenue Cur',8:'Avg Rate Cur',9:'Rm Pick',10:'Revenue Pick',11:'Avg Rate Pick',12:'BB Id',13:'Status',14:'Chg Date',15:'Quelle'};
+  const locked = new Set([16]);
+  dt.columns().every(function(i){
+    if(locked.has(i)) return;
+    const label = labels[i] || ('Spalte ' + i);
+    const wrap = document.createElement('label');
+    wrap.className = 'col-item';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = this.visible();
+    input.dataset.col = String(i);
+    input.addEventListener('change', function(ev){
+      dt.column(Number(ev.target.dataset.col)).visible(ev.target.checked, false);
+      dt.columns.adjust().draw(false);
+      saveTableToLocal();
+    });
+    const text = document.createElement('span');
+    text.textContent = label;
+    wrap.appendChild(input);
+    wrap.appendChild(text);
+    chooser.appendChild(wrap);
+  });
 }
-function beyExport(useTemplate){
-  if(!beyParsedRooms.length){ alert("Bitte zuerst Bey Tours analysieren"); return; }
-  const rows=beyExportRows();
-  if(useTemplate){
-    downloadWithTemplate(rows, "BeyTours_PMS_Hub_Template.xlsx");
-  } else {
-    buildBlankWorkbook(rows, "Rooming List", "BeyTours_PMS_Hub.xlsx");
-  }
-  beyLog("Export erstellt: "+rows.length+" Zeilen");
+function syncColumnChooser(){
+  const chooser = document.getElementById('columnChooser');
+  if(!chooser || !dt) return;
+  chooser.querySelectorAll('input[data-col]').forEach(function(cb){
+    cb.checked = dt.column(Number(cb.dataset.col)).visible();
+  });
 }
-function beyDeleteRow(i){ beyParsedRooms.splice(i,1); beyRender(); }
-function beyAddRow(){ beyParsedRooms.push({name:"", firstName:"", roomType:"DBL", adult:2, specials:"", source:""}); beyRender(); }
+function toggleColumnPopover(force){
+  const el = document.getElementById('columnPopover');
+  if(!el) return;
+  const open = typeof force === 'boolean' ? force : !el.classList.contains('open');
+  el.classList.toggle('open', open);
+  el.setAttribute('aria-hidden', open ? 'false' : 'true');
+  if(open){ buildColumnChooser(); syncColumnChooser(); }
+}
 
-q("viyaAnalyzeBtn").onclick=viyaAnalyze;
-q("viyaPickTemplateBtn").onclick=async ()=>{ try{ await pickTemplateManually(viyaLog); }catch(err){ viyaLog("Template-Auswahl Fehler: " + err.message); alert(err.message); } };
-q("viyaExportBtn").onclick=async ()=>{ try{ await viyaMaybeLoadTemplate(); viyaExport(true); }catch(err){ viyaLog("Template-Export Fehler: " + err.message); alert(err.message); } };
-q("viyaExportBlankBtn").onclick=()=>viyaExport(false);
-q("viyaAddRowBtn").onclick=viyaAddRow;
-
-q("emeAnalyzeBtn").onclick=emeAnalyze;
-q("emePickTemplateBtn").onclick=async ()=>{ try{ await pickTemplateManually(emeLog); }catch(err){ emeLog("Template-Auswahl Fehler: " + err.message); alert(err.message); } };
-q("emeExportBtn").onclick=async ()=>{ try{ await emeMaybeLoadTemplate(); emeExport(true); }catch(err){ emeLog("Template-Export Fehler: " + err.message); alert(err.message); } };
-q("emeExportBlankBtn").onclick=()=>emeExport(false);
-q("emeAddRowBtn").onclick=emeAddRow;
-
-q("exaAnalyzeBtn").onclick=exaAnalyze;
-q("exaPickTemplateBtn").onclick=async ()=>{ try{ await pickTemplateManually(exaLog); }catch(err){ exaLog("Template-Auswahl Fehler: " + err.message); alert(err.message); } };
-q("exaExportBtn").onclick=async ()=>{ try{ await exaMaybeLoadTemplate(); exaExport(true); }catch(err){ exaLog("Template-Export Fehler: " + err.message); alert(err.message); } };
-q("exaExportBlankBtn").onclick=()=>exaExport(false);
-q("exaAddRowBtn").onclick=exaAddRow;
-
-q("beyAnalyzeBtn").onclick=beyAnalyze;
-q("beyPickTemplateBtn").onclick=async ()=>{ try{ await pickTemplateManually(beyLog); }catch(err){ beyLog("Template-Auswahl Fehler: " + err.message); alert(err.message); } };
-q("beyExportBtn").onclick=async ()=>{ try{ await beyMaybeLoadTemplate(); beyExport(true); }catch(err){ beyLog("Template-Export Fehler: " + err.message); alert(err.message); } };
-q("beyExportBlankBtn").onclick=()=>beyExport(false);
-q("beyAddRowBtn").onclick=beyAddRow;
-
-viyaLog("Viya-Modul geladen");
-emeLog("Emetravel-Modul geladen");
-exaLog("Exa-Modul geladen");
-beyLog("Bey-Tours-Modul geladen");
+document.getElementById('colToggleBtn').addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toggleColumnPopover(); });
+document.getElementById('showAllColsBtn').addEventListener('click', function(){ for(let i=0;i<=15;i++){ dt.column(i).visible(true, false); } dt.columns.adjust().draw(false); syncColumnChooser(); saveTableToLocal(); });
+document.getElementById('hideOptionalColsBtn').addEventListener('click', function(){ const keep = new Set([0,1,2,3,4,5,6,7,9,10,13,14]); for(let i=0;i<=15;i++){ dt.column(i).visible(keep.has(i), false); } dt.columns.adjust().draw(false); syncColumnChooser(); saveTableToLocal(); });
+document.addEventListener('click', function(e){ const pop = document.getElementById('columnPopover'); const btn = document.getElementById('colToggleBtn'); if(!pop || !btn) return; if(pop.contains(e.target) || btn.contains(e.target)) return; toggleColumnPopover(false); });
+window.addEventListener('resize', function(){ if(window.dt){ dt.columns.adjust(); } });
+document.getElementById('exportJsonBtn').addEventListener('click', downloadJsonSnapshot);
+document.getElementById('importJsonBtn').addEventListener('click', function(){
+  document.getElementById('importJsonFile').click();
+});
+document.getElementById('importJsonFile').addEventListener('change', async function(e){
+  var file = (e.target.files || [])[0];
+  await importJsonSnapshot(file);
+  e.target.value = '';
+});
 </script>
 </body>
 </html>
