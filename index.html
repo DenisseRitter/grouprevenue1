@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gruppenserien-Report V21 – Managementübersicht</title>
+<title>Gruppen Report IBIS MESSE</title>
 <style>
 :root{
   --blue:#123b66; --blue2:#204d7f; --gold:#d4af37; --ink:#1d1d1f; --muted:#667085;
@@ -28,10 +28,16 @@ h1{margin:0;font-size:28px}
 .kpi .t{font-size:12px;color:var(--muted);font-weight:700}
 .kpi .v{font-size:24px;font-weight:900;color:var(--blue);margin-top:6px}
 .kpi .s{font-size:12px;color:var(--muted);margin-top:4px}
+.kpi-topline{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.kpi-source-select{padding:7px 10px;border:1px solid rgba(18,59,102,.16);border-radius:10px;background:#fff;color:var(--blue);font-weight:800;min-width:116px}
+.kpi-grid .kpi{min-height:118px}
+.section-actions .btn.secondary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:1px solid transparent;box-shadow:0 10px 18px rgba(11,42,74,.14)}
 .section{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.05);overflow:hidden;margin-bottom:16px}
 .section-header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(90deg,rgba(11,42,74,.08),rgba(212,175,55,.10))}
 .section-title{font-size:18px;font-weight:900;color:var(--blue)}
 .section-actions{display:flex;gap:8px;flex-wrap:wrap}
+.section-actions .btn.secondary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:1px solid transparent;box-shadow:0 10px 18px rgba(11,42,74,.14)}
+.section-actions .btn.secondary:hover{transform:translateY(-1px)}
 .content{padding:14px 16px}
 .hidden{display:none}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fff}
@@ -63,9 +69,10 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
 .series-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .series-card{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.05)}
 .series-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.nationality-select{padding:8px 10px;border:1px solid rgba(18,59,102,.18);background:#fff;border-radius:10px;min-width:220px}
+.nationality-select,.queue-select,.queue-input{padding:8px 10px;border:1px solid rgba(18,59,102,.18);background:#fff;border-radius:10px;min-width:220px}
+.queue-input{min-width:160px}
 .year-toggle{appearance:none;border:1px solid rgba(18,59,102,.18);background:#fff;color:var(--blue);padding:8px 10px;border-radius:10px;font-weight:800;cursor:pointer}
-.delete-series-btn{appearance:none;border:1px solid rgba(217,45,32,.20);background:#fff;color:#b42318;padding:8px 10px;border-radius:10px;font-weight:800;cursor:pointer}
+.delete-series-btn,.delete-group-btn{appearance:none;border:1px solid rgba(217,45,32,.20);background:#fff;color:#b42318;padding:8px 10px;border-radius:10px;font-weight:800;cursor:pointer}
 .series-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
 .series-title{font-size:18px;font-weight:900;color:var(--blue)}
 .series-sub{margin-top:4px;font-size:12px;color:var(--muted)}
@@ -98,10 +105,26 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
 }
 .profile-year-row label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
 .profile-year-row input{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
-@media (max-width:1100px){.series-grid{grid-template-columns:1fr}}
+.queue-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding:12px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(90deg,rgba(11,42,74,.04),rgba(212,175,55,.10))}
+.queue-toolbar strong{color:var(--blue)}
+.queue-note{font-size:12px;color:var(--muted)}
+.group-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#otPrint.group-grid,#osPrint.group-grid{display:block;width:100%}
+.group-mini{width:100%;table-layout:fixed}
+.group-mini th,.group-mini td{font-size:11px;padding:7px 5px;border:1.5px solid #b8c6d8}
+.group-mini .monthcol{width:86px}
+.group-mini .metriccol{width:104px}
+.group-year-tag{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(18,59,102,.08);color:var(--blue);font-size:11px;font-weight:900;margin-right:6px}
+.group-empty{padding:16px;border:1px dashed var(--line);border-radius:14px;background:#fafcff;color:var(--muted);font-weight:700}
+.month-extra-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.month-total-card{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 8px 18px rgba(0,0,0,.04)}
+.month-total-head{padding:12px 14px;background:linear-gradient(90deg,rgba(18,59,102,.08),rgba(212,175,55,.10));border-bottom:1px solid var(--line);font-weight:900;color:var(--blue)}
+.month-total-body{padding:0}
+.queue-checkbox{transform:scale(1.15);cursor:pointer}
+@media (max-width:1100px){.series-grid,.group-grid,.month-extra-stack{grid-template-columns:1fr}}
 @media print{
-  body{background:#fff}.toolbar,.section-actions,.info,.ctrlbox{display:none !important}.wrap{max-width:none;padding:0}
-  header{border-radius:0;box-shadow:none}.section{border:0;box-shadow:none}.month-card,.series-card{break-inside:avoid;box-shadow:none}
+  body{background:#fff}.toolbar,.section-actions,.info,.ctrlbox,.queue-toolbar,.mergebox{display:none !important}.wrap{max-width:none;padding:0}
+  header{border-radius:0;box-shadow:none}.section{border:0;box-shadow:none}.month-card,.series-card,.month-total-card{break-inside:avoid;box-shadow:none}
   @page{size:A4 landscape;margin:8mm}
 }
 .btnrow{display:flex;gap:10px;flex-wrap:nowrap;align-items:center}
@@ -116,34 +139,106 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
 .series-filter-btn.active{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-color:transparent;box-shadow:0 10px 18px rgba(11,42,74,.16)}
 .series-filter-btn.all{background:linear-gradient(135deg,#fff,#f6f8fb)}
 .series-filter-count{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.72);color:var(--blue);font-size:11px;font-weight:900}
+
+.toolbar{display:flex;flex-direction:column;align-items:stretch}
+.toolbar-main-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:0}
+.toolbar-stack-box{width:100%}
+.queue-filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-left:auto}
+.queue-filter-input,.queue-filter-select{padding:8px 10px;border:1px solid rgba(18,59,102,.18);background:#fff;border-radius:10px;min-width:160px}
+.queue-mini-note{font-size:12px;color:var(--muted);font-weight:700}
+.month-grandbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.month-granditem{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:10px 12px}
+.month-granditem .lbl{font-size:11px;font-weight:800;opacity:.9}
+.month-granditem .vals{margin-top:4px;font-size:12px;font-weight:900;line-height:1.35}
+.group-month-stack{display:flex;flex-direction:column;gap:22px}
+.group-compare-wrap{width:100%;overflow:visible;padding-bottom:2px;display:flex;justify-content:center;margin:0 auto}
+.group-compare-table{width:min(1700px,100%);min-width:0;table-layout:fixed;margin:0 auto}
+.group-compare-table th,.group-compare-table td{font-size:12px;padding:9px 8px;border:1.5px solid #b8c6d8;white-space:nowrap}
+.group-compare-table thead tr:first-child th{background:linear-gradient(180deg,#ede7d5,#e4decd);font-size:12px}
+.group-compare-table .group-name-head{background:#e9e1e6 !important;width:220px}
+.group-compare-table .year25-head,.group-compare-table .year25-cell{background:#f6f1df}
+.group-compare-table .year26-head,.group-compare-table .year26-cell{background:#e6eff9}
+.group-compare-table .mid-divider{border-left:4px solid #7d94b8 !important}
+.group-compare-table .total-row td{font-weight:900;background:#f6f8fb}
+.toolbar-main-actions .btn.secondary,
+.queue-toolbar .btn.secondary{
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:#fff;
+  border:1px solid transparent;
+  box-shadow:0 10px 18px rgba(11,42,74,.14);
+}
+.toolbar-main-actions .btn.secondary:hover,
+.queue-toolbar .btn.secondary:hover{transform:translateY(-1px)}
+.group-month-stack{display:flex;flex-direction:column;gap:22px;width:100%;max-width:none;margin:0 auto}
+.group-month-stack > .month-card{width:min(1720px,98%);margin:0 auto}
+.group-month-layout{display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;width:100%;max-width:1720px;margin:0 auto}
+.group-month-layout > div{width:100%}
+.group-month-layout > div:first-child{min-width:0;width:100%;display:flex;justify-content:center}
+.group-comment-box{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#fafcff,#f3f7fc);padding:18px;box-shadow:0 8px 18px rgba(0,0,0,.04);width:min(1560px,96%);margin:0 auto}
+.group-comment-title{font-weight:900;color:var(--blue);margin-bottom:10px;font-size:16px;text-align:center}
+.group-comment-box textarea{width:100%;min-height:260px;resize:vertical;border:1px solid rgba(18,59,102,.18);border-radius:12px;padding:14px 16px;background:#fff;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5}
+.group-comment-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center}
+.group-back-btn{appearance:none;border:1px solid rgba(18,59,102,.18);background:#fff;color:var(--blue);border-radius:999px;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;cursor:pointer;margin-left:8px;vertical-align:top;box-shadow:0 4px 10px rgba(0,0,0,.06)}
+.group-back-btn:hover{transform:translateY(-1px);box-shadow:0 6px 12px rgba(0,0,0,.09)}
+.group-name-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.group-name-content{min-width:0;flex:1}
+.group-comment-actions .btn.secondary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:1px solid transparent}
+.group-month-center{width:100%;margin:0 auto;display:flex;justify-content:center}
+.budget-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.budget-card{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 8px 18px rgba(0,0,0,.04)}
+.budget-card-head{padding:12px 14px;background:linear-gradient(90deg,rgba(18,59,102,.08),rgba(212,175,55,.10));border-bottom:1px solid var(--line)}
+.budget-card-title{font-size:18px;font-weight:900;color:var(--blue)}
+.budget-card-sub{margin-top:4px;font-size:12px;color:var(--muted);font-weight:700}
+.budget-card .table-wrap{border:0;border-radius:0}
+.budget-input{width:100%;padding:7px 8px;border:1px solid rgba(18,59,102,.18);border-radius:8px;background:#fff;text-align:right;font-weight:700}
+.budget-status-ok{background:rgba(19,138,54,.12)!important;color:#0f6d2b;font-weight:900}
+.budget-status-bad{background:rgba(217,45,32,.12)!important;color:#b42318;font-weight:900}
+.budget-status-empty{background:#fffdf6!important;color:#7b5f00;font-weight:900}
+.budget-note{margin-top:12px;font-size:12px;color:var(--muted)}
+.group-compare-table .group-name-head{width:260px}
+.group-compare-table .year25-head,.group-compare-table .year25-cell{background:#fbf3df}
+.group-compare-table .year26-head,.group-compare-table .year26-cell{background:#e8f1fc}
+.group-compare-table .mid-divider{border-left:6px solid #58739d !important}
+@media (max-width:1350px){.group-month-layout{display:flex;flex-direction:column}}
+.group-month-filter-label{font-weight:900;color:var(--blue);margin-right:4px}
+.group-highlight-name{font-weight:900}
+.group-compare-table .group-name-head{width:auto;min-width:0}
+.group-compare-table td:first-child,.group-compare-table th:first-child{white-space:normal}
+.group-compare-table thead th{white-space:normal;line-height:1.15}
+.group-compare-table .match-cell-25{box-shadow:inset 0 0 0 999px rgba(255,236,179,.55)}
+.group-compare-table .match-cell-26{box-shadow:inset 0 0 0 999px rgba(210,229,255,.55)}
+.group-compare-table .match-name{box-shadow:inset 0 0 0 999px rgba(226,239,210,.70)}
+.group-compare-table .mid-divider{border-left:5px solid #6e85aa !important}
+
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>Gruppenserien-Report</h1>
+    <h1>Gruppen Report IBIS MESSE</h1>
   </header>
 
   <div class="toolbar">
-    <button class="btn" onclick="toggleSection('pivotWrap')">Pivot öffnen / schließen</button>
-    <button class="btn" onclick="toggleSection('monthlyWrap')">Monatsvergleich öffnen / schließen</button>
-    <button class="btn" onclick="toggleSection('top3Wrap')">Top 3 Gruppen öffnen / schließen</button>
-    <button class="btn secondary" onclick="toggleSection('seriesWrap')">Management-Ansicht pro Serie öffnen / schließen</button>
-    <button class="btn gold" onclick="printOnly('pivotPrint','Pivot Übersicht')">Pivot drucken</button>
-    <button class="btn gold" onclick="printOnly('monthlyPrint','Monatsvergleich')">Monatsvergleich drucken</button>
-    <button class="btn gold" onclick="printOnly('seriesPrint','Management-Ansicht pro Serie')">Serienansicht drucken</button>
-    <button class="btn secondary" onclick="clearDashboard()">Tabelle leeren</button>
-    <button class="btn secondary" onclick="exportDashboardData()">Daten exportieren</button>
-    <button class="btn secondary" onclick="importDashboardData()">Daten importieren</button>
-    <input type="file" id="importDashboardFile" accept=".json" style="display:none">
-    <div class="filebox">
-      <strong>Import:</strong>
-      <input id="fileInput" type="file" accept=".txt,.csv,.tsv" multiple>
-      <span class="small">Hotely TXT / TSV</span>
+    <div class="toolbar-main-actions">
+      <button class="btn secondary" onclick="closeAllSections()">Alle schliessen</button>
+      <button class="btn secondary" onclick="clearDashboard()">Tabelle leeren</button>
+      <button class="btn secondary" onclick="exportDashboardData()">Daten exportieren</button>
+      <button class="btn secondary" onclick="importDashboardData()">Daten importieren</button>
+      <input type="file" id="importDashboardFile" accept=".json" style="display:none">
+    </div>
+    <div class="filebox toolbar-stack-box">
+      <strong>Import Serien:</strong>
+      <input id="fileInputSeries" type="file" accept=".txt,.csv,.tsv" multiple>
+      <span class="small">für Management-Ansicht pro Serie</span>
+    </div>
+    <div class="filebox toolbar-stack-box">
+      <strong>Import OT / OS Gruppen:</strong>
+      <input id="fileInputGroups" type="file" accept=".txt,.csv,.tsv" multiple>
+      <span class="small">landet zuerst in der Ablage</span>
     </div>
   </div>
 
-  <div class="mergebox">
+  <div class="mergebox toolbar-stack-box">
     <label for="mergeSeriesA"><strong>CorporateIDs verschmelzen:</strong></label>
     <select id="mergeSeriesA"><option value="">CorporateID A</option></select>
     <select id="mergeSeriesB"><option value="">CorporateID B</option></select>
@@ -151,34 +246,54 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
   </div>
 
   <div class="info">
-    Neu: Die Pivot-Filter sind jetzt direkt in der Pivot-Übersicht integriert, damit sie nur dort sichtbar sind und nicht den Rest der Ansicht verwirren.
+    Neu: Serien bleiben unverändert. Zusätzliche OT / OS Gruppen werden separat importiert, zuerst in der Ablage bearbeitet und erst danach per CorporateID und Typ zugewiesen.
   </div>
 
-
 <!-- 2026 -->
-<div class="grid" style="margin-bottom:12px">
-  <div class="kpi"><div class="t">Serien 2026</div><div class="v" id="kpiSeries2026">0</div><div class="s">aktive Gruppen</div></div>
-  <div class="kpi"><div class="t">Monate mit Daten 2026</div><div class="v" id="kpiMonths2026">0</div><div class="s">Jan–Dez</div></div>
-  <div class="kpi"><div class="t">Room Revenue 2026</div><div class="v mono" id="kpiRoomRevenue2026">0.00</div><div class="s">nur 2026</div></div>
-  <div class="kpi"><div class="t">Room Nights 2026</div><div class="v mono" id="kpiRoomNights2026">0</div><div class="s">nur 2026</div></div>
-  <div class="kpi"><div class="t">F&amp;B Revenue 2026</div><div class="v mono" id="kpiFBRevenue2026">0.00</div><div class="s">nur 2026</div></div>
-  <div class="kpi"><div class="t">Block ADR 2026</div><div class="v mono" id="kpiAdr2026">0.00</div><div class="s">nur 2026</div></div>
+<div class="grid kpi-grid" style="margin-bottom:12px">
+  <div class="kpi">
+    <div class="kpi-topline">
+      <div class="t">Gruppen total 2026</div>
+      <select id="kpiSource2026" class="kpi-source-select">
+        <option value="all">Alle</option>
+        <option value="series">Serien</option>
+        <option value="ot">OT Groups</option>
+        <option value="os">OS Groups</option>
+      </select>
+    </div>
+    <div class="v" id="kpiGroups2026">0</div>
+    <div class="s" id="kpiSourceLabel2026">aktive Gruppen • Alle</div>
+  </div>
+  <div class="kpi"><div class="t">Monate mit Daten 2026</div><div class="v" id="kpiMonths2026">0</div><div class="s" id="kpiMonthsLabel2026">Jan–Dez • Alle</div></div>
+  <div class="kpi"><div class="t">Room Revenue 2026</div><div class="v mono" id="kpiRoomRevenue2026">0.00</div><div class="s" id="kpiRevenueLabel2026">Gesamttotal • Alle</div></div>
+  <div class="kpi"><div class="t">Room Nights 2026</div><div class="v mono" id="kpiRoomNights2026">0</div><div class="s" id="kpiNightsLabel2026">Gesamttotal • Alle</div></div>
+  <div class="kpi"><div class="t">F&amp;B Revenue 2026</div><div class="v mono" id="kpiFBRevenue2026">0.00</div><div class="s" id="kpiFbLabel2026">Gesamttotal • Alle</div></div>
+  <div class="kpi"><div class="t">Block ADR 2026</div><div class="v mono" id="kpiAdr2026">0.00</div><div class="s" id="kpiAdrLabel2026">Durchschnitt • Alle</div></div>
 </div>
-
 
 <!-- 2025 -->
-<div class="grid">
-  <div class="kpi"><div class="t">Serien 2025</div><div class="v" id="kpiSeries2025">0</div><div class="s">aktive Gruppen</div></div>
-  <div class="kpi"><div class="t">Monate mit Daten 2025</div><div class="v" id="kpiMonths2025">0</div><div class="s">Jan–Dez</div></div>
-  <div class="kpi"><div class="t">Room Revenue 2025</div><div class="v mono" id="kpiRoomRevenue2025">0.00</div><div class="s">nur 2025</div></div>
-  <div class="kpi"><div class="t">Room Nights 2025</div><div class="v mono" id="kpiRoomNights2025">0</div><div class="s">nur 2025</div></div>
-  <div class="kpi"><div class="t">F&amp;B Revenue 2025</div><div class="v mono" id="kpiFBRevenue2025">0.00</div><div class="s">nur 2025</div></div>
-  <div class="kpi"><div class="t">Block ADR 2025</div><div class="v mono" id="kpiAdr2025">0.00</div><div class="s">nur 2025</div></div>
+<div class="grid kpi-grid">
+  <div class="kpi">
+    <div class="kpi-topline">
+      <div class="t">Gruppen total 2025</div>
+      <select id="kpiSource2025" class="kpi-source-select">
+        <option value="all">Alle</option>
+        <option value="series">Serien</option>
+        <option value="ot">OT Groups</option>
+        <option value="os">OS Groups</option>
+      </select>
+    </div>
+    <div class="v" id="kpiGroups2025">0</div>
+    <div class="s" id="kpiSourceLabel2025">aktive Gruppen • Alle</div>
+  </div>
+  <div class="kpi"><div class="t">Monate mit Daten 2025</div><div class="v" id="kpiMonths2025">0</div><div class="s" id="kpiMonthsLabel2025">Jan–Dez • Alle</div></div>
+  <div class="kpi"><div class="t">Room Revenue 2025</div><div class="v mono" id="kpiRoomRevenue2025">0.00</div><div class="s" id="kpiRevenueLabel2025">Gesamttotal • Alle</div></div>
+  <div class="kpi"><div class="t">Room Nights 2025</div><div class="v mono" id="kpiRoomNights2025">0</div><div class="s" id="kpiNightsLabel2025">Gesamttotal • Alle</div></div>
+  <div class="kpi"><div class="t">F&amp;B Revenue 2025</div><div class="v mono" id="kpiFBRevenue2025">0.00</div><div class="s" id="kpiFbLabel2025">Gesamttotal • Alle</div></div>
+  <div class="kpi"><div class="t">Block ADR 2025</div><div class="v mono" id="kpiAdr2025">0.00</div><div class="s" id="kpiAdrLabel2025">Durchschnitt • Alle</div></div>
 </div>
 
-
-
-<div class="section">
+  <div class="section">
     <div class="section-header">
       <div class="section-title">Pivot Übersicht</div>
       <div class="section-actions">
@@ -211,6 +326,13 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
           <option value="seriesMonths">Serien × Monate</option>
         </select>
 
+        <label for="pivotSourceMode">Bereich</label>
+        <select id="pivotSourceMode">
+          <option value="series">Nur Serien</option>
+          <option value="totals">Nur Totale</option>
+          <option value="all">Serien + Totale</option>
+        </select>
+
         <label for="pivotSeriesMode">Serie berechnen</label>
         <select id="pivotSeriesMode">
           <option value="all">Alle Serien</option>
@@ -221,7 +343,7 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
           <thead></thead>
           <tbody></tbody>
         </table>
-      </div></div>
+      </div>
     </div>
   </div>
 
@@ -235,7 +357,7 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
     </div>
     <div id="monthlyWrap" class="content hidden">
       <div id="monthFilterBar" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px"></div>
-      <div id="monthlyPrint" class="month-stack"></div></div>
+      <div id="monthlyPrint" class="month-stack"></div>
     </div>
   </div>
 
@@ -259,6 +381,62 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
 
   <div class="section">
     <div class="section-header">
+      <div class="section-title">Ablage OT / OS Zuweisung</div>
+      <div class="section-actions">
+        <button class="btn secondary" onclick="toggleSection('queueWrap')">öffnen / schließen</button>
+      </div>
+    </div>
+    <div id="queueWrap" class="content hidden">
+      <div class="queue-toolbar">
+        <strong>Zuweisung für markierte Zeilen</strong>
+        <select id="queueTypeSelect" class="queue-select">
+          <option value="">Typ wählen</option>
+          <option value="OT">OT Group</option>
+          <option value="OS">OS Group</option>
+        </select>
+        <select id="queueCorporateSelect" class="queue-select">
+          <option value="">CorporateID wählen</option>
+        </select>
+        <button class="btn secondary" onclick="assignSelectedQueuedGroups()">Zuweisen</button>
+        <button class="btn secondary" onclick="toggleAllQueuedRows(true)">Alle markieren</button>
+        <button class="btn secondary" onclick="toggleAllQueuedRows(false)">Alle abwählen</button>
+        <button class="btn secondary" onclick="toggleVisibleQueuedRows(true)">Gefilterte markieren</button>
+        <button class="btn secondary" onclick="deleteSelectedQueuedGroups()">Markierte löschen</button>
+        <div class="queue-filters">
+          <input id="queueNameFilter" class="queue-filter-input" placeholder="Gruppenname filtern">
+          <select id="queueYearFilter" class="queue-filter-select">
+            <option value="">Import-Jahr: alle</option>
+          </select>
+          <select id="queueMonthFilter" class="queue-filter-select">
+            <option value="">Import-Monat: alle</option>
+          </select>
+        </div>
+        <span class="queue-note">Ablage bleibt bestehen, bis alle Gruppen zugewiesen oder gelöscht sind.</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>✔</th>
+              <th class="left">Gruppenname</th>
+              <th>Import-Jahr</th>
+              <th>Import-Monat</th>
+              <th>CorporateID</th>
+              <th>Typ</th>
+              <th>Room Revenue</th>
+              <th>Room Nights</th>
+              <th>F&amp;B Revenue</th>
+              <th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody id="queueBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
       <div class="section-title">Management-Ansicht pro Serie</div>
       <div class="section-actions">
         <button class="btn secondary" onclick="toggleSection('seriesWrap')">öffnen / schließen</button>
@@ -267,8 +445,79 @@ th{background:#eef3f9;color:var(--blue);font-weight:900}
     </div>
     <div id="seriesWrap" class="content hidden">
       <div id="seriesFilterBar" class="series-filter-bar"></div>
-      <div id="seriesPrint" class="series-grid"></div></div>
+      <div id="seriesPrint" class="series-grid"></div>
     </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">OT Groups</div>
+      <div class="section-actions">
+        <button class="btn secondary" onclick="toggleSection('otWrap')">öffnen / schließen</button>
+        <button class="btn secondary" onclick="printOnly('otPrint','OT Groups')">Drucken</button>
+      </div>
+    </div>
+    <div id="otWrap" class="content hidden">
+      <div id="otMonthFilterBar" class="month-filter-bar"></div>
+      <div id="otPrint" class="group-grid"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">OS Groups</div>
+      <div class="section-actions">
+        <button class="btn secondary" onclick="toggleSection('osWrap')">öffnen / schließen</button>
+        <button class="btn secondary" onclick="printOnly('osPrint','OS Groups')">Drucken</button>
+      </div>
+    </div>
+    <div id="osWrap" class="content hidden">
+      <div id="osMonthFilterBar" class="month-filter-bar"></div>
+      <div id="osPrint" class="group-grid"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Budget Details</div>
+      <div class="section-actions">
+        <button class="btn secondary" onclick="toggleSection('budgetWrap')">öffnen / schließen</button>
+        <button class="btn secondary" onclick="printOnly('budgetPrint','Budget Details')">Drucken</button>
+      </div>
+    </div>
+    <div id="budgetWrap" class="content hidden"><div id="budgetPrint">
+      <div class="budget-grid">
+        <div class="budget-card">
+          <div class="budget-card-head">
+            <div class="budget-card-title">Tour-Wholesaler Budget 2026</div>
+            <div class="budget-card-sub">Sollwert manuell • Istwert automatisch aus Serien + OT Groups (nur Room Revenue)</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Monat</th><th>Soll-Budget</th><th>Ist 2026</th><th>Differenz</th><th>Status</th></tr>
+              </thead>
+              <tbody id="budgetTourBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="budget-card">
+          <div class="budget-card-head">
+            <div class="budget-card-title">Corporate Budget 2026</div>
+            <div class="budget-card-sub">Sollwert manuell • Istwert automatisch aus OS Groups (nur Room Revenue)</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Monat</th><th>Soll-Budget</th><th>Ist 2026</th><th>Differenz</th><th>Status</th></tr>
+              </thead>
+              <tbody id="budgetCorporateBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="budget-note">Grün = Budget erreicht oder überschritten. Hellrot = Budget noch nicht erreicht. Für diese Leiste wird nur 2026 berücksichtigt.</div>
+    </div></div>
   </div>
 </div>
 
@@ -279,6 +528,12 @@ const STORAGE_NATIONALITY = "pms_dashboard_v23_nationality";
 const STORAGE_PIVOT = "pms_dashboard_v18_pivot_state";
 const STORAGE_MONTH_FILTER = "pms_dashboard_v18_month_filter";
 const STORAGE_SERIES_FILTER = "pms_dashboard_v18_series_filter";
+const STORAGE_QUEUE = "pms_dashboard_v24_group_queue";
+const STORAGE_OT_GROUPS = "pms_dashboard_v24_ot_groups";
+const STORAGE_OS_GROUPS = "pms_dashboard_v24_os_groups";
+const STORAGE_GROUP_COMMENTS = "pms_dashboard_v25_group_comments";
+const STORAGE_KPI_SOURCE = "pms_dashboard_v26_kpi_source";
+const STORAGE_BUDGET_DETAILS = "pms_dashboard_v27_budget_details";
 const monthNames = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
 const seriesCreamColors = ["#f6e7a8","#dce9f8","#dcefdc","#f6d9e8","#f4e1b7","#d6e6f5","#d9edd2","#f4d6dd","#efe0a6","#d9eaf2","#e2f0d0","#f2d7e6"];
 let seriesStore = {};
@@ -288,9 +543,15 @@ let profileFields = {};
 let nationalityFields = {};
 let collapsedPastYears = {};
 let mergedCorporateMap = {};
-let pivotState = {metric:"roomRevenue", yearMode:"current", viewMode:"monthsSeries", seriesMode:"all"};
+let pivotState = {metric:"roomRevenue", yearMode:"current", viewMode:"monthsSeries", seriesMode:"all", sourceMode:"all"};
 let activeMonthFilter = "all";
 let activeSeriesFilter = "all";
+let queuedGroups = [];
+let otGroupStore = {};
+let osGroupStore = {};
+let groupComments = {};
+let kpiSourceState = {"2025":"all","2026":"all"};
+let budgetDetails = {tour:{}, corporate:{}};
 
 try{
   const saved = JSON.parse(localStorage.getItem(STORAGE_PIVOT)||"null");
@@ -307,6 +568,11 @@ try{
   if(savedSeriesFilter !== null) activeSeriesFilter = savedSeriesFilter;
 }catch(e){}
 
+try{
+  const savedKpiSource = JSON.parse(localStorage.getItem(STORAGE_KPI_SOURCE)||"null");
+  if(savedKpiSource) kpiSourceState = {...kpiSourceState, ...savedKpiSource};
+}catch(e){}
+
 function fmt(n){ return Number(n || 0).toLocaleString("de-CH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function fmt0(n){ return Number(n || 0).toLocaleString("de-CH",{maximumFractionDigits:0}); }
 function escapeHtml(s){ return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
@@ -315,17 +581,26 @@ function printOnly(id,title){
   const content = document.getElementById(id).innerHTML;
   const win = window.open("", "print");
   win.document.write(`<html><head><meta charset="utf-8"><title>${title}</title><style>
-  body{font-family:Arial;padding:12px;color:#222}h2{margin:0 0 10px 0;color:#123b66}
-  table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid #ccc;padding:6px;text-align:center;font-size:10.5px;word-wrap:break-word}
-  th{background:#eef3f9;color:#123b66}.left{text-align:left}
-  @page{size:A4 landscape;margin:8mm}
-  .btnrow{display:flex;gap:10px;flex-wrap:nowrap;align-items:center}
-
-.month-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
-.month-filter-btn{appearance:none;border:1px solid rgba(18,59,102,.18);background:#fff;color:var(--blue);padding:8px 10px;border-radius:10px;font-weight:800;cursor:pointer}
-.month-filter-btn.active{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-color:transparent}
-</style></head><body><h2>${title}</h2>${content}</body></html>`);
-  win.document.close(); win.focus(); win.print();
+  :root{--blue:#123b66;--blue2:#204d7f;--gold:#d4af37;--line:#cfd7e2;--ink:#1d1d1f}
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+  body{padding:6mm;zoom:.94}
+  h2{margin:0 0 8px 0;color:var(--blue);font-size:18px}
+  table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid #b8c6d8;padding:5px 6px;text-align:center;font-size:9.6px;word-wrap:break-word}
+  th{background:#eef3f9;color:var(--blue);font-weight:900}.left{text-align:left}
+  .table-wrap{overflow:visible !important;border:0 !important}
+  .month-card,.series-card,.budget-card,.month-total-card{break-inside:avoid;page-break-inside:avoid;border:1px solid var(--line);box-shadow:none !important}
+  .month-head,.series-head,.section-header,.budget-card-head,.month-total-head{background:#dde7f3 !important;color:var(--blue) !important}
+  .month-chip,.corp{background:#eef3f9 !important;color:var(--blue) !important;border:1px solid #b8c6d8 !important}
+  .group-comment-actions,.section-actions,.month-filter-bar,.series-filter-bar,.btn,.btnrow{display:none !important}
+  .group-month-center,.group-month-layout,.group-compare-wrap,.group-comment-box,.budget-grid{width:100% !important;max-width:none !important;margin:0 auto !important}
+  .group-compare-table{width:100% !important;margin:0 auto !important}
+  .group-comment-box textarea{min-height:70px;border:1px solid #b8c6d8}
+  @page{size:A4 landscape;margin:6mm}
+  </style></head><body><h2>${title}</h2>${content}</body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>win.print(),300);
 }
 function saveStore(){ localStorage.setItem(STORAGE_DATA, JSON.stringify(seriesStore)); }
 function loadStore(){ try{ seriesStore = JSON.parse(localStorage.getItem(STORAGE_DATA)||"{}") || {}; }catch(e){ seriesStore = {}; } }
@@ -333,14 +608,27 @@ function saveProfiles(){ localStorage.setItem(STORAGE_PROFILE, JSON.stringify(pr
 function loadProfiles(){ try{ profileFields = JSON.parse(localStorage.getItem(STORAGE_PROFILE)||"{}") || {}; }catch(e){ profileFields = {}; } }
 function saveNationality(){ localStorage.setItem(STORAGE_NATIONALITY, JSON.stringify(nationalityFields)); }
 function loadNationality(){ try{ nationalityFields = JSON.parse(localStorage.getItem(STORAGE_NATIONALITY)||"{}") || {}; }catch(e){ nationalityFields = {}; } }
+function saveGroupComments(){ localStorage.setItem(STORAGE_GROUP_COMMENTS, JSON.stringify(groupComments)); }
+function loadGroupComments(){ try{ groupComments = JSON.parse(localStorage.getItem(STORAGE_GROUP_COMMENTS)||"{}") || {}; }catch(e){ groupComments = {}; } }
 function savePivot(){ localStorage.setItem(STORAGE_PIVOT, JSON.stringify(pivotState)); }
 function saveMonthFilter(){ localStorage.setItem(STORAGE_MONTH_FILTER, activeMonthFilter); }
 function saveSeriesFilter(){ localStorage.setItem(STORAGE_SERIES_FILTER, activeSeriesFilter); }
+function saveKpiSourceState(){ localStorage.setItem(STORAGE_KPI_SOURCE, JSON.stringify(kpiSourceState)); }
+function saveBudgetDetails(){ localStorage.setItem(STORAGE_BUDGET_DETAILS, JSON.stringify(budgetDetails)); }
+function loadBudgetDetails(){ try{ budgetDetails = JSON.parse(localStorage.getItem(STORAGE_BUDGET_DETAILS)||"null") || {tour:{}, corporate:{}}; }catch(e){ budgetDetails = {tour:{}, corporate:{}}; } }
+function saveQueuedGroups(){ localStorage.setItem(STORAGE_QUEUE, JSON.stringify(queuedGroups)); }
+function loadQueuedGroups(){ try{ queuedGroups = JSON.parse(localStorage.getItem(STORAGE_QUEUE)||"[]") || []; }catch(e){ queuedGroups = []; } }
+function saveOtGroupStore(){ localStorage.setItem(STORAGE_OT_GROUPS, JSON.stringify(otGroupStore)); }
+function loadOtGroupStore(){ try{ otGroupStore = JSON.parse(localStorage.getItem(STORAGE_OT_GROUPS)||"{}") || {}; }catch(e){ otGroupStore = {}; } }
+function saveOsGroupStore(){ localStorage.setItem(STORAGE_OS_GROUPS, JSON.stringify(osGroupStore)); }
+function loadOsGroupStore(){ try{ osGroupStore = JSON.parse(localStorage.getItem(STORAGE_OS_GROUPS)||"{}") || {}; }catch(e){ osGroupStore = {}; } }
 function blankMonths(){ return monthNames.map(() => ({cur:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdr:0,fbpp:0},ly:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdr:0,fbpp:0},hasLY:false})); }
+function blankSimpleMonths(){ return monthNames.map(() => ({roomRevenue:0,roomNights:0,fbRevenue:0,blockAdr:0,fbpp:0})); }
 function monthIndexFromValue(v){ const n = Number(v); return Number.isFinite(n) && n>=1 && n<=12 ? n-1 : -1; }
 function cleanCorporateId(raw){ const s=String(raw||""); const m=s.match(/Corporate\s*ID\s*:\s*(\d+)/i)||s.match(/CorporateID\s*:\s*(\d+)/i)||s.match(/(\d{5,})/); return m?m[1]:""; }
 function diffClass(cur,ly,hasLY){ if(!hasLY) return ""; const d=(cur||0)-(ly||0); return d>0?"good":(d<0?"bad":""); }
 function pct(cur,ly,hasLY){ if(!hasLY||!ly) return "–"; return fmt(((cur-ly)/ly)*100)+" %"; }
+function uniqueId(prefix="id"){ return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2,8); }
 
 function normalizeStoreToSeriesData(){
   const entries = Object.values(seriesStore);
@@ -358,6 +646,11 @@ function normalizeStoreToSeriesData(){
   }).sort((a,b)=>a.series.localeCompare(b.series,"de"));
 }
 function seriesTotal(s){ return s.months.reduce((a,m)=>{ a.roomRevenue += m.cur.roomRevenue||0; a.roomNights += m.cur.roomNights||0; a.fbRevenue += m.cur.fbRevenue||0; return a; }, {roomRevenue:0,roomNights:0,fbRevenue:0}); }
+function simpleMonthsTotals(months){
+  return (months || []).reduce((a,m)=>{ a.roomRevenue += m.roomRevenue||0; a.roomNights += m.roomNights||0; a.fbRevenue += m.fbRevenue||0; return a; }, {roomRevenue:0,roomNights:0,fbRevenue:0});
+}
+function storeValues(store){ return Object.values(store || {}).sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"de")); }
+
 function buildMonthlySummary(){
   const out=monthNames.map((name,idx)=>({month:name,idx,cur:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,fbppSum:0,count:0},ly:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,fbppSum:0,count:0},hasLY:false}));
   seriesData.forEach(s=>s.months.forEach((m,idx)=>{
@@ -377,66 +670,249 @@ function buildMonthlySummary(){
   });
   return out;
 }
+function buildExtraMonthlySummary(store){
+  const entries = storeValues(store);
+  const out = monthNames.map((name,idx)=>({
+    month:name, idx,
+    cur:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,fbppSum:0,count:0},
+    ly:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,fbppSum:0,count:0}
+  }));
+  entries.forEach(g=>{
+    (g.currentMonths||[]).forEach((m,idx)=>{
+      out[idx].cur.roomRevenue += m.roomRevenue||0;
+      out[idx].cur.roomNights += m.roomNights||0;
+      out[idx].cur.fbRevenue += m.fbRevenue||0;
+      if(m.blockAdr||m.roomNights){ out[idx].cur.blockAdrSum += m.blockAdr||0; out[idx].cur.count += 1; }
+      if(m.fbpp||m.roomNights) out[idx].cur.fbppSum += m.fbpp||0;
+    });
+    (g.lyMonths||[]).forEach((m,idx)=>{
+      out[idx].ly.roomRevenue += m.roomRevenue||0;
+      out[idx].ly.roomNights += m.roomNights||0;
+      out[idx].ly.fbRevenue += m.fbRevenue||0;
+      if(m.blockAdr||m.roomNights){ out[idx].ly.blockAdrSum += m.blockAdr||0; out[idx].ly.count += 1; }
+      if(m.fbpp||m.roomNights) out[idx].ly.fbppSum += m.fbpp||0;
+    });
+  });
+  out.forEach(m=>{
+    m.cur.blockAdr = m.cur.count ? m.cur.blockAdrSum / m.cur.count : 0;
+    m.ly.blockAdr = m.ly.count ? m.ly.blockAdrSum / m.ly.count : 0;
+    m.cur.fbpp = m.cur.count ? m.cur.fbppSum / m.cur.count : 0;
+    m.ly.fbpp = m.ly.count ? m.ly.fbppSum / m.ly.count : 0;
+  });
+  return out;
+}
 function buildTop3(){ return monthNames.map((monthName,idx)=>{ const ranked=seriesData.map(s=>({series:s.series,revenue:s.months[idx].cur.roomRevenue||0})).filter(x=>x.revenue!==0).sort((a,b)=>b.revenue-a.revenue); return {month:monthName, top:ranked.slice(0,3)}; }); }
 function isTop3(seriesName,monthIdx){ return buildTop3()[monthIdx].top.some(x=>x.series===seriesName&&x.revenue>0); }
 
-function computeYearKpisFor(yearStr){
-  let roomRevenue=0, roomNights=0, fbRevenue=0, blockAdrSum=0, count=0, seriesCount=0;
+function countStoreGroupsForYear(store, yearStr){
+  let count = 0;
+  storeValues(store).forEach(g => {
+    const months = String(yearStr) === "2025" ? (g.lyMonths || []) : (g.currentMonths || []);
+    if((months || []).some(m => (m.roomRevenue||0)!==0 || (m.roomNights||0)!==0 || (m.fbRevenue||0)!==0 || (m.blockAdr||0)!==0 || (m.fbpp||0)!==0)) count += 1;
+  });
+  return count;
+}
+function buildYearTotalsFromMonthlySummary(summary, yearMode){
+  const total = {roomRevenue:0, roomNights:0, fbRevenue:0, blockAdrWeighted:0, count:0, monthsWithData:0};
+  (summary || []).forEach(m => {
+    const src = yearMode === "ly" ? m.ly : m.cur;
+    const hasData = (src.roomRevenue||0)!==0 || (src.roomNights||0)!==0 || (src.fbRevenue||0)!==0 || (src.blockAdr||0)!==0 || (src.fbpp||0)!==0;
+    if(hasData) total.monthsWithData += 1;
+    total.roomRevenue += src.roomRevenue || 0;
+    total.roomNights += src.roomNights || 0;
+    total.fbRevenue += src.fbRevenue || 0;
+    total.blockAdrWeighted += (src.blockAdr || 0) * ((src.count)||0);
+    total.count += (src.count)||0;
+  });
+  total.adr = total.count ? total.blockAdrWeighted / total.count : 0;
+  return total;
+}
+function computeYearKpisFor(yearStr, sourceType="all"){
+  const useSeries = sourceType === "all" || sourceType === "series";
+  const useOT = sourceType === "all" || sourceType === "ot";
+  const useOS = sourceType === "all" || sourceType === "os";
+
+  const result = {groupCount:0, monthsWithData:0, roomRevenue:0, roomNights:0, fbRevenue:0, adr:0};
   const monthFlags = new Array(12).fill(false);
+  let blockAdrWeighted = 0, adrCount = 0;
 
-  seriesData.forEach(s=>{
-    let hasSeriesData = false;
-    const useCurrent = String(s.currentYear || "") === String(yearStr);
-    const useLy = String(s.lyYear || "") === String(yearStr);
+  if(useSeries){
+    seriesData.forEach(s=>{
+      let hasSeriesData = false;
+      const useCurrent = String(s.currentYear || "") === String(yearStr);
+      const useLy = String(s.lyYear || "") === String(yearStr);
 
-    s.months.forEach((m, idx)=>{
-      const src = useCurrent ? m.cur : (useLy ? m.ly : null);
-      if(!src) return;
-      const hasData = (src.roomRevenue||0)!==0 || (src.roomNights||0)!==0 || (src.fbRevenue||0)!==0 || (src.blockAdr||0)!==0 || (src.fbpp||0)!==0;
-      if(hasData){
+      s.months.forEach((m, idx)=>{
+        const src = useCurrent ? m.cur : (useLy ? m.ly : null);
+        if(!src) return;
+        const hasData = (src.roomRevenue||0)!==0 || (src.roomNights||0)!==0 || (src.fbRevenue||0)!==0 || (src.blockAdr||0)!==0 || (src.fbpp||0)!==0;
+        if(!hasData) return;
         hasSeriesData = true;
         monthFlags[idx] = true;
-        roomRevenue += src.roomRevenue || 0;
-        roomNights += src.roomNights || 0;
-        fbRevenue += src.fbRevenue || 0;
+        result.roomRevenue += src.roomRevenue || 0;
+        result.roomNights += src.roomNights || 0;
+        result.fbRevenue += src.fbRevenue || 0;
         if((src.blockAdr||0)!==0 || (src.roomNights||0)!==0){
-          blockAdrSum += src.blockAdr || 0;
-          count += 1;
+          blockAdrWeighted += src.blockAdr || 0;
+          adrCount += 1;
         }
-      }
+      });
+      if(hasSeriesData) result.groupCount += 1;
     });
-    if(hasSeriesData) seriesCount += 1;
-  });
+  }
 
-  return {
-    seriesCount,
-    monthsWithData: monthFlags.filter(Boolean).length,
-    roomRevenue,
-    roomNights,
-    fbRevenue,
-    adr: count ? blockAdrSum / count : 0
+  if(useOT){
+    const otSummary = buildStoreMonthlySummary(otGroupStore);
+    const totals = buildYearTotalsFromMonthlySummary(otSummary, String(yearStr)==="2025" ? "ly" : "cur");
+    result.groupCount += countStoreGroupsForYear(otGroupStore, yearStr);
+    result.roomRevenue += totals.roomRevenue;
+    result.roomNights += totals.roomNights;
+    result.fbRevenue += totals.fbRevenue;
+    blockAdrWeighted += totals.blockAdrWeighted;
+    adrCount += totals.count;
+    otSummary.forEach((m,idx)=>{
+      const src = String(yearStr)==="2025" ? m.ly : m.cur;
+      if((src.roomRevenue||0)!==0 || (src.roomNights||0)!==0 || (src.fbRevenue||0)!==0 || (src.blockAdr||0)!==0 || (src.fbpp||0)!==0) monthFlags[idx] = true;
+    });
+  }
+
+  if(useOS){
+    const osSummary = buildStoreMonthlySummary(osGroupStore);
+    const totals = buildYearTotalsFromMonthlySummary(osSummary, String(yearStr)==="2025" ? "ly" : "cur");
+    result.groupCount += countStoreGroupsForYear(osGroupStore, yearStr);
+    result.roomRevenue += totals.roomRevenue;
+    result.roomNights += totals.roomNights;
+    result.fbRevenue += totals.fbRevenue;
+    blockAdrWeighted += totals.blockAdrWeighted;
+    adrCount += totals.count;
+    osSummary.forEach((m,idx)=>{
+      const src = String(yearStr)==="2025" ? m.ly : m.cur;
+      if((src.roomRevenue||0)!==0 || (src.roomNights||0)!==0 || (src.fbRevenue||0)!==0 || (src.blockAdr||0)!==0 || (src.fbpp||0)!==0) monthFlags[idx] = true;
+    });
+  }
+
+  result.monthsWithData = monthFlags.filter(Boolean).length;
+  result.adr = adrCount ? blockAdrWeighted / adrCount : 0;
+  return result;
+}
+function getKpiSourceLabel(sourceType){
+  return ({all:"Alle", series:"Serien", ot:"OT Groups", os:"OS Groups"})[sourceType] || "Alle";
+}
+function getSeriesRoomRevenueForYearMonth(yearStr, monthIdx){
+  return seriesData.reduce((sum,s)=>{
+    let src = null;
+    if(String(s.currentYear||"") === String(yearStr)) src = (s.months||[])[monthIdx]?.cur;
+    else if(String(s.lyYear||"") === String(yearStr)) src = (s.months||[])[monthIdx]?.ly;
+    return sum + ((src && src.roomRevenue) || 0);
+  }, 0);
+}
+function getStoreRoomRevenueForYearMonth(store, yearStr, monthIdx){
+  return storeValues(store).reduce((sum,g)=>sum + ((getGroupValueForYearMonth(g, yearStr, monthIdx).roomRevenue)||0), 0);
+}
+function getBudgetActuals2026(){
+  return monthNames.map((month, idx)=>({
+    month,
+    tour: getSeriesRoomRevenueForYearMonth("2026", idx) + getStoreRoomRevenueForYearMonth(otGroupStore, "2026", idx),
+    corporate: getStoreRoomRevenueForYearMonth(osGroupStore, "2026", idx)
+  }));
+}
+function getBudgetValue(type, monthIdx){
+  return budgetDetails?.[type]?.[monthIdx] ?? "";
+}
+function setBudgetValue(type, monthIdx, value){
+  if(!budgetDetails[type]) budgetDetails[type] = {};
+  budgetDetails[type][monthIdx] = value;
+  saveBudgetDetails();
+}
+function parseBudgetNumber(value){
+  const s = String(value ?? "").trim().replace(/'/g,"").replace(/\s+/g,"").replace(/,/g, ".");
+  if(!s) return null;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+}
+function budgetStatusClass(budget, actual){
+  if(budget === null) return "budget-status-empty";
+  return actual >= budget ? "budget-status-ok" : "budget-status-bad";
+}
+function budgetStatusLabel(budget, actual){
+  if(budget === null) return "Budget offen";
+  return actual >= budget ? "erreicht" : "offen";
+}
+function renderBudgetDetails(){
+  const actuals = getBudgetActuals2026();
+  const renderRows = (type, actualKey, totalLabel) => {
+    let totalBudget = 0;
+    let totalActual = 0;
+    let hasBudgetTotal = false;
+    const rows = actuals.map((row, idx) => {
+      const rawBudget = getBudgetValue(type, idx);
+      const parsedBudget = parseBudgetNumber(rawBudget);
+      const actual = row[actualKey] || 0;
+      const diff = parsedBudget === null ? null : (actual - parsedBudget);
+      const statusClass = budgetStatusClass(parsedBudget, actual);
+      if(parsedBudget !== null){
+        totalBudget += parsedBudget;
+        hasBudgetTotal = true;
+      }
+      totalActual += actual;
+      return `<tr>
+        <td class="left"><strong>${escapeHtml(row.month)} 2026</strong></td>
+        <td><input class="budget-input" data-budget-type="${type}" data-budget-month="${idx}" value="${escapeHtml(rawBudget)}" placeholder="Betrag eingeben, z. B. 25000.00"></td>
+        <td class="mono">${fmt(actual)}</td>
+        <td class="mono ${diff !== null ? (diff >= 0 ? 'good' : 'bad') : ''}">${diff === null ? "–" : fmt(diff)}</td>
+        <td class="${statusClass}">${budgetStatusLabel(parsedBudget, actual)}</td>
+      </tr>`;
+    }).join("");
+    const totalDiff = hasBudgetTotal ? (totalActual - totalBudget) : null;
+    const totalStatusClass = budgetStatusClass(hasBudgetTotal ? totalBudget : null, totalActual);
+    const totalStatusLabel = budgetStatusLabel(hasBudgetTotal ? totalBudget : null, totalActual);
+    return rows + `<tr style="background:#f6f8fb;font-weight:900">
+      <td class="left"><strong>${escapeHtml(totalLabel)}</strong></td>
+      <td class="mono">${hasBudgetTotal ? fmt(totalBudget) : "–"}</td>
+      <td class="mono">${fmt(totalActual)}</td>
+      <td class="mono ${totalDiff !== null ? (totalDiff >= 0 ? 'good' : 'bad') : ''}">${totalDiff === null ? "–" : fmt(totalDiff)}</td>
+      <td class="${totalStatusClass}">${totalStatusLabel}</td>
+    </tr>`;
   };
+  const tourBody = document.getElementById("budgetTourBody");
+  const corpBody = document.getElementById("budgetCorporateBody");
+  if(tourBody) tourBody.innerHTML = renderRows("tour", "tour", "Gesamttotal Tour-Wholesaler Budget 2026");
+  if(corpBody) corpBody.innerHTML = renderRows("corporate", "corporate", "Gesamttotal Corporate Budget 2026");
+  document.querySelectorAll("[data-budget-type]").forEach(inp => {
+    inp.addEventListener("input", function(){
+      setBudgetValue(this.getAttribute("data-budget-type"), Number(this.getAttribute("data-budget-month")), this.value || "");
+    });
+    inp.addEventListener("change", function(){
+      setBudgetValue(this.getAttribute("data-budget-type"), Number(this.getAttribute("data-budget-month")), this.value || "");
+      renderBudgetDetails();
+    });
+    inp.addEventListener("blur", function(){
+      setBudgetValue(this.getAttribute("data-budget-type"), Number(this.getAttribute("data-budget-month")), this.value || "");
+      renderBudgetDetails();
+    });
+  });
 }
-
 function renderKpis(){
-  const y2026 = computeYearKpisFor("2026");
-  const y2025 = computeYearKpisFor("2025");
-
-  document.getElementById("kpiSeries2026").textContent = y2026.seriesCount;
-  document.getElementById("kpiMonths2026").textContent = y2026.monthsWithData;
-  document.getElementById("kpiRoomRevenue2026").textContent = fmt(y2026.roomRevenue);
-  document.getElementById("kpiRoomNights2026").textContent = fmt0(y2026.roomNights);
-  document.getElementById("kpiFBRevenue2026").textContent = fmt(y2026.fbRevenue);
-  document.getElementById("kpiAdr2026").textContent = fmt(y2026.adr);
-
-  document.getElementById("kpiSeries2025").textContent = y2025.seriesCount;
-  document.getElementById("kpiMonths2025").textContent = y2025.monthsWithData;
-  document.getElementById("kpiRoomRevenue2025").textContent = fmt(y2025.roomRevenue);
-  document.getElementById("kpiRoomNights2025").textContent = fmt0(y2025.roomNights);
-  document.getElementById("kpiFBRevenue2025").textContent = fmt(y2025.fbRevenue);
-  document.getElementById("kpiAdr2025").textContent = fmt(y2025.adr);
+  ["2026","2025"].forEach(yearStr => {
+    const sourceType = kpiSourceState[yearStr] || "all";
+    const data = computeYearKpisFor(yearStr, sourceType);
+    const label = getKpiSourceLabel(sourceType);
+    const select = document.getElementById("kpiSource"+yearStr);
+    if(select) select.value = sourceType;
+    document.getElementById("kpiGroups"+yearStr).textContent = data.groupCount;
+    document.getElementById("kpiMonths"+yearStr).textContent = data.monthsWithData;
+    document.getElementById("kpiRoomRevenue"+yearStr).textContent = fmt(data.roomRevenue);
+    document.getElementById("kpiRoomNights"+yearStr).textContent = fmt0(data.roomNights);
+    document.getElementById("kpiFBRevenue"+yearStr).textContent = fmt(data.fbRevenue);
+    document.getElementById("kpiAdr"+yearStr).textContent = fmt(data.adr);
+    document.getElementById("kpiSourceLabel"+yearStr).textContent = "aktive Gruppen • " + label;
+    document.getElementById("kpiMonthsLabel"+yearStr).textContent = "Jan–Dez • " + label;
+    document.getElementById("kpiRevenueLabel"+yearStr).textContent = "Gesamttotal • " + label;
+    document.getElementById("kpiNightsLabel"+yearStr).textContent = "Gesamttotal • " + label;
+    document.getElementById("kpiFbLabel"+yearStr).textContent = "Gesamttotal • " + label;
+    document.getElementById("kpiAdrLabel"+yearStr).textContent = "Durchschnitt • " + label;
+  });
 }
-
 
 function getMetricNumeric(monthObj, metric, yearMode){
   const base = yearMode === "ly" ? monthObj.ly : monthObj.cur;
@@ -476,29 +952,101 @@ function filteredSeriesForPivot(){
   if(pivotState.seriesMode === "all") return seriesData;
   return seriesData.filter(s => s.key === pivotState.seriesMode);
 }
+function buildStoreMonthlySummary(store){
+  const out = monthNames.map((name,idx)=>({month:name,idx,cur:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,fbppSum:0,count:0},ly:{roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,fbppSum:0,count:0},hasLY:true}));
+  storeValues(store).forEach(g => {
+    out.forEach((row,idx) => {
+      const m25 = getGroupValueForYearMonth(g, "2025", idx);
+      const m26 = getGroupValueForYearMonth(g, "2026", idx);
+      row.cur.roomRevenue += m26.roomRevenue || 0;
+      row.cur.roomNights += m26.roomNights || 0;
+      row.cur.fbRevenue += m26.fbRevenue || 0;
+      if((m26.blockAdr||0) || (m26.roomNights||0)){ row.cur.blockAdrSum += m26.blockAdr || 0; row.cur.count += 1; }
+      row.cur.fbppSum += m26.fbpp || 0;
+      row.ly.roomRevenue += m25.roomRevenue || 0;
+      row.ly.roomNights += m25.roomNights || 0;
+      row.ly.fbRevenue += m25.fbRevenue || 0;
+      if((m25.blockAdr||0) || (m25.roomNights||0)){ row.ly.blockAdrSum += m25.blockAdr || 0; row.ly.count += 1; }
+      row.ly.fbppSum += m25.fbpp || 0;
+    });
+  });
+  out.forEach(row => {
+    row.cur.blockAdr = row.cur.count ? row.cur.blockAdrSum / row.cur.count : 0;
+    row.ly.blockAdr = row.ly.count ? row.ly.blockAdrSum / row.ly.count : 0;
+    row.cur.fbpp = row.cur.count ? row.cur.fbppSum / row.cur.count : 0;
+    row.ly.fbpp = row.ly.count ? row.ly.fbppSum / row.ly.count : 0;
+  });
+  return out;
+}
+function combineMonthlySummaries(summaries){
+  return monthNames.map((name,idx)=>{
+    const parts = summaries.map(s => s[idx]);
+    const curCount = parts.reduce((a,p)=>a+((p.cur.count)||0),0);
+    const lyCount = parts.reduce((a,p)=>a+((p.ly.count)||0),0);
+    return {
+      month:name, idx, hasLY:true,
+      cur:{
+        roomRevenue:parts.reduce((a,p)=>a+(p.cur.roomRevenue||0),0),
+        roomNights:parts.reduce((a,p)=>a+(p.cur.roomNights||0),0),
+        fbRevenue:parts.reduce((a,p)=>a+(p.cur.fbRevenue||0),0),
+        fbpp:curCount ? parts.reduce((a,p)=>a+((p.cur.fbpp||0)*((p.cur.count)||0)),0)/curCount : 0,
+        blockAdr:curCount ? parts.reduce((a,p)=>a+((p.cur.blockAdr||0)*((p.cur.count)||0)),0)/curCount : 0,
+        count:curCount
+      },
+      ly:{
+        roomRevenue:parts.reduce((a,p)=>a+(p.ly.roomRevenue||0),0),
+        roomNights:parts.reduce((a,p)=>a+(p.ly.roomNights||0),0),
+        fbRevenue:parts.reduce((a,p)=>a+(p.ly.fbRevenue||0),0),
+        fbpp:lyCount ? parts.reduce((a,p)=>a+((p.ly.fbpp||0)*((p.ly.count)||0)),0)/lyCount : 0,
+        blockAdr:lyCount ? parts.reduce((a,p)=>a+((p.ly.blockAdr||0)*((p.ly.count)||0)),0)/lyCount : 0,
+        count:lyCount
+      }
+    };
+  });
+}
+function buildPivotEntities(){
+  const entities = [];
+  const sourceMode = pivotState.sourceMode || "all";
+  if(sourceMode !== "totals"){
+    filteredSeriesForPivot().forEach(s => entities.push({key:s.key, label:s.series, type:'series', months:s.months}));
+  }
+  const seriesSummary = buildMonthlySummary();
+  const otSummary = buildStoreMonthlySummary(otGroupStore);
+  const osSummary = buildStoreMonthlySummary(osGroupStore);
+  const allSummary = combineMonthlySummaries([seriesSummary, otSummary, osSummary]);
+  if(sourceMode !== "series"){
+    entities.push({key:'total_series', label:'Total Serien', type:'summary', months:seriesSummary});
+    entities.push({key:'total_ot', label:'Total OT Groups', type:'summary', months:otSummary});
+    entities.push({key:'total_os', label:'Total OS Groups', type:'summary', months:osSummary});
+    entities.push({key:'total_all', label:'Total alle Gruppen', type:'summary', months:allSummary});
+  }
+  return entities;
+}
 function renderPivot(){
   updateSeriesModeOptions();
+  const sourceSel = document.getElementById("pivotSourceMode");
+  if(sourceSel) sourceSel.value = pivotState.sourceMode || "all";
   const thead = document.querySelector("#pivotTable thead");
   const tbody = document.querySelector("#pivotTable tbody");
-  const usedSeries = filteredSeriesForPivot();
+  const entities = buildPivotEntities();
 
   if(pivotState.viewMode === "monthsSeries"){
-    thead.innerHTML = `<tr><th class="left">${metricLabel(pivotState.metric)}</th>${usedSeries.map(s=>`<th>${escapeHtml(s.series)}</th>`).join("")}</tr>`;
+    thead.innerHTML = `<tr><th class="left">${metricLabel(pivotState.metric)}</th>${entities.map(s=>`<th>${escapeHtml(s.label)}</th>`).join("")}</tr>`;
     tbody.innerHTML = monthNames.map((m, idx) => {
-      const cells = usedSeries.map(s => {
+      const cells = entities.map(s => {
         const val = getMetricNumeric(s.months[idx], pivotState.metric, pivotState.yearMode);
         return `<td class="mono">${formatMetricValue(val, pivotState.metric, pivotState.yearMode)}</td>`;
       }).join("");
       return `<tr><td class="left"><strong>${m} ${currentYear||""}</strong></td>${cells}</tr>`;
     }).join("");
   } else {
-    thead.innerHTML = `<tr><th class="left">Serie</th>${monthNames.map(m=>`<th>${m} ${currentYear||""}</th>`).join("")}</tr>`;
-    tbody.innerHTML = usedSeries.map(s => {
+    thead.innerHTML = `<tr><th class="left">Bereich</th>${monthNames.map(m=>`<th>${m} ${currentYear||""}</th>`).join("")}</tr>`;
+    tbody.innerHTML = entities.map(s => {
       const cells = s.months.map(monthObj => {
         const val = getMetricNumeric(monthObj, pivotState.metric, pivotState.yearMode);
         return `<td class="mono">${formatMetricValue(val, pivotState.metric, pivotState.yearMode)}</td>`;
       }).join("");
-      return `<tr><td class="left"><strong>${escapeHtml(s.series)}</strong></td>${cells}</tr>`;
+      return `<tr><td class="left"><strong>${escapeHtml(s.label)}</strong></td>${cells}</tr>`;
     }).join("");
   }
 }
@@ -523,10 +1071,37 @@ function renderMonthFilterBar(){
   }));
 }
 
+function renderExtraMonthTotalCard(title, summary, idx){
+  const m = summary[idx];
+  if(!m) return "";
+  return `<div class="month-total-card">
+    <div class="month-total-head">${escapeHtml(title)}</div>
+    <div class="month-total-body">
+      <table class="matrix">
+        <thead>
+          <tr><th colspan="5">${escapeHtml(monthNames[idx])}</th></tr>
+          <tr><th>Room Revenue</th><th>Room Nights</th><th>F&amp;B Revenue</th><th>F&amp;B / Guest</th><th>Block ADR</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:#f6f8fb;font-weight:900">
+            <td class="mono">${fmt(m.cur.roomRevenue)}</td>
+            <td class="mono">${fmt0(m.cur.roomNights)}</td>
+            <td class="mono">${fmt(m.cur.fbRevenue)}</td>
+            <td class="mono">${fmt(m.cur.fbpp)}</td>
+            <td class="mono">${fmt(m.cur.blockAdr)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
 function renderMonthlyBlocks(){
   const wrap=document.getElementById("monthlyPrint");
   const summary=buildMonthlySummary();
-  wrap.innerHTML=summary.filter(m=>{ if(activeMonthFilter!=="all" && Number(activeMonthFilter)!==m.idx) return false; return m.cur.roomRevenue||m.cur.roomNights||m.cur.fbRevenue; }).map(m=>{
+  const otSummary = buildExtraMonthlySummary(otGroupStore);
+  const osSummary = buildExtraMonthlySummary(osGroupStore);
+  wrap.innerHTML=summary.filter(m=>{ if(activeMonthFilter!=="all" && Number(activeMonthFilter)!==m.idx) return false; return m.cur.roomRevenue||m.cur.roomNights||m.cur.fbRevenue||otSummary[m.idx].cur.roomRevenue||osSummary[m.idx].cur.roomRevenue||otSummary[m.idx].cur.roomNights||osSummary[m.idx].cur.roomNights||otSummary[m.idx].cur.fbRevenue||osSummary[m.idx].cur.fbRevenue; }).map(m=>{
     const visible=seriesData.filter(s=>{const x=s.months[m.idx]; return x.cur.roomRevenue||x.cur.roomNights||x.cur.fbRevenue;}).sort((a,b)=>(b.months[m.idx].cur.roomRevenue||0)-(a.months[m.idx].cur.roomRevenue||0));
     const rows=visible.map(s=>{ const x=s.months[m.idx]; return `<tr>
       <td class="series-cell">${isTop3(s.series,m.idx)?"🏆 ":""}${escapeHtml(s.series)}<div class="corp">CorporateID: ${escapeHtml(s.corporateId||"–")}</div></td>
@@ -544,10 +1119,11 @@ function renderMonthlyBlocks(){
       <td class="mono">${fmt(m.cur.fbpp)}</td><td class="mono">${m.hasLY?fmt(m.ly.fbpp):"–"}</td><td class="mono ${diffClass(m.cur.fbpp,m.ly.fbpp,m.hasLY)}">${m.hasLY?fmt(m.cur.fbpp-m.ly.fbpp):"–"}</td><td class="mono ${diffClass(m.cur.fbpp,m.ly.fbpp,m.hasLY)}">${pct(m.cur.fbpp,m.ly.fbpp,m.hasLY)}</td>
       <td class="mono">${fmt(m.cur.blockAdr)}</td><td class="mono">${m.hasLY?fmt(m.ly.blockAdr):"–"}</td><td class="mono ${diffClass(m.cur.blockAdr,m.ly.blockAdr,m.hasLY)}">${m.hasLY?fmt(m.cur.blockAdr-m.ly.blockAdr):"–"}</td><td class="mono ${diffClass(m.cur.blockAdr,m.ly.blockAdr,m.hasLY)}">${pct(m.cur.blockAdr,m.ly.blockAdr,m.hasLY)}</td>
     </tr>`;
-    return `<div class="month-card"><div class="month-head"><div><div class="month-title">${m.month} ${currentYear||""}</div><div class="month-sub">Zusammenfassung aller Gruppen im selben Monat</div></div><div class="month-chips"><div class="month-chip">${visible.length} Gruppen</div><div class="month-chip">Top 3 markiert</div></div></div>
+    const extraCards = `<div class="month-extra-stack">${renderExtraMonthTotalCard("OT Groups – Monatstotal", otSummary, m.idx)}${renderExtraMonthTotalCard("OS Groups – Monatstotal", osSummary, m.idx)}</div>`;
+    return `<div class="month-card"><div class="month-head"><div><div class="month-title">${m.month} ${currentYear||""}</div><div class="month-sub">Zusammenfassung aller Serien im selben Monat</div></div><div class="month-chips"><div class="month-chip">${visible.length} Serien</div><div class="month-chip">Top 3 markiert</div></div></div>
       <table class="matrix"><thead><tr><th class="seriehead left" rowspan="2">Serie</th><th colspan="4">Room Revenue</th><th colspan="4">Room Nights</th><th colspan="4">F&amp;B Revenue</th><th colspan="4">F&amp;B / Guest</th><th colspan="4">Block Room ADR</th></tr>
       <tr><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th></tr></thead>
-      <tbody>${rows}${totalRow}</tbody></table></div>`;
+      <tbody>${rows}${totalRow}</tbody></table>${extraCards}</div>`;
   }).join("");
 }
 
@@ -560,44 +1136,38 @@ function getProfile(key, year){
   const p = profileFields[key] || {};
   return p[year] || {breakfast:"", single:"", doubleTwin:"", triple:"", halfboard:""};
 }
-function getCardColor(index){
-  return seriesCreamColors[index % seriesCreamColors.length];
-}
+function getCardColor(index){ return seriesCreamColors[index % seriesCreamColors.length]; }
 function getSeriesColorByKey(key){
   const keys = seriesData.map(s => s.key).sort();
   const idx = Math.max(0, keys.indexOf(key));
   return seriesCreamColors[idx % seriesCreamColors.length];
 }
-function saveCollapsedPastYears(){
-  try{ localStorage.setItem("pms_dashboard_v18_collapsed_years", JSON.stringify(collapsedPastYears)); }catch(e){}
-}
-function loadCollapsedPastYears(){
-  try{ collapsedPastYears = JSON.parse(localStorage.getItem("pms_dashboard_v18_collapsed_years")||"{}") || {}; }catch(e){ collapsedPastYears = {}; }
-}
-function isPastYearCollapsed(key){
-  return collapsedPastYears[key] !== false;
-}
-function setPastYearCollapsed(key, val){
-  collapsedPastYears[key] = !!val;
-  saveCollapsedPastYears();
-}
-function saveMergedCorporateMap(){
-  try{ localStorage.setItem("pms_dashboard_v18_merged_corporates", JSON.stringify(mergedCorporateMap)); }catch(e){}
-}
-function loadMergedCorporateMap(){
-  try{ mergedCorporateMap = JSON.parse(localStorage.getItem("pms_dashboard_v18_merged_corporates")||"{}") || {}; }catch(e){ mergedCorporateMap = {}; }
-}
-function effectiveCorporateId(rawId){
-  return mergedCorporateMap[rawId] || rawId;
+function saveCollapsedPastYears(){ try{ localStorage.setItem("pms_dashboard_v18_collapsed_years", JSON.stringify(collapsedPastYears)); }catch(e){} }
+function loadCollapsedPastYears(){ try{ collapsedPastYears = JSON.parse(localStorage.getItem("pms_dashboard_v18_collapsed_years")||"{}") || {}; }catch(e){ collapsedPastYears = {}; } }
+function isPastYearCollapsed(key){ return collapsedPastYears[key] !== false; }
+function setPastYearCollapsed(key, val){ collapsedPastYears[key] = !!val; saveCollapsedPastYears(); }
+function saveMergedCorporateMap(){ try{ localStorage.setItem("pms_dashboard_v18_merged_corporates", JSON.stringify(mergedCorporateMap)); }catch(e){} }
+function loadMergedCorporateMap(){ try{ mergedCorporateMap = JSON.parse(localStorage.getItem("pms_dashboard_v18_merged_corporates")||"{}") || {}; }catch(e){ mergedCorporateMap = {}; } }
+function effectiveCorporateId(rawId){ return mergedCorporateMap[rawId] || rawId; }
+
+function getAllCorporateOptions(){
+  const ids = Array.from(new Set([
+    ...seriesData.map(s => s.corporateId).filter(Boolean),
+    ...storeValues(otGroupStore).map(g => g.corporateId).filter(Boolean),
+    ...storeValues(osGroupStore).map(g => g.corporateId).filter(Boolean),
+    ...queuedGroups.map(g => g.corporateId).filter(Boolean)
+  ])).sort();
+  return ids;
 }
 function refreshMergeSelectors(){
   const a = document.getElementById("mergeSeriesA");
   const b = document.getElementById("mergeSeriesB");
-  if(!a || !b) return;
-  const corpIds = Array.from(new Set(seriesData.map(s => s.corporateId).filter(Boolean))).sort();
+  const c = document.getElementById("queueCorporateSelect");
+  const corpIds = getAllCorporateOptions();
   const opts = ['<option value="">CorporateID wählen</option>'].concat(corpIds.map(id => `<option value="${escapeHtml(id)}">${escapeHtml(id)}</option>`));
-  a.innerHTML = opts.join("");
-  b.innerHTML = opts.join("");
+  if(a) a.innerHTML = opts.join("");
+  if(b) b.innerHTML = opts.join("");
+  if(c) c.innerHTML = ['<option value="">CorporateID wählen</option>'].concat(corpIds.map(id => `<option value="${escapeHtml(id)}">${escapeHtml(id)}</option>`)).join("");
 }
 function mergeImportFromStoreEntry(entry, newCorp){
   let existingKey = Object.keys(seriesStore).find(k => seriesStore[k].corporateId === newCorp);
@@ -659,7 +1229,10 @@ function rebuildStoreWithMergedCorporateIds(){
     const newCorp = effectiveCorporateId(entry.corporateId);
     mergeImportFromStoreEntry(entry, newCorp);
   });
-  saveStore();
+  Object.values(otGroupStore).forEach(g => { if(g.corporateId) g.corporateId = effectiveCorporateId(g.corporateId); });
+  Object.values(osGroupStore).forEach(g => { if(g.corporateId) g.corporateId = effectiveCorporateId(g.corporateId); });
+  queuedGroups.forEach(g => { if(g.corporateId) g.corporateId = effectiveCorporateId(g.corporateId); });
+  saveStore(); saveOtGroupStore(); saveOsGroupStore(); saveQueuedGroups();
   renderAll();
 }
 function mergeSelectedCorporateIds(){
@@ -680,6 +1253,41 @@ function deleteSeriesByKey(key){
   saveProfiles();
   renderAll();
 }
+function deleteGroupByKey(type, key){
+  if(type === "OT" && otGroupStore[key]){ delete otGroupStore[key]; saveOtGroupStore(); }
+  if(type === "OS" && osGroupStore[key]){ delete osGroupStore[key]; saveOsGroupStore(); }
+  renderAll();
+}
+function moveGroupBackToQueue(type, key){
+  const store = type === "OT" ? otGroupStore : osGroupStore;
+  const row = store[key];
+  if(!row) return;
+  const totalsCur = simpleMonthsTotals(row.currentMonths || []);
+  const totalsLy = simpleMonthsTotals(row.lyMonths || []);
+  queuedGroups.push({
+    queueId: uniqueId("queue"),
+    name: row.name || "",
+    originalName: row.name || "",
+    importYear: row.currentYear || row.lyYear || "",
+    importMonth: getImportMonthLabelFromMonths((row.currentMonths || []).some(m => (m.roomRevenue||0)!==0 || (m.roomNights||0)!==0 || (m.fbRevenue||0)!==0 || (m.blockAdr||0)!==0 || (m.fbpp||0)!==0) ? row.currentMonths : row.lyMonths),
+    corporateId: row.corporateId || "",
+    groupType: type,
+    currentYear: row.currentYear || "",
+    lyYear: row.lyYear || "",
+    currentMonths: (row.currentMonths || blankSimpleMonths()).map(m => ({...m})),
+    lyMonths: (row.lyMonths || blankSimpleMonths()).map(m => ({...m})),
+    totals: {
+      roomRevenue:(totalsCur.roomRevenue||0)+(totalsLy.roomRevenue||0),
+      roomNights:(totalsCur.roomNights||0)+(totalsLy.roomNights||0),
+      fbRevenue:(totalsCur.fbRevenue||0)+(totalsLy.fbRevenue||0)
+    }
+  });
+  delete store[key];
+  saveQueuedGroups();
+  if(type === "OT") saveOtGroupStore();
+  if(type === "OS") saveOsGroupStore();
+  renderAll();
+}
 function renderSeriesFilterBar(){
   const bar = document.getElementById("seriesFilterBar");
   if(!bar) return;
@@ -692,7 +1300,7 @@ function renderSeriesFilterBar(){
   const seriesButtons = available.map(s => {
     const total = seriesTotal(s);
     const color = getSeriesColorByKey(s.key);
-    return `<button class="series-filter-btn ${activeSeriesFilter===s.key?"active":""}" data-series-filter="${escapeHtml(s.key)}" style="background:${activeSeriesFilter===s.key?"linear-gradient(135deg,var(--blue),var(--blue2))":color};color:${activeSeriesFilter===s.key?"#fff":"var(--blue)"};border-color:${activeSeriesFilter===s.key?"transparent":"rgba(18,59,102,.14)"}">${escapeHtml(s.series)}<span class="series-filter-count" style="color:${activeSeriesFilter===s.key?"var(--blue)":"var(--blue)"}">${fmt0(total.roomNights)}</span></button>`;
+    return `<button class="series-filter-btn ${activeSeriesFilter===s.key?"active":""}" data-series-filter="${escapeHtml(s.key)}" style="background:${activeSeriesFilter===s.key?"linear-gradient(135deg,var(--blue),var(--blue2))":color};color:${activeSeriesFilter===s.key?"#fff":"var(--blue)"};border-color:${activeSeriesFilter===s.key?"transparent":"rgba(18,59,102,.14)"}">${escapeHtml(s.series)}<span class="series-filter-count" style="color:var(--blue)">${fmt0(total.roomNights)}</span></button>`;
   }).join("");
   bar.innerHTML = `<div class="series-filter-label">Serienwahl:</div>${allButton}${seriesButtons}`;
   bar.querySelectorAll(".series-filter-btn").forEach(btn=>btn.addEventListener("click", function(){
@@ -835,19 +1443,372 @@ function renderSeriesBlocks(){
   }));
 }
 
+function findStoreEntryByIdentity(store, group){
+  return Object.keys(store).find(key => {
+    const g = store[key];
+    return String(g.name||"") === String(group.name||"") && String(g.corporateId||"") === String(group.corporateId||"");
+  });
+}
+function mergeStandaloneGroupIntoStore(store, group){
+  const corpId = group.corporateId ? effectiveCorporateId(group.corporateId) : "";
+  const normalized = {...group, corporateId:corpId};
+  let existingKey = findStoreEntryByIdentity(store, normalized);
+  if(!existingKey){
+    const key = uniqueId(corpId ? ("grp_"+corpId) : "grp");
+    store[key] = {
+      key,
+      name: normalized.name || "Unbenannte Gruppe",
+      corporateId: corpId,
+      currentYear: normalized.currentYear || "",
+      lyYear: normalized.lyYear || "",
+      currentMonths: JSON.parse(JSON.stringify(normalized.currentMonths || blankSimpleMonths())),
+      lyMonths: JSON.parse(JSON.stringify(normalized.lyMonths || blankSimpleMonths()))
+    };
+    return;
+  }
+  const target = store[existingKey];
+  const targetCur = Number(target.currentYear || 0);
+  const entryCur = Number(normalized.currentYear || 0);
+  if(String(target.currentYear||"") === String(normalized.currentYear||"")){
+    target.currentMonths = normalized.currentMonths.map(m => ({...m}));
+    if(normalized.lyYear){
+      target.lyYear = normalized.lyYear;
+      target.lyMonths = normalized.lyMonths.map(m => ({...m}));
+    }
+  }else if(entryCur > targetCur){
+    target.lyYear = target.currentYear || "";
+    target.lyMonths = JSON.parse(JSON.stringify(target.currentMonths || blankSimpleMonths()));
+    target.currentYear = normalized.currentYear || target.currentYear;
+    target.currentMonths = normalized.currentMonths.map(m => ({...m}));
+  }else{
+    target.lyYear = normalized.currentYear || target.lyYear;
+    target.lyMonths = normalized.currentMonths.map(m => ({...m}));
+  }
+  target.name = normalized.name || target.name;
+  target.corporateId = corpId || target.corporateId;
+}
+function getImportMonthLabelFromMonths(months){
+  const labels = (months || []).map((m, idx) => {
+    const hasData = (m.roomRevenue||0)!==0 || (m.roomNights||0)!==0 || (m.fbRevenue||0)!==0 || (m.blockAdr||0)!==0 || (m.fbpp||0)!==0;
+    return hasData ? monthNames[idx] : null;
+  }).filter(Boolean);
+  return labels.length ? labels.join(", ") : "";
+}
+function getQueueImportMonthLabel(group){
+  if(group && String(group.importMonth || "").trim()) return String(group.importMonth).trim();
+  return getImportMonthLabelFromMonths(group?.currentMonths || []);
+}
+
+function queueParsedGroups(parsed){
+  if(!parsed || !parsed.seriesEntries) return;
+  parsed.seriesEntries.forEach(entry => {
+    const currentMonths = entry.months.map(m => ({...m.cur}));
+    const total = simpleMonthsTotals(currentMonths);
+    if(!(total.roomRevenue||total.roomNights||total.fbRevenue)) return;
+    queuedGroups.push({
+      queueId: uniqueId("queue"),
+      name: entry.series,
+      originalName: entry.series,
+      corporateId: cleanCorporateId(entry.corporateId || "") || "",
+      groupType: "",
+      importYear: entry.year || "",
+      importMonth: getImportMonthLabelFromMonths(currentMonths),
+      currentYear: entry.year || "",
+      lyYear: "",
+      currentMonths,
+      lyMonths: blankSimpleMonths(),
+      totals: total
+    });
+  });
+  saveQueuedGroups();
+}
+
+function renderQueue(){
+  const body = document.getElementById("queueBody");
+  if(!body) return;
+  if(!queuedGroups.length){
+    body.innerHTML = `<tr><td colspan="9" class="left"><span class="group-empty">Keine offenen Gruppen in der Ablage.</span></td></tr>`;
+    return;
+  }
+  body.innerHTML = queuedGroups.map(g => {
+    return `<tr>
+      <td><input type="checkbox" class="queue-checkbox" data-queue-check="${escapeHtml(g.queueId)}"></td>
+      <td class="left"><input class="queue-input" data-queue-name="${escapeHtml(g.queueId)}" value="${escapeHtml(g.name)}"></td>
+      <td>${escapeHtml(g.importYear || "–")}</td>
+      <td><input class="queue-input" data-queue-corp="${escapeHtml(g.queueId)}" value="${escapeHtml(g.corporateId || "")}" placeholder="CorporateID"></td>
+      <td>
+        <select class="queue-select" data-queue-type="${escapeHtml(g.queueId)}" style="min-width:140px">
+          <option value="" ${!g.groupType ? "selected" : ""}>Typ wählen</option>
+          <option value="OT" ${g.groupType==="OT" ? "selected" : ""}>OT</option>
+          <option value="OS" ${g.groupType==="OS" ? "selected" : ""}>OS</option>
+        </select>
+      </td>
+      <td class="mono">${fmt(g.totals?.roomRevenue || 0)}</td>
+      <td class="mono">${fmt0(g.totals?.roomNights || 0)}</td>
+      <td class="mono">${fmt(g.totals?.fbRevenue || 0)}</td>
+      <td><button class="delete-group-btn" data-queue-delete="${escapeHtml(g.queueId)}">Löschen</button></td>
+    </tr>`;
+  }).join("");
+
+  body.querySelectorAll("input[data-queue-name]").forEach(inp => inp.addEventListener("input", function(){
+    const id = this.getAttribute("data-queue-name");
+    const row = queuedGroups.find(x => x.queueId === id);
+    if(row){ row.name = this.value; saveQueuedGroups(); }
+  }));
+  body.querySelectorAll("input[data-queue-corp]").forEach(inp => inp.addEventListener("input", function(){
+    const id = this.getAttribute("data-queue-corp");
+    const row = queuedGroups.find(x => x.queueId === id);
+    if(row){ row.corporateId = this.value.trim(); saveQueuedGroups(); refreshMergeSelectors(); }
+  }));
+  body.querySelectorAll("select[data-queue-type]").forEach(sel => sel.addEventListener("change", function(){
+    const id = this.getAttribute("data-queue-type");
+    const row = queuedGroups.find(x => x.queueId === id);
+    if(row){ row.groupType = this.value; saveQueuedGroups(); }
+  }));
+  body.querySelectorAll("[data-queue-delete]").forEach(btn => btn.addEventListener("click", function(){
+    const id = this.getAttribute("data-queue-delete");
+    queuedGroups = queuedGroups.filter(x => x.queueId !== id);
+    saveQueuedGroups();
+    renderAll();
+  }));
+}
+function toggleAllQueuedRows(flag){
+  document.querySelectorAll("[data-queue-check]").forEach(cb => { cb.checked = !!flag; });
+}
+function deleteSelectedQueuedGroups(){
+  const selectedIds = Array.from(document.querySelectorAll("[data-queue-check]:checked")).map(cb => cb.getAttribute("data-queue-check"));
+  if(!selectedIds.length) return;
+  queuedGroups = queuedGroups.filter(x => !selectedIds.includes(x.queueId));
+  saveQueuedGroups();
+  renderAll();
+}
+function assignSelectedQueuedGroups(){
+  const selectedIds = Array.from(document.querySelectorAll("[data-queue-check]:checked")).map(cb => cb.getAttribute("data-queue-check"));
+  if(!selectedIds.length) return;
+  const bulkType = document.getElementById("queueTypeSelect").value;
+  const bulkCorp = document.getElementById("queueCorporateSelect").value;
+  const remaining = [];
+  queuedGroups.forEach(g => {
+    if(!selectedIds.includes(g.queueId)){ remaining.push(g); return; }
+    const finalType = bulkType || g.groupType;
+    const finalCorp = (bulkCorp || g.corporateId || "").trim();
+    if(!finalType){ remaining.push(g); return; }
+    const payload = {
+      name: g.name,
+      corporateId: finalCorp,
+      currentYear: g.currentYear,
+      lyYear: g.lyYear,
+      currentMonths: g.currentMonths.map(m => ({...m})),
+      lyMonths: g.lyMonths.map(m => ({...m}))
+    };
+    if(finalType === "OT") mergeStandaloneGroupIntoStore(otGroupStore, payload);
+    if(finalType === "OS") mergeStandaloneGroupIntoStore(osGroupStore, payload);
+  });
+  queuedGroups = remaining;
+  saveQueuedGroups(); saveOtGroupStore(); saveOsGroupStore();
+  renderAll();
+}
+
+function buildGroupCardTable(group, compareMode){
+  const years = ["2025","2026"];
+  if(compareMode === "osCompare"){
+    const monthRows = monthNames.map((mn, idx) => {
+      const y25 = String(group.currentYear) === "2025" ? (group.currentMonths[idx] || {}) : (String(group.lyYear) === "2025" ? (group.lyMonths[idx] || {}) : {});
+      const y26 = String(group.currentYear) === "2026" ? (group.currentMonths[idx] || {}) : (String(group.lyYear) === "2026" ? (group.lyMonths[idx] || {}) : {});
+      return `<tr>
+        <td class="left monthcol">${mn}</td>
+        <td class="mono metriccol">${fmt(y25.roomRevenue||0)}</td>
+        <td class="mono metriccol">${fmt(y26.roomRevenue||0)}</td>
+        <td class="mono metriccol">${fmt0(y25.roomNights||0)}</td>
+        <td class="mono metriccol">${fmt0(y26.roomNights||0)}</td>
+        <td class="mono metriccol">${fmt(y25.fbRevenue||0)}</td>
+        <td class="mono metriccol">${fmt(y26.fbRevenue||0)}</td>
+      </tr>`;
+    }).join("");
+    const t25 = String(group.currentYear) === "2025" ? simpleMonthsTotals(group.currentMonths) : (String(group.lyYear) === "2025" ? simpleMonthsTotals(group.lyMonths) : {roomRevenue:0,roomNights:0,fbRevenue:0});
+    const t26 = String(group.currentYear) === "2026" ? simpleMonthsTotals(group.currentMonths) : (String(group.lyYear) === "2026" ? simpleMonthsTotals(group.lyMonths) : {roomRevenue:0,roomNights:0,fbRevenue:0});
+    return `<table class="group-mini">
+      <thead>
+        <tr><th rowspan="2">Monat</th><th colspan="2">Room Revenue</th><th colspan="2">Room Nights</th><th colspan="2">F&amp;B Revenue</th></tr>
+        <tr><th>2025</th><th>2026</th><th>2025</th><th>2026</th><th>2025</th><th>2026</th></tr>
+      </thead>
+      <tbody>
+        ${monthRows}
+        <tr style="background:#f6f8fb;font-weight:900">
+          <td class="left">Gesamttotal</td>
+          <td class="mono">${fmt(t25.roomRevenue)}</td>
+          <td class="mono">${fmt(t26.roomRevenue)}</td>
+          <td class="mono">${fmt0(t25.roomNights)}</td>
+          <td class="mono">${fmt0(t26.roomNights)}</td>
+          <td class="mono">${fmt(t25.fbRevenue)}</td>
+          <td class="mono">${fmt(t26.fbRevenue)}</td>
+        </tr>
+      </tbody>
+    </table>`;
+  }
+  const yearRows = [];
+  years.forEach(y => {
+    const months = String(group.currentYear) === y ? group.currentMonths : (String(group.lyYear) === y ? group.lyMonths : blankSimpleMonths());
+    yearRows.push(`<tr class="yearbreak"><td colspan="7">${escapeHtml(y)}</td></tr>`);
+    monthNames.forEach((mn, idx) => {
+      const m = months[idx] || {};
+      yearRows.push(`<tr>
+        <td class="left monthcol">${mn}</td>
+        <td class="mono metriccol">${fmt(m.roomRevenue||0)}</td>
+        <td class="mono metriccol">${fmt0(m.roomNights||0)}</td>
+        <td class="mono metriccol">${fmt(m.fbRevenue||0)}</td>
+        <td class="mono metriccol">${fmt(m.fbpp||0)}</td>
+        <td class="mono metriccol">${fmt(m.blockAdr||0)}</td>
+        <td>${escapeHtml(y)}</td>
+      </tr>`);
+    });
+  });
+  return `<table class="group-mini">
+    <thead>
+      <tr><th>Monat</th><th>Room Revenue</th><th>Room Nights</th><th>F&amp;B Revenue</th><th>F&amp;B / Guest</th><th>Block ADR</th><th>Jahr</th></tr>
+    </thead>
+    <tbody>${yearRows.join("")}</tbody>
+  </table>`;
+}
+
+function buildStandaloneCorporateBuckets(store){
+  const buckets = {};
+  storeValues(store).forEach(g => {
+    const corp = String(g.corporateId || "").trim();
+    const bucketKey = corp ? `corp_${corp}` : `single_${g.key}`;
+    if(!buckets[bucketKey]){
+      buckets[bucketKey] = {
+        bucketKey,
+        corporateId: corp,
+        label: corp ? `CorporateID: ${corp}` : (g.name || "Ohne CorporateID"),
+        items: [],
+        aggregated: {
+          name: corp ? `CorporateID ${corp}` : (g.name || "Ohne CorporateID"),
+          corporateId: corp,
+          currentYear: "2026",
+          lyYear: "2025",
+          currentMonths: blankSimpleMonths(),
+          lyMonths: blankSimpleMonths()
+        }
+      };
+    }
+    buckets[bucketKey].items.push(g);
+  });
+
+  Object.values(buckets).forEach(bucket => {
+    bucket.items.forEach(g => {
+      const years = [String(g.currentYear || ""), String(g.lyYear || "")].filter(Boolean);
+      years.forEach(year => {
+        const srcMonths = String(g.currentYear||"") === year ? (g.currentMonths || []) : (String(g.lyYear||"") === year ? (g.lyMonths || []) : []);
+        srcMonths.forEach((m, idx) => {
+          const target = year === "2025" ? bucket.aggregated.lyMonths[idx] : bucket.aggregated.currentMonths[idx];
+          target.roomRevenue += m.roomRevenue || 0;
+          target.roomNights += m.roomNights || 0;
+          target.fbRevenue += m.fbRevenue || 0;
+          target.blockAdr += m.blockAdr || 0;
+          target.fbpp += m.fbpp || 0;
+        });
+      });
+      if(!years.length){
+        (g.currentMonths || []).forEach((m, idx) => {
+          const target = bucket.aggregated.currentMonths[idx];
+          target.roomRevenue += m.roomRevenue || 0;
+          target.roomNights += m.roomNights || 0;
+          target.fbRevenue += m.fbRevenue || 0;
+          target.blockAdr += m.blockAdr || 0;
+          target.fbpp += m.fbpp || 0;
+        });
+      }
+    });
+  });
+
+  return Object.values(buckets).sort((a,b)=>String(a.label||"").localeCompare(String(b.label||""),"de"));
+}
+
+function buildBucketMembersTable(bucket, type){
+  const rows = bucket.items.map(g => {
+    const tCur = simpleMonthsTotals(g.currentMonths || []);
+    const tLy = simpleMonthsTotals(g.lyMonths || []);
+    if(type === "OS"){
+      const y25 = String(g.currentYear) === "2025" ? tCur : (String(g.lyYear) === "2025" ? tLy : {roomRevenue:0,roomNights:0,fbRevenue:0});
+      const y26 = String(g.currentYear) === "2026" ? tCur : (String(g.lyYear) === "2026" ? tLy : {roomRevenue:0,roomNights:0,fbRevenue:0});
+      return `<tr><td class="left">${escapeHtml(g.name)}</td><td class="mono">${fmt(y25.roomRevenue)}</td><td class="mono">${fmt(y26.roomRevenue)}</td><td class="mono">${fmt0(y25.roomNights)}</td><td class="mono">${fmt0(y26.roomNights)}</td><td class="mono">${fmt(y25.fbRevenue)}</td><td class="mono">${fmt(y26.fbRevenue)}</td></tr>`;
+    }
+    return `<tr><td class="left">${escapeHtml(g.name)}</td><td>${escapeHtml(g.currentYear||"–")}</td><td class="mono">${fmt(tCur.roomRevenue)}</td><td class="mono">${fmt0(tCur.roomNights)}</td><td class="mono">${fmt(tCur.fbRevenue)}</td><td>${escapeHtml(g.lyYear||"–")}</td><td class="mono">${fmt(tLy.roomRevenue)}</td></tr>`;
+  }).join("");
+  const head = type === "OS"
+    ? `<tr><th class="left">Gruppe</th><th>Room Revenue 2025</th><th>Room Revenue 2026</th><th>Room Nights 2025</th><th>Room Nights 2026</th><th>F&amp;B 2025</th><th>F&amp;B 2026</th></tr>`
+    : `<tr><th class="left">Gruppe</th><th>Akt. Jahr</th><th>Room Revenue</th><th>Room Nights</th><th>F&amp;B Revenue</th><th>LY Jahr</th><th>LY Revenue</th></tr>`;
+  return `<div style="margin-top:12px"><div class="small" style="margin-bottom:8px"><strong>Enthaltene Gruppen</strong></div><table class="group-mini"><thead>${head}</thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function deleteCorporateBucket(type, bucketKey){
+  const store = type === "OT" ? otGroupStore : osGroupStore;
+  const bucket = buildStandaloneCorporateBuckets(store).find(x => x.bucketKey === bucketKey);
+  if(!bucket) return;
+  bucket.items.forEach(item => { if(store[item.key]) delete store[item.key]; });
+  if(type === "OT") saveOtGroupStore();
+  if(type === "OS") saveOsGroupStore();
+  renderAll();
+}
+
+function renderGroupBlocks(type){
+  const wrap = document.getElementById(type === "OT" ? "otPrint" : "osPrint");
+  const store = type === "OT" ? otGroupStore : osGroupStore;
+  const buckets = buildStandaloneCorporateBuckets(store);
+  if(!buckets.length){
+    wrap.innerHTML = `<div class="group-empty">Noch keine ${type} Groups zugewiesen.</div>`;
+    return;
+  }
+  wrap.innerHTML = buckets.map((bucket, index) => {
+    const g = bucket.aggregated;
+    const currentTotals = simpleMonthsTotals(g.currentMonths || []);
+    const lyTotals = simpleMonthsTotals(g.lyMonths || []);
+    const color = getCardColor(index + (type === "OS" ? 4 : 0));
+    const badge = bucket.corporateId ? `<span class="corp">CorporateID: ${escapeHtml(bucket.corporateId)}</span>` : `<span class="corp">CorporateID: –</span>`;
+    const sub = type === "OS"
+      ? `<div class="series-sub"><span class="group-year-tag">2025</span>Room Revenue ${fmt(lyTotals.roomRevenue)} • Room Nights ${fmt0(lyTotals.roomNights)} • F&amp;B Revenue ${fmt(lyTotals.fbRevenue)}<br><span class="group-year-tag">2026</span>Room Revenue ${fmt(currentTotals.roomRevenue)} • Room Nights ${fmt0(currentTotals.roomNights)} • F&amp;B Revenue ${fmt(currentTotals.fbRevenue)}<br><span class="small">${bucket.items.length} Gruppe${bucket.items.length===1?"":"n"} in diesem Block</span></div>`
+      : `<div class="series-sub"><strong>2026</strong> — Room Revenue ${fmt(currentTotals.roomRevenue)} • Room Nights ${fmt0(currentTotals.roomNights)} • F&amp;B Revenue ${fmt(currentTotals.fbRevenue)}<br><strong>2025</strong> — Room Revenue ${fmt(lyTotals.roomRevenue)} • Room Nights ${fmt0(lyTotals.roomNights)} • F&amp;B Revenue ${fmt(lyTotals.fbRevenue)}<br><span class="small">${bucket.items.length} Gruppe${bucket.items.length===1?"":"n"} in diesem Block</span></div>`;
+    return `<div class="series-card" style="background:#ffffff; border-color:rgba(18,59,102,.18)">
+      <div class="series-head" style="background:${color}; border-bottom:1px solid rgba(18,59,102,.14)">
+        <div>
+          <div class="series-title">${escapeHtml(bucket.label)} ${badge}</div>
+          ${sub}
+        </div>
+        <div class="series-actions">
+          <button class="delete-group-btn" data-group-type="${type}" data-group-bucket="${escapeHtml(bucket.bucketKey)}">Block löschen</button>
+        </div>
+      </div>
+      <div class="content" style="padding:10px 12px;background:#ffffff">
+        ${buildGroupCardTable(g, type === "OS" ? "osCompare" : "default")}
+        ${buildBucketMembersTable(bucket, type)}
+      </div>
+    </div>`;
+  }).join("");
+
+  wrap.querySelectorAll(".delete-group-btn").forEach(btn => btn.addEventListener("click", function(){
+    deleteCorporateBucket(this.getAttribute("data-group-type"), this.getAttribute("data-group-bucket"));
+  }));
+}
+
 function renderAll(){
   normalizeStoreToSeriesData();
   document.getElementById("pivotMetric").value = pivotState.metric;
   document.getElementById("pivotYearMode").value = pivotState.yearMode;
   document.getElementById("pivotViewMode").value = pivotState.viewMode;
+  if(document.getElementById("pivotSourceMode")) document.getElementById("pivotSourceMode").value = pivotState.sourceMode || "all";
   renderKpis();
   refreshMergeSelectors();
   renderPivot();
   renderMonthFilterBar();
   renderMonthlyBlocks();
   renderTop3();
+  renderQueue();
   renderSeriesFilterBar();
   renderSeriesBlocks();
+  renderGroupBlocks("OT");
+  renderGroupBlocks("OS");
+  renderBudgetDetails();
 }
 
 function parseDelimited(text,delim){
@@ -905,25 +1866,30 @@ function parseHotelyText(text){
     if(year && !importYear) importYear=year;
     const series=sortAlpha;
     const corpRaw=getCell(cols,map,"CF_CORPID_POTENTIAL") || getCell(cols,map,"IATA_COMP_NO");
-    const corporateId=cleanCorporateId(corpRaw) || ("NOID_"+series);
+    const corporateId=cleanCorporateId(corpRaw) || "";
     if(!bySeries[series]) bySeries[series] = { series, corporateId, year, months: blankMonths() };
     const roomRevenue=toNum(getCell(cols,map,"ROOM"));
     const roomNights=toNum(getCell(cols,map,"ROOMS"));
     const fbRevenue=toNum(getCell(cols,map,"FOOD"));
     const blockAdr=toNum(getCell(cols,map,"CF_BLK_ADR"));
     const fbpp=toNum(getCell(cols,map,"CF_FOOD_REVENUE_PP"));
+    if(!(roomRevenue||roomNights||fbRevenue||blockAdr||fbpp)) continue;
     bySeries[series].months[monthIdx].cur.roomRevenue = roomRevenue;
     bySeries[series].months[monthIdx].cur.roomNights = roomNights;
     bySeries[series].months[monthIdx].cur.fbRevenue = fbRevenue;
     bySeries[series].months[monthIdx].cur.blockAdr = blockAdr;
     bySeries[series].months[monthIdx].cur.fbpp = fbpp;
   }
-  return {year: importYear, seriesEntries: Object.values(bySeries)};
+  const seriesEntries = Object.values(bySeries).filter(entry => entry.months.some(m => {
+    const cur = m.cur || {};
+    return (cur.roomRevenue||0)!==0 || (cur.roomNights||0)!==0 || (cur.fbRevenue||0)!==0 || (cur.blockAdr||0)!==0 || (cur.fbpp||0)!==0;
+  }));
+  return {year: importYear, seriesEntries};
 }
 function mergeImport(parsed){
   if(!parsed || !parsed.seriesEntries) return;
   parsed.seriesEntries.forEach(entry => {
-    const corpId = effectiveCorporateId(entry.corporateId);
+    const corpId = effectiveCorporateId(entry.corporateId || ("NOID_"+entry.series));
     let existingKey = Object.keys(seriesStore).find(k => seriesStore[k].corporateId === corpId);
     if(!existingKey){
       const key = corpId + "__" + entry.series;
@@ -953,7 +1919,12 @@ function mergeImport(parsed){
   saveStore();
   renderAll();
 }
-function clearDashboard(){ seriesStore = {}; profileFields = {}; nationalityFields = {}; mergedCorporateMap = {}; saveStore(); saveProfiles(); saveNationality(); saveMergedCorporateMap(); renderAll(); }
+function clearDashboard(){
+  seriesStore = {}; profileFields = {}; nationalityFields = {}; mergedCorporateMap = {};
+  queuedGroups = []; otGroupStore = {}; osGroupStore = {};
+  saveStore(); saveProfiles(); saveNationality(); saveMergedCorporateMap(); saveQueuedGroups(); saveOtGroupStore(); saveOsGroupStore();
+  renderAll();
+}
 
 document.getElementById("pivotMetric").addEventListener("change", function(){
   pivotState.metric = this.value; savePivot(); renderPivot();
@@ -967,11 +1938,24 @@ document.getElementById("pivotYearMode").addEventListener("change", function(){
 document.getElementById("pivotViewMode").addEventListener("change", function(){
   pivotState.viewMode = this.value; savePivot(); renderPivot();
 });
+document.getElementById("pivotSourceMode").addEventListener("change", function(){
+  pivotState.sourceMode = this.value; savePivot(); renderPivot();
+});
 document.getElementById("pivotSeriesMode").addEventListener("change", function(){
   pivotState.seriesMode = this.value; savePivot(); renderPivot();
 });
+document.getElementById("kpiSource2026").addEventListener("change", function(){
+  kpiSourceState["2026"] = this.value || "all";
+  saveKpiSourceState();
+  renderKpis();
+});
+document.getElementById("kpiSource2025").addEventListener("change", function(){
+  kpiSourceState["2025"] = this.value || "all";
+  saveKpiSourceState();
+  renderKpis();
+});
 
-document.getElementById("fileInput").addEventListener("change", async function(e){
+document.getElementById("fileInputSeries").addEventListener("change", async function(e){
   const files=Array.from(e.target.files||[]);
   for(const file of files){
     const text=await file.text();
@@ -981,15 +1965,32 @@ document.getElementById("fileInput").addEventListener("change", async function(e
   e.target.value="";
 });
 
+document.getElementById("fileInputGroups").addEventListener("change", async function(e){
+  const files=Array.from(e.target.files||[]);
+  for(const file of files){
+    const text=await file.text();
+    const parsed = parseHotelyText(text);
+    if(parsed) queueParsedGroups(parsed);
+  }
+  e.target.value="";
+  renderAll();
+});
+
 function exportDashboardData(){
   try{
     const data = {
-      seriesStore: JSON.parse(localStorage.getItem("pms_dashboard_v18_store") || "{}"),
-      profileFields: JSON.parse(localStorage.getItem("pms_dashboard_v18_profile_fields") || "{}"),
-      nationalityFields: JSON.parse(localStorage.getItem("pms_dashboard_v23_nationality") || "{}"),
+      seriesStore: JSON.parse(localStorage.getItem(STORAGE_DATA) || "{}"),
+      profileFields: JSON.parse(localStorage.getItem(STORAGE_PROFILE) || "{}"),
+      nationalityFields: JSON.parse(localStorage.getItem(STORAGE_NATIONALITY) || "{}"),
       mergedCorporateMap: JSON.parse(localStorage.getItem("pms_dashboard_v18_merged_corporates") || "{}"),
       collapsedPastYears: JSON.parse(localStorage.getItem("pms_dashboard_v18_collapsed_years") || "{}"),
-      pivotState: JSON.parse(localStorage.getItem("pms_dashboard_v18_pivot_state") || "{}")
+      pivotState: JSON.parse(localStorage.getItem(STORAGE_PIVOT) || "{}"),
+      queuedGroups: JSON.parse(localStorage.getItem(STORAGE_QUEUE) || "[]"),
+      otGroupStore: JSON.parse(localStorage.getItem(STORAGE_OT_GROUPS) || "{}"),
+      osGroupStore: JSON.parse(localStorage.getItem(STORAGE_OS_GROUPS) || "{}"),
+      groupComments: JSON.parse(localStorage.getItem(STORAGE_GROUP_COMMENTS) || "{}"),
+      kpiSourceState: JSON.parse(localStorage.getItem(STORAGE_KPI_SOURCE) || "{}"),
+      budgetDetails: JSON.parse(localStorage.getItem(STORAGE_BUDGET_DETAILS) || "{}")
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
@@ -1019,12 +2020,18 @@ document.getElementById("importDashboardFile").addEventListener("change", functi
     try{
       const data = JSON.parse(evt.target.result);
 
-      if(data.seriesStore) localStorage.setItem("pms_dashboard_v18_store", JSON.stringify(data.seriesStore));
-      if(data.profileFields) localStorage.setItem("pms_dashboard_v18_profile_fields", JSON.stringify(data.profileFields));
-      if(data.nationalityFields) localStorage.setItem("pms_dashboard_v23_nationality", JSON.stringify(data.nationalityFields));
+      if(data.seriesStore) localStorage.setItem(STORAGE_DATA, JSON.stringify(data.seriesStore));
+      if(data.profileFields) localStorage.setItem(STORAGE_PROFILE, JSON.stringify(data.profileFields));
+      if(data.nationalityFields) localStorage.setItem(STORAGE_NATIONALITY, JSON.stringify(data.nationalityFields));
       if(data.mergedCorporateMap) localStorage.setItem("pms_dashboard_v18_merged_corporates", JSON.stringify(data.mergedCorporateMap));
       if(data.collapsedPastYears) localStorage.setItem("pms_dashboard_v18_collapsed_years", JSON.stringify(data.collapsedPastYears));
-      if(data.pivotState) localStorage.setItem("pms_dashboard_v18_pivot_state", JSON.stringify(data.pivotState));
+      if(data.pivotState) localStorage.setItem(STORAGE_PIVOT, JSON.stringify(data.pivotState));
+      if(data.queuedGroups) localStorage.setItem(STORAGE_QUEUE, JSON.stringify(data.queuedGroups));
+      if(data.otGroupStore) localStorage.setItem(STORAGE_OT_GROUPS, JSON.stringify(data.otGroupStore));
+      if(data.osGroupStore) localStorage.setItem(STORAGE_OS_GROUPS, JSON.stringify(data.osGroupStore));
+      if(data.groupComments) localStorage.setItem(STORAGE_GROUP_COMMENTS, JSON.stringify(data.groupComments));
+      if(data.kpiSourceState) localStorage.setItem(STORAGE_KPI_SOURCE, JSON.stringify(data.kpiSourceState));
+      if(data.budgetDetails) localStorage.setItem(STORAGE_BUDGET_DETAILS, JSON.stringify(data.budgetDetails));
 
       alert("Daten erfolgreich importiert.");
       location.reload();
@@ -1036,11 +2043,443 @@ document.getElementById("importDashboardFile").addEventListener("change", functi
   e.target.value = "";
 });
 
+
+let activeQueueNameFilter = "";
+let activeQueueYearFilter = "";
+let activeQueueMonthFilter = "";
+let activeOTMonthFilter = "all";
+let activeOSMonthFilter = "all";
+
+function closeAllSections(){
+  ["pivotWrap","monthlyWrap","top3Wrap","queueWrap","seriesWrap","otWrap","osWrap"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.add("hidden");
+  });
+}
+
+function getCorporateDisplayOptions(){
+  const map = {};
+  seriesData.forEach(s=>{ if(s.corporateId && !map[s.corporateId]) map[s.corporateId]=s.series; });
+  storeValues(otGroupStore).forEach(g=>{ if(g.corporateId && !map[g.corporateId]) map[g.corporateId]=g.name; });
+  storeValues(osGroupStore).forEach(g=>{ if(g.corporateId && !map[g.corporateId]) map[g.corporateId]=g.name; });
+  queuedGroups.forEach(g=>{ if(g.corporateId && !map[g.corporateId]) map[g.corporateId]=g.name; });
+  return Object.keys(map).sort().map(id => ({id, label: `${id} — ${map[id]}`}));
+}
+
+function refreshMergeSelectors(){
+  const a = document.getElementById("mergeSeriesA");
+  const b = document.getElementById("mergeSeriesB");
+  const c = document.getElementById("queueCorporateSelect");
+  const options = getCorporateDisplayOptions();
+  const opts = ['<option value="">CorporateID wählen</option>'].concat(options.map(o => `<option value="${escapeHtml(o.id)}">${escapeHtml(o.label)}</option>`));
+  if(a) a.innerHTML = opts.join("");
+  if(b) b.innerHTML = opts.join("");
+  if(c) c.innerHTML = ['<option value="">CorporateID wählen</option>'].concat(options.map(o => `<option value="${escapeHtml(o.id)}">${escapeHtml(o.label)}</option>`)).join("");
+}
+
+function buildCombinedMonthlyGrandTotals(monthIdx){
+  const summary = buildMonthlySummary()[monthIdx] || {cur:{},ly:{}};
+  const ot = buildExtraMonthlySummary(otGroupStore)[monthIdx] || {cur:{},ly:{}};
+  const os = buildExtraMonthlySummary(osGroupStore)[monthIdx] || {cur:{},ly:{}};
+  const curCount = (summary.cur.count||0) + (ot.cur.count||0) + (os.cur.count||0);
+  const lyCount = (summary.ly.count||0) + (ot.ly.count||0) + (os.ly.count||0);
+  return {
+    cur:{
+      roomRevenue:(summary.cur.roomRevenue||0)+(ot.cur.roomRevenue||0)+(os.cur.roomRevenue||0),
+      roomNights:(summary.cur.roomNights||0)+(ot.cur.roomNights||0)+(os.cur.roomNights||0),
+      fbRevenue:(summary.cur.fbRevenue||0)+(ot.cur.fbRevenue||0)+(os.cur.fbRevenue||0),
+      blockAdr:curCount ? (((summary.cur.blockAdrSum||0)+(ot.cur.blockAdrSum||0)+(os.cur.blockAdrSum||0))/curCount) : 0
+    },
+    ly:{
+      roomRevenue:(summary.ly.roomRevenue||0)+(ot.ly.roomRevenue||0)+(os.ly.roomRevenue||0),
+      roomNights:(summary.ly.roomNights||0)+(ot.ly.roomNights||0)+(os.ly.roomNights||0),
+      fbRevenue:(summary.ly.fbRevenue||0)+(ot.ly.fbRevenue||0)+(os.ly.fbRevenue||0),
+      blockAdr:lyCount ? (((summary.ly.blockAdrSum||0)+(ot.ly.blockAdrSum||0)+(os.ly.blockAdrSum||0))/lyCount) : 0
+    }
+  };
+}
+
+function renderMonthlyBlocks(){
+  const wrap=document.getElementById("monthlyPrint");
+  const summary=buildMonthlySummary();
+  const otSummary = buildExtraMonthlySummary(otGroupStore);
+  const osSummary = buildExtraMonthlySummary(osGroupStore);
+  wrap.innerHTML=summary.filter(m=>{
+    if(activeMonthFilter!=="all" && Number(activeMonthFilter)!==m.idx) return false;
+    return m.cur.roomRevenue||m.cur.roomNights||m.cur.fbRevenue||otSummary[m.idx].cur.roomRevenue||osSummary[m.idx].cur.roomRevenue||otSummary[m.idx].cur.roomNights||osSummary[m.idx].cur.roomNights||otSummary[m.idx].cur.fbRevenue||osSummary[m.idx].cur.fbRevenue;
+  }).map(m=>{
+    const visible=seriesData.filter(s=>{const x=s.months[m.idx]; return x.cur.roomRevenue||x.cur.roomNights||x.cur.fbRevenue;}).sort((a,b)=>(b.months[m.idx].cur.roomRevenue||0)-(a.months[m.idx].cur.roomRevenue||0));
+    const rows=visible.map(s=>{ const x=s.months[m.idx]; return `<tr>
+      <td class="series-cell">${isTop3(s.series,m.idx)?"🏆 ":""}${escapeHtml(s.series)}<div class="corp">CorporateID: ${escapeHtml(s.corporateId||"–")}</div></td>
+      <td class="mono">${fmt(x.cur.roomRevenue)}</td><td class="mono">${x.hasLY?fmt(x.ly.roomRevenue):"–"}</td><td class="mono ${diffClass(x.cur.roomRevenue,x.ly.roomRevenue,x.hasLY)}">${x.hasLY?fmt(x.cur.roomRevenue-x.ly.roomRevenue):"–"}</td><td class="mono ${diffClass(x.cur.roomRevenue,x.ly.roomRevenue,x.hasLY)}">${pct(x.cur.roomRevenue,x.ly.roomRevenue,x.hasLY)}</td>
+      <td class="mono">${fmt0(x.cur.roomNights)}</td><td class="mono">${x.hasLY?fmt0(x.ly.roomNights):"–"}</td><td class="mono ${diffClass(x.cur.roomNights,x.ly.roomNights,x.hasLY)}">${x.hasLY?fmt0(x.cur.roomNights-x.ly.roomNights):"–"}</td><td class="mono ${diffClass(x.cur.roomNights,x.ly.roomNights,x.hasLY)}">${pct(x.cur.roomNights,x.ly.roomNights,x.hasLY)}</td>
+      <td class="mono">${fmt(x.cur.fbRevenue)}</td><td class="mono">${x.hasLY?fmt(x.ly.fbRevenue):"–"}</td><td class="mono ${diffClass(x.cur.fbRevenue,x.ly.fbRevenue,x.hasLY)}">${x.hasLY?fmt(x.cur.fbRevenue-x.ly.fbRevenue):"–"}</td><td class="mono ${diffClass(x.cur.fbRevenue,x.ly.fbRevenue,x.hasLY)}">${pct(x.cur.fbRevenue,x.ly.fbRevenue,x.hasLY)}</td>
+      <td class="mono">${fmt(x.cur.fbpp)}</td><td class="mono">${x.hasLY?fmt(x.ly.fbpp):"–"}</td><td class="mono ${diffClass(x.cur.fbpp,x.ly.fbpp,x.hasLY)}">${x.hasLY?fmt(x.cur.fbpp-x.ly.fbpp):"–"}</td><td class="mono ${diffClass(x.cur.fbpp,x.ly.fbpp,x.hasLY)}">${pct(x.cur.fbpp,x.ly.fbpp,x.hasLY)}</td>
+      <td class="mono">${fmt(x.cur.blockAdr)}</td><td class="mono">${x.hasLY?fmt(x.ly.blockAdr):"–"}</td><td class="mono ${diffClass(x.cur.blockAdr,x.ly.blockAdr,x.hasLY)}">${x.hasLY?fmt(x.cur.blockAdr-x.ly.blockAdr):"–"}</td><td class="mono ${diffClass(x.cur.blockAdr,x.ly.blockAdr,x.hasLY)}">${pct(x.cur.blockAdr,x.ly.blockAdr,x.hasLY)}</td>
+    </tr>`; }).join("");
+    const totalRow = `<tr style="background:#f6f8fb;font-weight:900">
+      <td class="series-cell">Gesamttotal</td>
+      <td class="mono">${fmt(m.cur.roomRevenue)}</td><td class="mono">${m.hasLY?fmt(m.ly.roomRevenue):"–"}</td><td class="mono ${diffClass(m.cur.roomRevenue,m.ly.roomRevenue,m.hasLY)}">${m.hasLY?fmt(m.cur.roomRevenue-m.ly.roomRevenue):"–"}</td><td class="mono ${diffClass(m.cur.roomRevenue,m.ly.roomRevenue,m.hasLY)}">${pct(m.cur.roomRevenue,m.ly.roomRevenue,m.hasLY)}</td>
+      <td class="mono">${fmt0(m.cur.roomNights)}</td><td class="mono">${m.hasLY?fmt0(m.ly.roomNights):"–"}</td><td class="mono ${diffClass(m.cur.roomNights,m.ly.roomNights,m.hasLY)}">${m.hasLY?fmt0(m.cur.roomNights-m.ly.roomNights):"–"}</td><td class="mono ${diffClass(m.cur.roomNights,m.ly.roomNights,m.hasLY)}">${pct(m.cur.roomNights,m.ly.roomNights,m.hasLY)}</td>
+      <td class="mono">${fmt(m.cur.fbRevenue)}</td><td class="mono">${m.hasLY?fmt(m.ly.fbRevenue):"–"}</td><td class="mono ${diffClass(m.cur.fbRevenue,m.ly.fbRevenue,m.hasLY)}">${m.hasLY?fmt(m.cur.fbRevenue-m.ly.fbRevenue):"–"}</td><td class="mono ${diffClass(m.cur.fbRevenue,m.ly.fbRevenue,m.hasLY)}">${pct(m.cur.fbRevenue,m.ly.fbRevenue,m.hasLY)}</td>
+      <td class="mono">${fmt(m.cur.fbpp)}</td><td class="mono">${m.hasLY?fmt(m.ly.fbpp):"–"}</td><td class="mono ${diffClass(m.cur.fbpp,m.ly.fbpp,m.hasLY)}">${m.hasLY?fmt(m.cur.fbpp-m.ly.fbpp):"–"}</td><td class="mono ${diffClass(m.cur.fbpp,m.ly.fbpp,m.hasLY)}">${pct(m.cur.fbpp,m.ly.fbpp,m.hasLY)}</td>
+      <td class="mono">${fmt(m.cur.blockAdr)}</td><td class="mono">${m.hasLY?fmt(m.ly.blockAdr):"–"}</td><td class="mono ${diffClass(m.cur.blockAdr,m.ly.blockAdr,m.hasLY)}">${m.hasLY?fmt(m.cur.blockAdr-m.ly.blockAdr):"–"}</td><td class="mono ${diffClass(m.cur.blockAdr,m.ly.blockAdr,m.hasLY)}">${pct(m.cur.blockAdr,m.ly.blockAdr,m.hasLY)}</td>
+    </tr>`;
+    const extraCards = `<div class="month-extra-stack">${renderExtraMonthTotalCard("OT Groups – Monatstotal", otSummary, m.idx)}${renderExtraMonthTotalCard("OS Groups – Monatstotal", osSummary, m.idx)}</div>`;
+    const grand = buildCombinedMonthlyGrandTotals(m.idx);
+    const grandBar = `<div class="month-grandbar">
+      <div class="month-granditem"><div class="lbl">Gesamt Room Revenue</div><div class="vals">2025: ${fmt(grand.ly.roomRevenue)}<br>2026: ${fmt(grand.cur.roomRevenue)}</div></div>
+      <div class="month-granditem"><div class="lbl">Gesamt Room Nights</div><div class="vals">2025: ${fmt0(grand.ly.roomNights)}<br>2026: ${fmt0(grand.cur.roomNights)}</div></div>
+      <div class="month-granditem"><div class="lbl">Gesamt F&amp;B Revenue</div><div class="vals">2025: ${fmt(grand.ly.fbRevenue)}<br>2026: ${fmt(grand.cur.fbRevenue)}</div></div>
+      <div class="month-granditem"><div class="lbl">Gesamt Block ADR</div><div class="vals">2025: ${fmt(grand.ly.blockAdr)}<br>2026: ${fmt(grand.cur.blockAdr)}</div></div>
+    </div>`;
+    return `<div class="month-card"><div class="month-head"><div><div class="month-title">${m.month} ${currentYear||""}</div><div class="month-sub">Zusammenfassung aller Serien im selben Monat</div></div><div class="month-chips"><div class="month-chip">${visible.length} Serien</div><div class="month-chip">Top 3 markiert</div></div>${grandBar}</div>
+      <table class="matrix"><thead><tr><th class="seriehead left" rowspan="2">Serie</th><th colspan="4">Room Revenue</th><th colspan="4">Room Nights</th><th colspan="4">F&amp;B Revenue</th><th colspan="4">F&amp;B / Guest</th><th colspan="4">Block Room ADR</th></tr>
+      <tr><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th><th class="kpi-cur">Aktuell</th><th class="kpi-ly">LY</th><th class="kpi-d">Δ</th><th class="kpi-p">Δ%</th></tr></thead>
+      <tbody>${rows}${totalRow}</tbody></table>${extraCards}</div>`;
+  }).join("");
+}
+
+function updateQueueFilterYearOptions(){
+  const sel = document.getElementById("queueYearFilter");
+  if(!sel) return;
+  const years = Array.from(new Set(queuedGroups.map(g => String(g.importYear||"").trim()).filter(Boolean))).sort();
+  const current = activeQueueYearFilter;
+  sel.innerHTML = `<option value="">Import-Jahr: alle</option>` + years.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join("");
+  sel.value = years.includes(current) ? current : "";
+  activeQueueYearFilter = sel.value;
+}
+function updateQueueFilterMonthOptions(){
+  const sel = document.getElementById("queueMonthFilter");
+  if(!sel) return;
+  const months = Array.from(new Set(queuedGroups.flatMap(g => String(getQueueImportMonthLabel(g) || "").split(",").map(x => x.trim()).filter(Boolean)))).sort((a,b) => monthNames.indexOf(a) - monthNames.indexOf(b));
+  const current = activeQueueMonthFilter;
+  sel.innerHTML = `<option value="">Import-Monat: alle</option>` + months.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
+  sel.value = months.includes(current) ? current : "";
+  activeQueueMonthFilter = sel.value;
+}
+
+function getFilteredQueuedGroups(){
+  const term = activeQueueNameFilter.trim().toLowerCase();
+  const year = activeQueueYearFilter.trim();
+  const month = activeQueueMonthFilter.trim();
+  return queuedGroups.filter(g => {
+    const okName = !term || String(g.name||"").toLowerCase().includes(term) || String(g.originalName||"").toLowerCase().includes(term);
+    const okYear = !year || String(g.importYear||"") === year;
+    const monthLabel = getQueueImportMonthLabel(g);
+    const okMonth = !month || monthLabel.split(",").map(x => x.trim()).includes(month);
+    return okName && okYear && okMonth;
+  });
+}
+
+function renderQueue(){
+  const body = document.getElementById("queueBody");
+  updateQueueFilterYearOptions();
+  updateQueueFilterMonthOptions();
+  if(!body) return;
+  const visibleRows = getFilteredQueuedGroups();
+  if(!queuedGroups.length){
+    body.innerHTML = `<tr><td colspan="10" class="left"><span class="group-empty">Keine offenen Gruppen in der Ablage.</span></td></tr>`;
+    return;
+  }
+  if(!visibleRows.length){
+    body.innerHTML = `<tr><td colspan="10" class="left"><span class="group-empty">Keine Gruppen für den aktuellen Filter gefunden.</span></td></tr>`;
+    return;
+  }
+  body.innerHTML = visibleRows.map(g => {
+    return `<tr data-queue-visible-row="${escapeHtml(g.queueId)}">
+      <td><input type="checkbox" class="queue-checkbox" data-queue-check="${escapeHtml(g.queueId)}"></td>
+      <td class="left"><input class="queue-input" data-queue-name="${escapeHtml(g.queueId)}" value="${escapeHtml(g.name)}"></td>
+      <td>${escapeHtml(g.importYear || "–")}</td>
+      <td>${escapeHtml(getQueueImportMonthLabel(g) || "–")}</td>
+      <td><input class="queue-input" data-queue-corp="${escapeHtml(g.queueId)}" value="${escapeHtml(g.corporateId || "")}" placeholder="CorporateID"></td>
+      <td>
+        <select class="queue-select" data-queue-type="${escapeHtml(g.queueId)}" style="min-width:140px">
+          <option value="" ${!g.groupType ? "selected" : ""}>Typ wählen</option>
+          <option value="OT" ${g.groupType==="OT" ? "selected" : ""}>OT</option>
+          <option value="OS" ${g.groupType==="OS" ? "selected" : ""}>OS</option>
+        </select>
+      </td>
+      <td class="mono">${fmt(g.totals?.roomRevenue || 0)}</td>
+      <td class="mono">${fmt0(g.totals?.roomNights || 0)}</td>
+      <td class="mono">${fmt(g.totals?.fbRevenue || 0)}</td>
+      <td><button class="delete-group-btn" data-queue-delete="${escapeHtml(g.queueId)}">Löschen</button></td>
+    </tr>`;
+  }).join("");
+
+  body.querySelectorAll("input[data-queue-name]").forEach(inp => inp.addEventListener("input", function(){
+    const id = this.getAttribute("data-queue-name");
+    const row = queuedGroups.find(x => x.queueId === id);
+    if(row){ row.name = this.value; saveQueuedGroups(); }
+  }));
+  body.querySelectorAll("input[data-queue-corp]").forEach(inp => inp.addEventListener("input", function(){
+    const id = this.getAttribute("data-queue-corp");
+    const row = queuedGroups.find(x => x.queueId === id);
+    if(row){ row.corporateId = this.value.trim(); saveQueuedGroups(); refreshMergeSelectors(); }
+  }));
+  body.querySelectorAll("select[data-queue-type]").forEach(sel => sel.addEventListener("change", function(){
+    const id = this.getAttribute("data-queue-type");
+    const row = queuedGroups.find(x => x.queueId === id);
+    if(row){ row.groupType = this.value; saveQueuedGroups(); }
+  }));
+  body.querySelectorAll("[data-queue-delete]").forEach(btn => btn.addEventListener("click", function(){
+    const id = this.getAttribute("data-queue-delete");
+    queuedGroups = queuedGroups.filter(x => x.queueId !== id);
+    saveQueuedGroups();
+    renderAll();
+  }));
+}
+
+function toggleAllQueuedRows(flag){
+  document.querySelectorAll("[data-queue-check]").forEach(cb => { cb.checked = !!flag; });
+}
+function toggleVisibleQueuedRows(flag){
+  document.querySelectorAll("[data-queue-visible-row] [data-queue-check]").forEach(cb => { cb.checked = !!flag; });
+}
+
+function getGroupValueForYearMonth(g, year, idx){
+  if(String(g.currentYear||"") === String(year)) return (g.currentMonths||[])[idx] || {};
+  if(String(g.lyYear||"") === String(year)) return (g.lyMonths||[])[idx] || {};
+  return {};
+}
+
+function hasMeaningfulGroupMonthData(m){
+  return !!((m.roomRevenue||0) || (m.roomNights||0) || (m.fbRevenue||0) || (m.blockAdr||0) || (m.fbpp||0));
+}
+
+function formatMaybeValue(m, key, zeroFmt){
+  return hasMeaningfulGroupMonthData(m) ? zeroFmt(m[key]||0) : "–";
+}
+function getGroupCommentKey(type, monthIdx){ return `${type}_${monthIdx}`; }
+function getGroupComment(type, monthIdx){ return groupComments[getGroupCommentKey(type, monthIdx)] || ""; }
+function setGroupComment(type, monthIdx, value){ groupComments[getGroupCommentKey(type, monthIdx)] = value || ""; saveGroupComments(); }
+
+function normalizeGroupMatchName(name){
+  return String(name||"")
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/\b(ibis|messe|group|groups|gruppe|gruppen|ot|os|hotel|fair)\b/g, " ")
+    .replace(/20\d{2}/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildOsMatchMap(entries, monthIdx){
+  const grouped = new Map();
+  entries.forEach(g => {
+    const key = normalizeGroupMatchName(g.name);
+    if(!key) return;
+    if(!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(g);
+  });
+  const map = {};
+  grouped.forEach((items) => {
+    let has25 = false, has26 = false;
+    items.forEach(g => {
+      if(hasMeaningfulGroupMonthData(getGroupValueForYearMonth(g,"2025",monthIdx))) has25 = true;
+      if(hasMeaningfulGroupMonthData(getGroupValueForYearMonth(g,"2026",monthIdx))) has26 = true;
+    });
+    if(has25 && has26){
+      items.forEach(g => { map[g.key] = true; });
+    }
+  });
+  return map;
+}
+
+function renderGroupMonthFilterBar(type, entries){
+  const bar = document.getElementById(type === "OT" ? "otMonthFilterBar" : "osMonthFilterBar");
+  if(!bar) return;
+  const state = type === "OT" ? activeOTMonthFilter : activeOSMonthFilter;
+  const visibleMonths = monthNames.map((m,idx)=>({m,idx})).filter(({idx}) => entries.some(g => hasMeaningfulGroupMonthData(getGroupValueForYearMonth(g,"2025",idx)) || hasMeaningfulGroupMonthData(getGroupValueForYearMonth(g,"2026",idx))));
+  const monthButtons = visibleMonths.map(({m,idx}) => `<button class="month-filter-btn ${String(state)===String(idx)?"active":""}" data-group-month="${idx}" data-group-type="${type}">${m}</button>`).join("");
+  bar.innerHTML = `<div class="group-month-filter-label">Monat filtern:</div><button class="month-filter-btn ${state==="all"?"active":""}" data-group-month="all" data-group-type="${type}">Alle</button>${monthButtons}`;
+  bar.querySelectorAll('[data-group-month]').forEach(btn => btn.addEventListener('click', function(){
+    const month = this.getAttribute('data-group-month') || 'all';
+    if(type === 'OT') activeOTMonthFilter = month; else activeOSMonthFilter = month;
+    renderGroupBlocks(type);
+  }));
+}
+
+function renderYearSplitMonthTable(entries, type, monthIdx){
+  const list25 = entries
+    .map(g => ({entry:g, value:getGroupValueForYearMonth(g,"2025",monthIdx)}))
+    .filter(x => hasMeaningfulGroupMonthData(x.value))
+    .sort((a,b)=>String(a.entry.name||"").localeCompare(String(b.entry.name||""),"de"));
+  const list26 = entries
+    .map(g => ({entry:g, value:getGroupValueForYearMonth(g,"2026",monthIdx)}))
+    .filter(x => hasMeaningfulGroupMonthData(x.value))
+    .sort((a,b)=>String(a.entry.name||"").localeCompare(String(b.entry.name||""),"de"));
+
+  const match25 = new Set();
+  const match26 = new Set();
+  if(type === "OS"){
+    const norm25 = new Map();
+    list25.forEach(x => { const k = normalizeGroupMatchName(x.entry.name); if(k) norm25.set(k, x.entry.key); });
+    list26.forEach(x => {
+      const k = normalizeGroupMatchName(x.entry.name);
+      if(k && norm25.has(k)){
+        match25.add(norm25.get(k));
+        match26.add(x.entry.key);
+      }
+    });
+  }
+
+  const maxLen = Math.max(list25.length, list26.length, 1);
+  const rows = Array.from({length:maxLen}, (_, i) => {
+    const l = list25[i];
+    const r = list26[i];
+    const leftMatch = l && match25.has(l.entry.key);
+    const rightMatch = r && match26.has(r.entry.key);
+    const leftName = l ? `<div class="group-name-row"><div class="group-name-content">${escapeHtml(l.entry.name)}${l.entry.corporateId?`<div class="corp">CorporateID: ${escapeHtml(l.entry.corporateId)}</div>`:""}${leftMatch?`<div class="small">ähnlich erkannt</div>`:""}</div><button class="group-back-btn" title="Zurück in Ablage" data-group-back-type="${type}" data-group-back-key="${escapeHtml(l.entry.key)}">↩</button></div>` : '–';
+    const rightName = r ? `<div class="group-name-row"><div class="group-name-content">${escapeHtml(r.entry.name)}${r.entry.corporateId?`<div class="corp">CorporateID: ${escapeHtml(r.entry.corporateId)}</div>`:""}${rightMatch?`<div class="small">ähnlich erkannt</div>`:""}</div><button class="group-back-btn" title="Zurück in Ablage" data-group-back-type="${type}" data-group-back-key="${escapeHtml(r.entry.key)}">↩</button></div>` : '–';
+    return `<tr>
+      <td class="left series-cell year25-cell ${leftMatch ? 'match-name' : ''}">${leftName}</td>
+      <td class="mono year25-cell ${leftMatch ? 'match-cell-25' : ''}">${l?fmt(l.value.roomRevenue||0):'–'}</td>
+      <td class="mono year25-cell ${leftMatch ? 'match-cell-25' : ''}">${l?fmt0(l.value.roomNights||0):'–'}</td>
+      <td class="mono year25-cell ${leftMatch ? 'match-cell-25' : ''}">${l?fmt(l.value.fbRevenue||0):'–'}</td>
+      <td class="mono year25-cell ${leftMatch ? 'match-cell-25' : ''}">${l?fmt(l.value.blockAdr||0):'–'}</td>
+      <td class="left series-cell year26-cell mid-divider ${rightMatch ? 'match-name' : ''}">${rightName}</td>
+      <td class="mono year26-cell ${rightMatch ? 'match-cell-26' : ''}">${r?fmt(r.value.roomRevenue||0):'–'}</td>
+      <td class="mono year26-cell ${rightMatch ? 'match-cell-26' : ''}">${r?fmt0(r.value.roomNights||0):'–'}</td>
+      <td class="mono year26-cell ${rightMatch ? 'match-cell-26' : ''}">${r?fmt(r.value.fbRevenue||0):'–'}</td>
+      <td class="mono year26-cell ${rightMatch ? 'match-cell-26' : ''}">${r?fmt(r.value.blockAdr||0):'–'}</td>
+    </tr>`;
+  }).join("");
+
+  const total25 = list25.reduce((a,x)=>{ const m=x.value; a.roomRevenue+=m.roomRevenue||0; a.roomNights+=m.roomNights||0; a.fbRevenue+=m.fbRevenue||0; a.blockAdrSum+=m.blockAdr||0; if((m.blockAdr||0)||(m.roomNights||0)) a.count++; return a; }, {roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,count:0});
+  const total26 = list26.reduce((a,x)=>{ const m=x.value; a.roomRevenue+=m.roomRevenue||0; a.roomNights+=m.roomNights||0; a.fbRevenue+=m.fbRevenue||0; a.blockAdrSum+=m.blockAdr||0; if((m.blockAdr||0)||(m.roomNights||0)) a.count++; return a; }, {roomRevenue:0,roomNights:0,fbRevenue:0,blockAdrSum:0,count:0});
+  const totalRow = `<tr class="total-row">
+    <td class="left year25-cell">Gesamttotal 2025</td>
+    <td class="mono year25-cell">${fmt(total25.roomRevenue)}</td>
+    <td class="mono year25-cell">${fmt0(total25.roomNights)}</td>
+    <td class="mono year25-cell">${fmt(total25.fbRevenue)}</td>
+    <td class="mono year25-cell">${fmt(total25.count ? total25.blockAdrSum/total25.count : 0)}</td>
+    <td class="left year26-cell mid-divider">Gesamttotal 2026</td>
+    <td class="mono year26-cell">${fmt(total26.roomRevenue)}</td>
+    <td class="mono year26-cell">${fmt0(total26.roomNights)}</td>
+    <td class="mono year26-cell">${fmt(total26.fbRevenue)}</td>
+    <td class="mono year26-cell">${fmt(total26.count ? total26.blockAdrSum/total26.count : 0)}</td>
+  </tr>`;
+
+  return `<div class="group-compare-wrap"><table class="group-compare-table">
+    <colgroup>
+      <col style="width:22%"><col style="width:7%"><col style="width:7%"><col style="width:7%"><col style="width:7%">
+      <col style="width:22%"><col style="width:7%"><col style="width:7%"><col style="width:7%"><col style="width:7%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="group-name-head left year25-head" colspan="5">${type} Groups 2025</th>
+        <th class="group-name-head left year26-head mid-divider" colspan="5">${type} Groups 2026</th>
+      </tr>
+      <tr>
+        <th class="year25-head left">${type} Group 2025</th>
+        <th class="year25-head">Room Revenue</th>
+        <th class="year25-head">Room Nights</th>
+        <th class="year25-head">F&amp;B Revenue</th>
+        <th class="year25-head">Block ADR</th>
+        <th class="year26-head left mid-divider">${type} Group 2026</th>
+        <th class="year26-head">Room Revenue</th>
+        <th class="year26-head">Room Nights</th>
+        <th class="year26-head">F&amp;B Revenue</th>
+        <th class="year26-head">Block ADR</th>
+      </tr>
+    </thead>
+    <tbody>${rows}${totalRow}</tbody>
+  </table></div>`;
+}
+
+function buildGroupCommentPanel(type, monthIdx){
+  const current = getGroupComment(type, monthIdx);
+  return `<div class="group-comment-box">
+    <div class="group-comment-title">Kommentar ${type} – ${escapeHtml(monthNames[monthIdx])}</div>
+    <textarea data-group-comment="${type}" data-group-comment-month="${monthIdx}" placeholder="Kommentar manuell eingeben...">${escapeHtml(current)}</textarea>
+    <div class="group-comment-actions">
+      <button class="btn secondary" data-group-comment-clear="${type}" data-group-comment-month="${monthIdx}">Inhalt löschen</button>
+    </div>
+  </div>`;
+}
+
+function renderGroupBlocks(type){
+  const wrap = document.getElementById(type === "OT" ? "otPrint" : "osPrint");
+  const store = type === "OT" ? otGroupStore : osGroupStore;
+  const entries = storeValues(store);
+  renderGroupMonthFilterBar(type, entries);
+  if(!entries.length){
+    wrap.innerHTML = `<div class="group-empty">Noch keine ${type} Groups zugewiesen.</div>`;
+    return;
+  }
+  const state = type === 'OT' ? activeOTMonthFilter : activeOSMonthFilter;
+  const visibleMonths = monthNames.map((m,idx)=>idx).filter(idx => {
+    if(state !== 'all' && Number(state) !== idx) return false;
+    return entries.some(g => hasMeaningfulGroupMonthData(getGroupValueForYearMonth(g,"2025",idx)) || hasMeaningfulGroupMonthData(getGroupValueForYearMonth(g,"2026",idx)));
+  });
+  wrap.innerHTML = `<div class="group-month-stack">` + visibleMonths.map(idx => {
+    const color = type === "OT" ? "linear-gradient(90deg,#123b66,#204d7f)" : "linear-gradient(90deg,#6f4a8e,#8c5ab1)";
+    return `<div class="month-card">
+      <div class="month-head" style="background:${color}">
+        <div>
+          <div class="month-title">${monthNames[idx]} – ${type} Groups</div>
+          <div class="month-sub">Alphabetischer Vergleich 2025 und 2026 in einer Tabelle</div>
+        </div>
+        <div class="month-chips"><div class="month-chip">${entries.length} Gruppen gesamt</div></div>
+      </div>
+      <div class="content"><div class="group-month-center"><div class="group-month-layout"><div>${renderYearSplitMonthTable(entries, type, idx)}</div><div class="group-comment-slot">${buildGroupCommentPanel(type, idx)}</div></div></div></div>
+    </div>`;
+  }).join("") + `</div>`;
+
+  wrap.querySelectorAll('[data-group-comment]').forEach(el => el.addEventListener('input', function(){
+    setGroupComment(this.getAttribute('data-group-comment'), Number(this.getAttribute('data-group-comment-month')), this.value || '');
+  }));
+  wrap.querySelectorAll('[data-group-comment-clear]').forEach(btn => btn.addEventListener('click', function(){
+    const type = this.getAttribute('data-group-comment-clear');
+    const month = Number(this.getAttribute('data-group-comment-month'));
+    setGroupComment(type, month, '');
+    renderGroupBlocks(type);
+  }));
+  wrap.querySelectorAll('[data-group-back-key]').forEach(btn => btn.addEventListener('click', function(){
+    moveGroupBackToQueue(this.getAttribute('data-group-back-type'), this.getAttribute('data-group-back-key'));
+  }));
+}
+
+function initializeEnhancedUI(){
+  const nameInput = document.getElementById("queueNameFilter");
+  const yearSelect = document.getElementById("queueYearFilter");
+  const monthSelect = document.getElementById("queueMonthFilter");
+  if(nameInput && !nameInput.dataset.bound){
+    nameInput.dataset.bound = "1";
+    nameInput.addEventListener("input", function(){
+      activeQueueNameFilter = this.value || "";
+      renderQueue();
+    });
+  }
+  if(yearSelect && !yearSelect.dataset.bound){
+    yearSelect.dataset.bound = "1";
+    yearSelect.addEventListener("change", function(){
+      activeQueueYearFilter = this.value || "";
+      renderQueue();
+    });
+  }
+  if(monthSelect && !monthSelect.dataset.bound){
+    monthSelect.dataset.bound = "1";
+    monthSelect.addEventListener("change", function(){
+      activeQueueMonthFilter = this.value || "";
+      renderQueue();
+    });
+  }
+}
+
 loadStore();
 loadProfiles();
 loadNationality();
 loadCollapsedPastYears();
 loadMergedCorporateMap();
+loadQueuedGroups();
+loadOtGroupStore();
+loadOsGroupStore();
+loadGroupComments();
+loadBudgetDetails();
+initializeEnhancedUI();
 renderAll();
 </script>
 </body>
